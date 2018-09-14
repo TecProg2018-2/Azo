@@ -2,11 +2,11 @@
 
 using namespace Azo;
 
-	obstacle::obstacle() {}
+Obstacle::Obstacle() {}
 
-obstacle::~obstacle(){}
+Obstacle::~Obstacle(){}
 
-void obstacle::shutDown() {
+void Obstacle::shutDown() {
 	for (auto eachBlock : mBlockList) {
 		if (eachBlock != NULL) {
 			eachBlock->shutDown();
@@ -24,9 +24,9 @@ void obstacle::shutDown() {
 		}
 	}
 
-	if (mobstacleImage != NULL) {
-		delete(mobstacleImage);
-		mobstacleImage = NULL;
+	if (mObstacleImage != NULL) {
+		delete(mObstacleImage);
+		mObstacleImage = NULL;
 	}
 
 	if (mAudioController != NULL) {
@@ -53,48 +53,48 @@ void obstacle::shutDown() {
 }
 
 
-obstacle::obstacle(std::string name, std::pair<double, double> positionRelativeToParent, obstacleType obstacleType) {
+Obstacle::Obstacle(std::string name, std::pair<double, double> positionRelativeToParent, ObstacleType obstacleType) {
 	mName = name;
 	mPositionRelativeToParent = positionRelativeToParent;
 	mCurrentPosition = mPositionRelativeToParent;
 
-	mobstacleType = obstacleType;
+	mObstacleType = obstacleType;
 
 	createComponents();
 }
 
 // Here we add the imagens/sound to the obstacle, based on its type.
-void obstacle::createComponents() {
+void Obstacle::createComponents() {
 	DEBUG("Creating obstacle components.");
-	if (mobstacleType == obstacleType::WESTERN_CAR) {
+	if (mObstacleType == ObstacleType::WESTERN_CAR) {
 		DEBUG("obstacle is a WESTERN CAR!");
-		mobstacleImage = new engine::ImageComponent(*this, "backgrounds/broken_caravan.png", 1);
-		this->AddComponent(*mobstacleImage);
+		mObstacleImage = new engine::ImageComponent(*this, "backgrounds/broken_caravan.png", 1);
+		this->AddComponent(*mObstacleImage);
 		createBlocks();
 
-	} else if (mobstacleType == obstacleType::WESTERN_BOX) {
+	} else if (mObstacleType == ObstacleType::WESTERN_BOX) {
 		DEBUG("obstacle is a WESTERN BOX!");
-		mobstacleImage = new engine::ImageComponent(*this, "backgrounds/box.png", 1);
-		this->AddComponent(*mobstacleImage);
+		mObstacleImage = new engine::ImageComponent(*this, "backgrounds/box.png", 1);
+		this->AddComponent(*mObstacleImage);
 		createBlocks();
 
-	} else if (mobstacleType == obstacleType::WESTERN_RAISED_BOX) {
+	} else if (mObstacleType == ObstacleType::WESTERN_RAISED_BOX) {
 		DEBUG("obstacle is a WESTERN RAISED BOX!");
-		mobstacleImage = new engine::ImageComponent(*this, "backgrounds/raised_box.png", 1);
-		this->AddComponent(*mobstacleImage);
+		mObstacleImage = new engine::ImageComponent(*this, "backgrounds/raised_box.png", 1);
+		this->AddComponent(*mObstacleImage);
 		createBlocks();
 
-	} else if (mobstacleType == obstacleType::WESTERN_ROCK) {
+	} else if (mObstacleType == ObstacleType::WESTERN_ROCK) {
 		DEBUG("obstacle is a WESTERN ROCK");
-		mobstacleImage = new engine::ImageComponent(*this, "backgrounds/rock.png", 1);
-		this->AddComponent(*mobstacleImage);
+		mObstacleImage = new engine::ImageComponent(*this, "backgrounds/rock.png", 1);
+		this->AddComponent(*mObstacleImage);
 		createBlocks();
 
-	} else if (mobstacleType == obstacleType::MACHINE_PART) {
+	} else if (mObstacleType == ObstacleType::MACHINE_PART) {
 		DEBUG("obstacle is a MACHINE PART");
 		mMachinePartState = MachinePartState::NON_COLLECTED;
 		generateTurningAnimation();
-		mTurning = new engine::Animation(*this, "sprites/machinePart.png", 1200.0f, mTurningAnimationSprites, 0, 23, true, 1);
+		mTurning = new engine::Animation(*this, "sprites/machine_part.png", 1200.0f, mTurningAnimationSprites, 0, 23, true, 1);
 		this->AddComponent(*mTurning);
 
 		mAudioController = new engine::AudioController();
@@ -102,22 +102,22 @@ void obstacle::createComponents() {
 		mAudioController->AddAudio("coleta", *mCollected);
 		this->AddComponent(*mAudioController);
 
-		mMachinePartCode = new machinePartCode(this);
+		mMachinePartCode = new MachinePartCode(this);
 		this->AddComponent(*mMachinePartCode);
 
-	} else if (mobstacleType == obstacleType::WESTERN_SPIKE) {
+	} else if (mObstacleType == ObstacleType::WESTERN_SPIKE) {
 		DEBUG("obstacle is a WESTERN SPIKE");
 
-		mobstacleImage = new engine::ImageComponent(*this, "backgrounds/Espinhos_rose.png", 1);
-		this->AddComponent(*mobstacleImage);
+		mObstacleImage = new engine::ImageComponent(*this, "backgrounds/Espinhos_rose.png", 1);
+		this->AddComponent(*mObstacleImage);
 		createBlocks();
-	} else if (mobstacleType == obstacleType::WESTERN_POST) {
+	} else if (mObstacleType == ObstacleType::WESTERN_POST) {
 		DEBUG("obstacle is a WESTERN POST");
 
-		mobstacleImage = new engine::ImageComponent(*this, "backgrounds/obstaculoDescer2.png", 1);
-		this->AddComponent(*mobstacleImage);
+		mObstacleImage = new engine::ImageComponent(*this, "backgrounds/obstaculoDescer2.png", 1);
+		this->AddComponent(*mObstacleImage);
 		createBlocks();
-	} else if (mobstacleType == obstacleType::GROUND) {
+	} else if (mObstacleType == ObstacleType::GROUND) {
 		createBlocks();
 	}
 }
@@ -125,7 +125,7 @@ void obstacle::createComponents() {
 // Here we create the invisible objects that make the obstacle.
 // The name attribute of the InvisibleBlock isn't needed. It's for testing only.
 // It's important to create the blocks based on the type of the object.
-void obstacle::createBlocks() {
+void Obstacle::createBlocks() {
 
 	// We initialize the block' position as the position relative to parent of the obstacle.
 	// This way we can position things inside the obstacle just by adding values.
@@ -133,37 +133,37 @@ void obstacle::createBlocks() {
 
 	//setting obstacle position based on its type
 
-	if (mobstacleType == obstacleType::GROUND) {
+	if (mObstacleType == ObstacleType::GROUND) {
 		//	DEBUG("Creating invisible block for the ground.");
 		mBlockList.push_back(new InvisibleBlock("block_1", blockPosition, std::make_pair(21000, 100))); //obstacle size
 		//	DEBUG("List size: " << mBlockList.size());
-	} else if (mobstacleType == obstacleType::WESTERN_CAR) {
+	} else if (mObstacleType == ObstacleType::WESTERN_CAR) {
 
 		blockPosition.first += 69;
 		blockPosition.second += 20;
 
 		mBlockList.push_back(new InvisibleBlock("block_2", blockPosition, std::make_pair(109, 143)));
-	} else if (mobstacleType == obstacleType::WESTERN_BOX) {
+	} else if (mObstacleType == ObstacleType::WESTERN_BOX) {
 		blockPosition.first += 58;
 		blockPosition.second += 6;
 
 		mBlockList.push_back(new InvisibleBlock("block_3", blockPosition, std::make_pair(63, 73)));
-	} else if (mobstacleType == obstacleType::WESTERN_RAISED_BOX) {
+	} else if (mObstacleType == ObstacleType::WESTERN_RAISED_BOX) {
 		blockPosition.first += 35;
 		blockPosition.second += 6;
 
 		mBlockList.push_back(new InvisibleBlock("block_4", blockPosition, std::make_pair(50, 68)));
-	} else if (mobstacleType == obstacleType::WESTERN_ROCK) {
+	} else if (mObstacleType == ObstacleType::WESTERN_ROCK) {
 		blockPosition.first += 80;
 		blockPosition.second += 12;
 
 		mBlockList.push_back(new InvisibleBlock("block_5", blockPosition, std::make_pair(4, 100)));
-	} else if (mobstacleType == obstacleType::WESTERN_SPIKE) {
+	} else if (mObstacleType == ObstacleType::WESTERN_SPIKE) {
 		blockPosition.first += 19;
 		blockPosition.second += 23;
 
 		mBlockList.push_back(new InvisibleBlock("block_6", blockPosition, std::make_pair(210, 92)));
-	} else if (mobstacleType == obstacleType::WESTERN_POST) {
+	} else if (mObstacleType == ObstacleType::WESTERN_POST) {
 		blockPosition.first += 48;
 		blockPosition.second += 32;
 
@@ -172,7 +172,7 @@ void obstacle::createBlocks() {
 
 }
 
-void obstacle::generateTurningAnimation() {
+void Obstacle::generateTurningAnimation() {
 	const int NUMBER_SPRITES_TURNING_ANIMATION = 24;
 	for (int i = 0; i < NUMBER_SPRITES_TURNING_ANIMATION; i++) {
 		mTurningAnimationSprites.push_back(new engine::Sprite());

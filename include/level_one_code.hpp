@@ -10,9 +10,9 @@ namespace Azo {
 	class LevelOneCode : public engine::CodeComponent {
 		private:
 			Player *mPlayer;
-			std::list<obstacle *> mObstacleList;
+			std::list<Obstacle *> mObstacleList;
 			engine::AudioController *mAudioController;
-			engine::GameObject *mLosingParts;		
+			engine::GameObject *mLosingParts;
 			engine::GameObject *mLosingDeath;
 			engine::GameObject *mWinningScreen;
 			engine::GameObject *mArrow;
@@ -27,7 +27,7 @@ namespace Azo {
 			void updateCode();
 			void changeOption();
 			void chooseOption();
-			void updateobstaclePosition();
+			void updateObstaclePosition();
 			void getParents();
 			bool hasGround(double *groundY);
 			bool hasCeiling(double *groundY);

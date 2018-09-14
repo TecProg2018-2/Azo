@@ -5,15 +5,15 @@
 #include "audio_controller.hpp"
 
 namespace Azo {
-	class obstacle;
+	class Obstacle;
 
-	class machinePartCode : public engine::CodeComponent {
+	class MachinePartCode : public engine::CodeComponent {
 		private:
-			obstacle *mMachinePart;
+			Obstacle *mMachinePart;
 			engine::AudioController *mAudioController;
 		public:
-			machinePartCode(obstacle *machinePart);
-			virtual ~machinePartCode();
+			MachinePartCode(Obstacle *machinePart);
+			virtual ~MachinePartCode();
 			void shutDown();
 		private:
 			void updateCode();

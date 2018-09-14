@@ -9,8 +9,8 @@ LevelOneCode::LevelOneCode(engine::GameObject &gameObject){
 }
 
 void LevelOneCode::shutDown() {
-	for (auto obstacle : mObstacleList) {
-		obstacle = nullptr;
+	for (auto Obstacle : mObstacleList) {
+		Obstacle = nullptr;
 	}
 
 	mAudioController = nullptr;
@@ -27,7 +27,7 @@ void LevelOneCode::getParents() {
 		if (parent->getClassName() == "Player") {
 			mPlayer = dynamic_cast<Player *>(parent);
 		} else if (parent->getClassName() == "obstacle") {
-			mObstacleList.push_back(dynamic_cast<obstacle *>(parent));
+			mObstacleList.push_back(dynamic_cast<Obstacle *>(parent));
 		} else if (parent->mName == "winning_screen") {
 			mWinningScreen = parent;
 		} else if (parent->mName == "losing_parts") {
@@ -81,6 +81,25 @@ void LevelOneCode::updateCode() {
 			}
 		}
 	}
+	updateObstaclePosition();
+
+  	if (mPlayer->mState != PlayerState::DIE) {
+    	updatePhysics();
+  	} else {
+	  	mWaitingTime += engine::Game::instance.GetTimer().GetDeltaTime();
+
+	  	if (mWaitingTime >= 2300.0f) {
+		  	mLosingDeath->mObjectState = engine::ObjectState::ENABLED;
+		  	changeOption();
+		  	if(engine::Game::instance.input_manager.KeyDownOnce(engine::Button::ENTER)){
+			  	chooseOption();
+		  	}
+		}
+
+	  	if (mAudioController->getAudioState("tema_level_one") == engine::AudioState::PLAYING){
+		  	mAudioController->stopAudio("tema_level_one");
+		}
+	}
 }
 
 void LevelOneCode::changeOption() {
@@ -120,7 +139,7 @@ void LevelOneCode::chooseOption() {
 
 
 
-void LevelOneCode::updateobstaclePosition() {
+void LevelOneCode::updateObstaclePosition() {
 	for (auto eachObstacle : mObstacleList) {
 		eachObstacle->mCurrentPosition.first = gameObject->mCurrentPosition.first + eachObstacle->mPositionRelativeToParent.first;
 		eachObstacle->mCurrentPosition.second = gameObject->mCurrentPosition.second + eachObstacle->mPositionRelativeToParent.second;
@@ -213,7 +232,7 @@ bool LevelOneCode::hasGround(double *groundY) {
 		// TODO(Roger): Update the collision methods so they return the colliding object.
 		// TODO(Roger): Create states to the machine parts.
 
-		if (eachObstacle->mobstacleType == obstacleType::MACHINE_PART) {
+		if (eachObstacle->mObstacleType == ObstacleType::MACHINE_PART) {
 			std::pair<double, double> blockBottomLeft = eachObstacle->calcBottomLeft();
 			std::pair<double, double> blockTopRight = eachObstacle->calcTopRight();
 
@@ -258,9 +277,9 @@ bool LevelOneCode::hasGround(double *groundY) {
 
 					*groundY = blockTop;
 
-					if (eachObstacle->mobstacleType == obstacleType::WESTERN_ROCK ||
-					   eachObstacle->mobstacleType == obstacleType::WESTERN_SPIKE ||
-					   eachObstacle->mobstacleType == obstacleType::WESTERN_POST) {
+					if (eachObstacle->mObstacleType == ObstacleType::WESTERN_ROCK ||
+					   eachObstacle->mObstacleType == ObstacleType::WESTERN_SPIKE ||
+					   eachObstacle->mObstacleType == ObstacleType::WESTERN_POST) {
 						mPlayer->mState = PlayerState::DIE;
 					}
 
@@ -288,7 +307,7 @@ bool LevelOneCode::hasWallOnRight(double *wallX) {
 		const int DISTANCE_TOP = 16;
 		const int DISTANCE_BOTTOM = 16;
 
-		if (eachObstacle->mobstacleType == obstacleType::MACHINE_PART) {
+		if (eachObstacle->mObstacleType == ObstacleType::MACHINE_PART) {
 			std::pair<double, double> blockBottomLeft = eachObstacle->calcBottomLeft();
 			std::pair<double, double> blockTopRight = eachObstacle->calcTopRight();
 
@@ -347,7 +366,7 @@ bool LevelOneCode::hasWallOnRight(double *wallX) {
 				   playerBottom >= blockTop &&
 				   playerRight >= blockLeft) {
 
-					if (eachObstacle->mobstacleType == obstacleType::WESTERN_POST) {
+					if (eachObstacle->mObstacleType == ObstacleType::WESTERN_POST) {
 						mPlayer->mState = PlayerState::DIE;
 					}
 
@@ -425,7 +444,7 @@ bool LevelOneCode::hasCeiling(double *groundY) {
 			   playerBottom >= blockTop &&
 			   playerTop >= blockTop) {
 
-				if (eachObstacle->mobstacleType == obstacleType::WESTERN_POST) {
+				if (eachObstacle->mObstacleType == ObstacleType::WESTERN_POST) {
 					mPlayer->mState = PlayerState::DIE;
 				}
 

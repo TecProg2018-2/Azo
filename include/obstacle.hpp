@@ -8,7 +8,7 @@
 namespace Azo {
 
 	// Add new obstacle Types here.
-	enum class obstacleType {
+	enum class ObstacleType {
 		GROUND,
 		WESTERN_BOX,
 		WESTERN_RAISED_BOX,
@@ -26,14 +26,14 @@ namespace Azo {
 		FINISHED,
 	};
 
-	class obstacle : public engine::GameObject {
+	class Obstacle : public engine::GameObject {
 		public:
 			std::pair<double, double> mPositionRelativeToParent;
 			std::list<InvisibleBlock *> mBlockList;
-			obstacleType mobstacleType;
+			ObstacleType mObstacleType;
 			MachinePartState mMachinePartState = MachinePartState::NON_MACHINE;
 		private:
-			engine::ImageComponent *mobstacleImage = NULL;
+			engine::ImageComponent *mObstacleImage = NULL;
 
 			engine::AudioController *mAudioController = NULL;
 
@@ -43,11 +43,11 @@ namespace Azo {
 
 			std::vector<engine::Sprite *> mTurningAnimationSprites;
 
-			machinePartCode *mMachinePartCode = NULL;
+			MachinePartCode *mMachinePartCode = NULL;
 		public:
-			obstacle();
-			virtual ~obstacle();
-			obstacle(std::string name, std::pair<double, double> positionRelativeToParent, obstacleType obstacleType);
+			Obstacle();
+			virtual ~Obstacle();
+			Obstacle(std::string name, std::pair<double, double> positionRelativeToParent, ObstacleType obstacleType);
 			void shutDown();
 			inline std::string getClassName(){
 				return "obstacle";
