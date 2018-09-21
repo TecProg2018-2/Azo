@@ -1,6 +1,19 @@
+/*************************************
+@file: player.cpp
+@brief Purpose: player class implementation
+GPL v3.0 License
+Copyright (c) 2017 Azo
+
+Notice: TheAzo, TheAzoTeam
+https://github.com/TecProg2018-2/Azo
+
+Ths file includes just player declaration because the related use of
+other classes comes from it.
+*************************************/
+
 #include "player.hpp"
 
-using namespace Azo;
+using namespace Azo;  //Used to avoid writing all the path from Azo context
 
 Player::Player(std::string name, std::pair<double, double> currentPosition) {
 	DEBUG("Player::Player method.");
