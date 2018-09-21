@@ -92,7 +92,7 @@ void PlayerCode::updateCode() {
 	switch (mPlayer->mState) {
 		case PlayerState::WALK:
 
-			mAnimationController->startUniqueAnimation("walking"); //sets the corresponding animation to the state WALK
+			mAnimationController->startUniqueAnimation("walking");
 
 			//Check if player hit some obstacle
 			if(mPlayer->mPushesRightWall || mPlayer->mPushesLeftWall) {
@@ -111,12 +111,12 @@ void PlayerCode::updateCode() {
 
 			} else if (!mPlayer->mOnGround) { //checks if character is not on ground
 				//DEBUG("Player isn't on ground. (WALK)");
-				mPlayer->mState = PlayerState::JUMP; //Updates mPlayer's state to JUMP
+				mPlayer->mState = PlayerState::JUMP;
 			}
 
 			//checks if button 'S' is pressed
 			if(engine::Game::instance.inputManager.keyState(engine::Button::S)) {
-				mPlayer->mState = PlayerState::SLIDE; //Updates mPlayer's state to SLIDE
+				mPlayer->mState = PlayerState::SLIDE;
 			}
 
 			break;
@@ -125,10 +125,10 @@ void PlayerCode::updateCode() {
 
 			//checks if character is on ground
 			if (mPlayer->mOnGround) {
-				mPlayer->mState = PlayerState::WALK; //Updates mPlayer's state to WALK
+				mPlayer->mState = PlayerState::WALK;
 			}
 
-			mAnimationController->startUniqueAnimation("jumping"); //sets the corresponding animation to the state WALK
+			mAnimationController->startUniqueAnimation("jumping");
 
 			mPlayer->mSpeed.second += (mPlayer->M_GRAVITY * engine::Game::instance.getTimer().getDeltaTime());
 			//DEBUG("UpdateCode method. Player Speed in Y: " << mPlayer->m_speed.second);
@@ -143,11 +143,11 @@ void PlayerCode::updateCode() {
 			break;
 
 		case PlayerState::SLIDE:
-			mAnimationController->startUniqueAnimation("sliding"); //sets the corresponding animation to the state SLIDE
+			mAnimationController->startUniqueAnimation("sliding");
 
 			//check if character was sliding
 			if (mAnimationController->getAnimationStatus("sliding") == engine::AnimationState::FINISHED) {
-				mPlayer->mState = PlayerState::WALK; //updates mPlayer's state to WALK
+				mPlayer->mState = PlayerState::WALK;
 				break;
 			}
 
@@ -158,33 +158,33 @@ void PlayerCode::updateCode() {
 			//Check if player hit some obstacle
 			if (mPlayer->mPushesRightWall) {
 				mPlayer->mSpeed.first = mPlayer->M_ZERO_VECTOR.first; //clear mPlayer walking speed
-				mPlayer->mState = PlayerState::WALK; //Updates mPlayer's state to WALK
+				mPlayer->mState = PlayerState::WALK;
 			}
 
 			//check if button 'W' is pressed
 			if (engine::Game::instance.inputManager.keyState(engine::Button::W)) {
-				mPlayer->mState = PlayerState::JUMP; //Updates mPlayer's state to JUMP
+				mPlayer->mState = PlayerState::JUMP;
 				mPlayer->mSpeed.second = mPlayer->M_JUMPING_SPEED; //normal jump speed of character
 			}
 
 			break;
 		case PlayerState::DIE:
-			mAnimationController->startUniqueAnimation("dying"); //sets the corresponding animation to the state DIE
+			mAnimationController->startUniqueAnimation("dying");
 
-			mAudioController->playAudio("lost"); //sets the corresponding audio to the state DIE
+			mAudioController->playAudio("lost");
 
 			break;
 		case PlayerState::END:
-			//checks if player collected parts is less that the total
+			//checks if player collected parts is less that the total avaliable in game
 			if (mPlayer->mCollectedParts < mPlayer->M_TOTAL_PARTS) {
-				mAnimationController->startUniqueAnimation("losing"); // sets the corresponding animation to losing in END state
+				mAnimationController->startUniqueAnimation("losing");
 				//checks if animationStatus is losing
 				if (mAnimationController->getAnimationStatus("losing") == engine::AnimationState::FINISHED) {
-					mAudioController->playAudio("lost"); // sets the corresponding audio to losing in END state
+					mAudioController->playAudio("lost");
 				}
 			} else {
-				mAnimationController->startUniqueAnimation("victory"); // sets the corresponding animation to victory in END state
-				mAudioController->playAudio("victory"); // sets the corresponding audio to victory in END state
+				mAnimationController->startUniqueAnimation("victory");
+				mAudioController->playAudio("victory");
 			}
 
 			break;
