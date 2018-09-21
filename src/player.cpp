@@ -15,6 +15,7 @@ other classes comes from it.
 
 using namespace Azo;  //Used to avoid writing all the path from Azo context
 
+//overloaded construcotr of Player instantiating it
 Player::Player(std::string name, std::pair<double, double> currentPosition) {
 	DEBUG("Player::Player method.");
 
@@ -23,8 +24,11 @@ Player::Player(std::string name, std::pair<double, double> currentPosition) {
 	createComponents();
 }
 
+//This method free all the pointers of player. It passes through its pointers
+//attributes, free them and point to null
 void Player::shutdown() {
 
+	//checks if mAnimationController is null
 	if (mAnimationController != nullptr) {
 		DEBUG("Shutting down mAnimationController");
 		mAnimationController->shutdown();
@@ -32,6 +36,8 @@ void Player::shutdown() {
 		mAnimationController = nullptr;
 	}
 
+	//The subsequent loops will Free the corresponding sprites
+	//they run all the existing sprites on their variables
 	for (auto eachSprite : mWalkingAnimationSprites) {
 		if (eachSprite != nullptr) {
 			eachSprite = nullptr;
@@ -56,7 +62,7 @@ void Player::shutdown() {
 		}
 	}
 
-
+	//The subsequent 'ifs' checks if the variable pointer is pointing to null
 	if (mWalking != nullptr) {
 		delete(mWalking);
 		mWalking = nullptr;
@@ -89,11 +95,13 @@ void Player::shutdown() {
 	}
 }
 
-
+//This method create the components corresponding to player. Components as the
+//possible animations and the possibles audios.
 void Player::createComponents() {
 	DEBUG("Creating Player Components.");
 	generateWalkingAnimation();
 
+	//Receives a new type of animation
 	mWalking = new engine::Animation(*this,
 									"sprites/CowboyRun.png",
 									1000.0f,
@@ -181,6 +189,7 @@ void Player::createComponents() {
 	DEBUG("Adding animation controller to Player.");
 	this->addComponent(*mAnimationController);
 
+	//Generates new audios
 	mLost = new engine::AudioComponent(*this,
 										"audios/derrota.ogg",
 										false,
@@ -204,6 +213,7 @@ void Player::createComponents() {
 	this->addComponent(*mPlayerCode);
 }
 
+//This method sets the configuration for winning scenario
 void Player::generateVictoryAnimation() {
 	mVictoryAnimationSprites.push_back(new engine::Sprite());
 
@@ -219,7 +229,7 @@ void Player::generateVictoryAnimation() {
 	mVictoryAnimationSprites[0]->spriteHeight = 140;
 }
 
-
+//This method sets the configuration for winning scenario
 void Player::generateLosingAnimation() {
 	const int LOSING_SPRITES = 7;
 	for (int i = 0; i < LOSING_SPRITES; i++) {
@@ -268,13 +278,14 @@ void Player::generateLosingAnimation() {
 	mLosingAnimationSprites[6]->spriteHeight = 111 - 4;
 }
 
-
-void Player::generateWalkingAnimation(){
+//This method sets the walking sprites on its desgined variables
+void Player::generateWalkingAnimation() {
 	DEBUG("Generating Player walking animation.");
 	const int WALKING_SPRITES = 23;
+	//A loop to run all the 23 spaces of the mAnimationSprites vector
 	for (int i = 0; i < WALKING_SPRITES; i++) {
 		mWalkingAnimationSprites.push_back(new engine::Sprite());
-	}
+	}//FOR - at the end it will have created the vector of animation sprite with desired number of spaces
 
 	/*
 		Set the animation sprites coordinates (x, y)
@@ -398,12 +409,14 @@ void Player::generateWalkingAnimation(){
 	mWalkingAnimationSprites[22]->spriteHeight = 139 - 29;
 }
 
+//This method sets the jumping sprites on its desgined variables
 void Player::generateJumpingAnimation() {
 	DEBUG("Generating Player Jumping Animation.");
 	const int JUMPING_SPRITES = 8;
+	//create a vector with designed number of sprites
 	for (int i = 0; i < JUMPING_SPRITES; i++) {
 		mJumpingAnimationSprites.push_back(new engine::Sprite());
-	}
+	}//FOR - the vector will have been created
 
 	/*
 		Set the animation sprites coordinates (x, y)
@@ -452,11 +465,13 @@ void Player::generateJumpingAnimation() {
 	mJumpingAnimationSprites[7]->spriteHeight = 1107 - 997;
 }
 
+//This method sets the sliding sprites on its desgined variables
 void Player::generateSlidingAnimation() {
 	const int SLIDING_SPRITES = 21;
+	//create a vector with designed number of sprites
 	for (int i = 0; i < SLIDING_SPRITES; i++) {
 		mSlidingAnimationSprites.push_back(new engine::Sprite());
-	}
+	} // FOR - vector will have been created
 
 	/*
 		Set the animation sprites coordinates (x, y)
@@ -570,11 +585,13 @@ void Player::generateSlidingAnimation() {
 	mSlidingAnimationSprites[20]->spriteHeight = 139 - 40;
 }
 
+//This method sets the jumping sprites on its desgined variables
 void Player::generateDyingAnimation() {
 	const int DYING_SPRITES = 36;
+	//create a vector with designed number of sprites
 	for (int i = 0; i < DYING_SPRITES; i++) {
 		mDyingAnimationSprites.push_back(new engine::Sprite());
-	}
+	}//FOR - vector will have been created
 
 	/*
 		Set the animation sprites coordinates (x, y)
