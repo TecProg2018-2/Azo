@@ -30,7 +30,7 @@ AudioComponent::~AudioComponent() {}
  */
 AudioComponent::AudioComponent(GameObject &gameObject,std::string audioPath,
 							  	bool isMusic, bool playOnStart) {
-
+	DEBUG("Creating Audio Component.");
 	this->gameObject = &gameObject;
 	this->audioPath = audioPath;//path to audio file
 	this->isMusic = isMusic;	//bool to check if music exists
@@ -47,10 +47,11 @@ AudioComponent::AudioComponent(GameObject &gameObject,std::string audioPath,
  */
 void AudioComponent::init() {
 
-	INFO("init audio component");
+	DEBUG("Init audio component");
 
 	// Checks if audio in question is music or sound effect
 	if (isMusic) {
+		DEBUG("Playing Music" << audioPath);
 		music = Game::instance.getAssetsManager().LoadMusic(audioPath);
 
 		if (music == NULL) {
@@ -60,6 +61,7 @@ void AudioComponent::init() {
 		}
 
 	} else {
+		DEBUG("Playing Sound" << audioPath);
 		sound = Game::instance.getAssetsManager().LoadSound(audioPath);
 
 		if (sound == NULL) {
@@ -75,9 +77,11 @@ void AudioComponent::init() {
 void AudioComponent::updateCode() {
 
 	if (playOnStart) {
+		DEBUG("Playing audio on startup");
 		play (-1, -1); // Plays audio once until end
 		playOnStart = false;
 	} else {
+		DEBUG("Startup audio already played");
 		//Nothing to do
 	}
 }
@@ -89,7 +93,7 @@ void AudioComponent::updateCode() {
 */
 void AudioComponent::shutdown() {
 
-	INFO("shutdown audio component");
+	DEBUG("Shutdown audio component");
 
 	stop(-1);
 
@@ -97,10 +101,12 @@ void AudioComponent::shutdown() {
 		Mix_FreeMusic(music);
 		music = nullptr;
 	} else {
+		DEBUG("No music to shutdown");
 		//Nothing to do
 	}
 
 	if(sound != nullptr) {
+		DEBUG("No sound to shutdown");
 		sound = nullptr;
 	} else {
 		//Nothing to do
@@ -118,7 +124,7 @@ void AudioComponent::play(int loops, int channel) {
 
 	//checks if the audio in question is music or sound effect
 	if (isMusic) {
-
+		DEBUG("Audio is music");
 		if (audioState == AudioState::STOPPED) {
 			Mix_PlayMusic (music, loops);
 			INFO("Play music: " << audioPath);
@@ -130,7 +136,7 @@ void AudioComponent::play(int loops, int channel) {
 		}
 
 	} else {
-
+		DEBUG("Audio is sound");
 		if (audioState == AudioState::STOPPED){
 			Mix_PlayChannel(channel, sound, 0);
 			INFO("Play sound: " << audioPath);
@@ -141,7 +147,7 @@ void AudioComponent::play(int loops, int channel) {
 			//Nothing to do
 		}
 	}
-
+	DEBUG("Changing AudioState to PLAYING");
 	audioState = AudioState::PLAYING;
 }
 
@@ -162,7 +168,7 @@ void AudioComponent::stop(int channel){
 		Mix_HaltChannel(channel);
 		INFO("Stop sound: " << audioPath);
 	}
-
+	DEBUG("Changing AudioState to PAUSED");
 	audioState = AudioState::STOPPED;
 }
 
@@ -182,6 +188,6 @@ void AudioComponent::pause(int channel) {
 		Mix_Pause(channel);
 		INFO("Pause sound: " << audioPath);
 	}
-
+	DEBUG("Changing AudioState to PAUSED");
 	audioState = AudioState::PAUSED;
 }
