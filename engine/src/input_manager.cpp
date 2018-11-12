@@ -7,7 +7,6 @@
  *
  * https://github.com/TecProg2018-2/Azo/blob/master/LICENSE.md
 */
-#include "log.h"
 #include "input_manager.hpp"
 
 using namespace engine;// Used to avoid write engine::Game engine::Game::instance;.
@@ -20,8 +19,9 @@ using namespace engine;// Used to avoid write engine::Game engine::Game::instanc
 InputManager::InputManager() {}
 InputManager::~InputManager() {}
 
+//Useless function for now
 /**
-* @brief test if button is pressed.
+* @brief test if button is pressed. 
 *
 * Used to set the test of key down.
 *
@@ -29,8 +29,9 @@ InputManager::~InputManager() {}
 *
 * @return a bool that indicates the add scene success.
 */
-bool InputManager::keyDown(Button button) {
+/*bool InputManager::keyDown(Button button) {
 	ASSERT(button != -1, "button path can't be -1");
+	DEBUG("Test");
 	for (auto eachEvent : mEventList) {
 		switch(eachEvent.type) {
 			mLastEventType = eachEvent.type;
@@ -38,9 +39,11 @@ bool InputManager::keyDown(Button button) {
 			//  Case start.
 			case SDL_KEYDOWN:
 
-				if (eachEvent.key.keysym.scancode == (SDL_Scancode)button) {                                
+				if (eachEvent.key.keysym.scancode == (SDL_Scancode)button) {      
+					DEBUG("Test2");                          
 					return true;
 				} else {
+					DEBUG("Test3");
 					//Nothing to do, for another command was not given
 				}
 
@@ -49,7 +52,7 @@ bool InputManager::keyDown(Button button) {
 	}
 
 	return false;
-}
+}*/
 
 /**
 * @brief test if button is pressed once.
@@ -60,11 +63,13 @@ bool InputManager::keyDown(Button button) {
 *
 * @return a bool that indicates the add scene success.
 */
+
 bool InputManager::keyDownOnce(Button button) {
 	ASSERT(button != -1, "button path can't be -1.");
 	if (keyboardStates[button]) {
 		SDL_PumpEvents();
 		if (keyboardStates[button]) {
+
 			//Nothing to do for the keyboardStates matches button
 		} else {
 			return true;
