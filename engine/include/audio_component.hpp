@@ -28,6 +28,18 @@ ra	 *Enum Class used to differentiate Audio States
 	};
 
 	/*
+	 * @brief Class for possible errors types.
+	 * 
+	 * Enum class used to differentiate errors inside the menu.
+	 */ 
+	enum class ErrorType {
+		DIVIBYZERO,
+		NULLPOINTER,
+		EMPTYSTRING,
+		WRONGTYPE,
+	};
+	
+	/*
 	 *
 	 *@brief AudioComponent class for in-game audio
 	 *
@@ -64,6 +76,7 @@ ra	 *Enum Class used to differentiate Audio States
 		inline bool getIsMusic() {
 			return isMusic;
 		}
+		void errorLog(ErrorType code, std::string file);
 	};
 
 }

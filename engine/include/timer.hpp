@@ -13,7 +13,17 @@
 #include "sdl2include.h"
 
 namespace engine {
- 
+	/**
+	 * @brief Class for possible errors types.
+	 * 
+	 * Enum class used to differentiate errors inside the menu.
+	 */ 
+	enum class ErrorType {
+		DIVIBYZERO,
+		NULLPOINTER,
+		EMPTYSTRING,
+		WRONGTYPE,
+	};
 	//@brief class to calculate time operations	 
 	class Timer {
 		private:
@@ -28,6 +38,7 @@ namespace engine {
 			void Reset();
 			void DeltaTime();
 			float getDeltaTime();
+			void errorLog(ErrorType code, std::string file);
 	};
 }
 

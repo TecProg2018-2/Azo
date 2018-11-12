@@ -27,6 +27,18 @@ namespace engine {
 		RUNNED,
 	};
 
+	/**
+	 * @brief Class for possible errors types.
+	 * 
+	 * Enum class used to differentiate errors inside the menu.
+	 */ 
+	enum class ErrorType {
+		DIVIBYZERO,
+		NULLPOINTER,
+		EMPTYSTRING,
+		WRONGTYPE,
+	};
+
 	/*
 	 *@brief a Scene class
 	 *
@@ -59,6 +71,7 @@ namespace engine {
 		void deleteKeyList();
 		void addGameObject(engine::GameObject &gameObject);
 		void removeGameObject(std::string &gameObjectName);
+		void errorLog(ErrorType code, std::string file);
 	};
 }
 

@@ -8,6 +8,9 @@
   * https://github.com/TecProg2018-2/Azo/blob/master/LICENSE.md
  */
 #include "timer.hpp"
+#include <ctime>
+#include <fstream>
+#include <iostream>
 
 using namespace engine;
 
@@ -63,4 +66,34 @@ void Timer::DeltaTime() {
 float Timer::getDeltaTime() {
   DEBUG("Getting DeltaTime"); // Logging done here so it doesn't affect the timer.
 	return deltaTime;
+}
+
+/*
+ *@brief Method to log error messages.
+ *
+ * Writes a file with error message, function containing error and time.
+ */
+void Timer::errorLog(ErrorType code, std::string file){
+    std::ofstream outfile;
+    outfile.open("../errorLog.txt", std::ofstream::out | std::ofstream::app);
+    time_t now = time(0);
+    std::string dt = ctime(&now); //convert to string
+	outfile << "Function: " + file << std::endl;
+    outfile << "Date: " + dt << std::endl;
+	
+    switch(code) {
+        case ErrorType::DIVIBYZERO:
+            outfile << "Error: division by zero" << std::endl;
+            break;
+        case ErrorType::EMPTYSTRING:
+            outfile << "Error: empty String" << std::endl;
+            break;
+        case ErrorType::NULLPOINTER:
+            outfile << "Error: null pointer" << std::endl;
+            break;
+        default:
+            outfile << "Error: wrong type" << std::endl;
+    }
+    outfile << "===============" << std::endl;
+    outfile.close();
 }
