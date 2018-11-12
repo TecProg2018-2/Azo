@@ -17,6 +17,7 @@ using namespace engine;
  *Resets elapsed time to zero
  */
 Timer::Timer() {
+  DEBUG("Creating Timer");
 	Reset();
 }
 
@@ -28,7 +29,7 @@ Timer::~Timer() {}
  * Reset startTicks and sets all other attributes to zero
  */
 void Timer::Reset() {
-
+  DEBUG("Resetting Timer");
 	startTicks = SDL_GetTicks();
 	elapsedTicks = 0.0f;
 	deltaTime = 0.0f;
@@ -39,7 +40,7 @@ void Timer::Reset() {
  *
  * Calculates difference from present tick to total elapsed ticks
  */
-void Timer::DeltaTime() {
+void Timer::DeltaTime() {  
 	deltaTime = SDL_GetTicks() - elapsedTicks;
 }
 
@@ -49,6 +50,7 @@ void Timer::DeltaTime() {
  *@return the elapsed time
  */
 float Timer::getDeltaTime() {
+  DEBUG("Getting DeltaTime"); // Logging done here so it doesn't affect the timer.
 	return deltaTime;
 }
 
