@@ -8,6 +8,9 @@
  * https://github.com/TecProg2018-2/Azo/blob/master/LICENSE.md
  */
 #include "audio_controller.hpp"
+#include <ctime>
+#include <fstream>
+#include <iostream>
 
 using namespace engine;
 
@@ -187,17 +190,20 @@ void Timer::errorLog(ErrorType code, std::string file){
     outfile << "Date: " + dt << std::endl;
 	
     switch(code) {
-        case ErrorType::DIVIBYZERO:
+        case ErrorType::DIVI_BY_ZERO:
             outfile << "Error: division by zero" << std::endl;
             break;
-        case ErrorType::EMPTYSTRING:
+        case ErrorType::EMPTY_STRING:
             outfile << "Error: empty String" << std::endl;
             break;
-        case ErrorType::NULLPOINTER:
+        case ErrorType::NULL_POINTER:
             outfile << "Error: null pointer" << std::endl;
             break;
-        default:
+        case ErrorType::WRONG_TYPE:
             outfile << "Error: wrong type" << std::endl;
+			break;
+		default:
+			outfile << "Error: no matching file" << std::endl;
     }
     outfile << "===============" << std::endl;
     outfile.close();

@@ -24,10 +24,11 @@ namespace engine {
 	 * Enum class used to differentiate errors inside the menu.
 	 */ 
 	enum class ErrorType {
-		DIVIBYZERO,
-		NULLPOINTER,
-		EMPTYSTRING,
-		WRONGTYPE,
+		DIVI_BY_ZERO,
+		NULL_POINTER,
+		EMPTYS_TRING,
+		WRONG_TYPE,
+		NO_MATCHING_FILE
 	};
 	/*
 	 *@brief Audio contoller class to control in game audio.
