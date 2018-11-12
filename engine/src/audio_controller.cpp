@@ -90,6 +90,7 @@ void AudioController::playAudio(std::string audioName) {
 	if(audioToBePlayed != audioMap.end()) {
 		audioToBePlayed->second->play(-1, -1);
 	} else {
+		ErrorType(ErrorType::NO_MATCHING_FILE, "AudioController::playAudio");
 		ERROR("Audio " >> audioName >> " doesn't exist.");
 	}
 }
@@ -107,6 +108,7 @@ void AudioController::stopAudio(std::string audioName) {
 	if(audioToBePlayed != audioMap.end()) {
 		audioToBePlayed->second->stop(-1);
 	} else {
+			ErrorType(ErrorType::NO_MATCHING_FILE, "AudioController::stopAudio");
 		ERROR("Audio " >> audioName >> " couldn't be found!");
 	}
 }
@@ -125,6 +127,7 @@ void AudioController::pauseAudio(std::string audioName) {
 	if(audioToBePlayed != audioMap.end()) {
 		audioToBePlayed->second->pause(-1);
 	} else {
+		ErrorType(ErrorType::NO_MATCHING_FILE, "AudioController::pauseAudio");
 		ERROR("Audio " >> audioName >> " couldn't be found!");
 	}
 }

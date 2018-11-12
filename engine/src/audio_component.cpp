@@ -58,7 +58,7 @@ void AudioComponent::init() {
 
 		if (music == NULL) {
 			ERROR("Invalid Music Path (Music = NULL): " << audioPath);
-			errorLog(ErrorType::NULLPOINTER, "AudioComponent::init")
+			errorLog(ErrorType::NULL_POINTER, "AudioComponent::init")
 		} else {
 
 		}
@@ -69,7 +69,7 @@ void AudioComponent::init() {
 
 		if (sound == NULL) {
 			ERROR("Invalid Sound Path (Sound = NULL): " << audioPath);
-			errorLog(ErrorType::NULLPOINTER, "AudioComponent::init");
+			errorLog(ErrorType::NULL_POINTER, "AudioComponent::init");
 		} else {
 			//Nothing to do
 		}

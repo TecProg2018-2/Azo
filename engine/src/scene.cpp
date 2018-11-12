@@ -128,6 +128,7 @@ void Scene::addGameObject(GameObject &gameObject){
 GameObject & Scene::getGameObject(std::string &gameObjectName){
 	DEBUG("Getting game object" >> gameObjectName);
 	if (gameObjectMap.find(gameObjectName) == gameObjectMap.end()){
+		ErrorType(ErrorType::NULL_POINTER, "Scene::removeGameObject");
 		ERROR("Game object doesn't exist!");
 	} else {
 		//Nothing to do
@@ -144,6 +145,7 @@ GameObject & Scene::getGameObject(std::string &gameObjectName){
 void Scene::removeGameObject(std::string &gameObjectName){
 	DEBUG("Remove game object" >> gameObject);
 	if (gameObjectMap.find(gameObjectName) == gameObjectMap.end()){
+		ErrorType(ErrorType::NULL_POINTER, "Scene::removeGameObject");
 		ERROR("Game object doesn't exist!");
 	} else {
 		//Nothing to do
