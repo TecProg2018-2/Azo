@@ -33,6 +33,14 @@ namespace engine {
 	 *It'a how the engine will manage the Scenes that appear on screen
 	 */
 	class Scene {
+	public:
+		engine::GameObject & getGameObject(std::string & gameObjectName);
+		SceneState mState = SceneState::FIRST_TIME;
+		
+	protected:
+		std::map<std::string, engine::GameObject *> gameObjectMap;
+		std::list<std::string> mKeyList;
+		std::string sceneName;
 
 	public:
 		Scene();
@@ -51,14 +59,6 @@ namespace engine {
 		void deleteKeyList();
 		void addGameObject(engine::GameObject &gameObject);
 		void removeGameObject(std::string &gameObjectName);
-
-		engine::GameObject & getGameObject(std::string & gameObjectName);
-		SceneState mState = SceneState::FIRST_TIME;
-
-	protected:
-		std::map<std::string, engine::GameObject *> gameObjectMap;
-		std::list<std::string> mKeyList;
-		std::string sceneName;
 	};
 }
 
