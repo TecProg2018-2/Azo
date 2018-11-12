@@ -22,7 +22,7 @@ InvisibleBlock::~InvisibleBlock(){}
  * @param size Pair of doubles relative to size(range > 0).
  */
 InvisibleBlock::InvisibleBlock(std::string name, std::pair<double, double> positionRelativeToParent,
-			       std::pair<double, double> size){
+			       std::pair<double, double> size) {
 	DEBUG("Creating Blocks");
 
 	mName = name;
@@ -50,7 +50,7 @@ InvisibleBlock::InvisibleBlock(std::string name, std::pair<double, double> posit
  *
  * Used for shutting down ImageComponent so as to free memory when closing the game.
  */
-void InvisibleBlock::shutdown(){
+void InvisibleBlock::shutdown() {
 	mImage->shutdown();
 	mImage = NULL;
 }

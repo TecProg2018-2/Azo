@@ -1,7 +1,7 @@
-/** 
+/**
  * @file invisible_block.hpp
  * @brief Purpose: Contains the InvisibleBlock class declaration.
- * 
+ *
  * GPL v3.0 License
  * Copyright (c) 2017 Azo
  *
@@ -19,25 +19,25 @@ namespace Azo {
 	 * A class for collision calculation using invisible blocks as parameters.
 	 */
 	class InvisibleBlock : public engine::GameObject {
+	public:
+		std::pair<double, double> mPositionRelativeToParent;
+		InvisibleBlock();
+		virtual ~InvisibleBlock();
+		InvisibleBlock(std::string name, std::pair<double, double> positionRelativeToParent,
+						 std::pair<double, double> size);
+		void shutdown();
+		/**
+		 * @brief Method for class name.
+		 *
+		 * Inline method for returning the class' name.
+		 */
+		inline std::string getClassName() {
+			return "InvisibleBlock";
+		}
 		private:
 			engine::ImageComponent *mImage;
 
-		public:
-			std::pair<double, double> mPositionRelativeToParent;
-		public:
-			InvisibleBlock();
-			virtual ~InvisibleBlock();
-			InvisibleBlock(std::string name, std::pair<double, double> positionRelativeToParent,
-				       std::pair<double, double> size);
-			void shutdown();
-			/**
-			 * @brief Method for class name.
-			 * 
-			 * Inline method for returning the class' name.
-			 */ 
-			inline std::string getClassName(){
-				return "InvisibleBlock";
-			}
+
 	};
 }
 
