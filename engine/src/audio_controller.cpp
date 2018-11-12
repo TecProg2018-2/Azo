@@ -17,7 +17,7 @@ AudioController::~AudioController() {}
  *@brief Method to initialize the in game audio.
  */
 void AudioController::init() {
-
+	DEBUG("Init AudioController");
 	for(auto audioRow : audioMap) {
 		auto audio = audioRow.second;
 		audio->init();
@@ -30,7 +30,7 @@ void AudioController::init() {
  *passes audio to shutdown() method and resets it to NULL.
  */
 void AudioController::shutdown() {
-
+	DEBUG("Shutdown AudioController");
 	for(auto audioRow : audioMap) {
 		auto audio = audioRow.second;
 		audio->shutdown();
@@ -40,14 +40,15 @@ void AudioController::shutdown() {
 
 
 void AudioController::updateCode() {
-
+	DEBUG("Update AudioController");
 	for(auto audioRow : audioMap) {
 		auto audio = audioRow.second;
 
 		if(audio->isEnabled()) {
 			audio->updateCode();
 		} else {
-
+			DEBUG("Audio" >> audio->audioPath >> "is disabled");
+			// Nothing to do.
 		}
 	}
 }
@@ -56,6 +57,7 @@ void AudioController::updateCode() {
  *@brief overwritten constructor for the AudioController.
  */
 AudioController::AudioController() {
+	DEBUG("Create AudioController");
 	this->componentState = State::ENABLED;
 }
 
@@ -65,7 +67,7 @@ AudioController::AudioController() {
  *@param Game Object to the audioController.
  */
 AudioController::AudioController(GameObject &gameObject) {
-
+	DEBUG("Create AudioController");
 	this->gameObject = &gameObject;
 	this->componentState = State::ENABLED;
 }
@@ -76,6 +78,7 @@ AudioController::AudioController(GameObject &gameObject) {
  *adds new audio to the audioMap.
  */
 void AudioController::addAudio(std::string audioName, AudioComponent &audio) {
+	DEBUG("Adding audio " >> audioName);
 	audioMap[audioName] = &audio;
 }
 
@@ -85,14 +88,13 @@ void AudioController::addAudio(std::string audioName, AudioComponent &audio) {
  *Finds and passes specific audio to play() method.
  */
 void AudioController::playAudio(std::string audioName) {
-
+	DEBUG("Trying to play " >> audioName);
 	auto audioToBePlayed = audioMap.find(audioName);
 
 	if(audioToBePlayed != audioMap.end()) {
 		audioToBePlayed->second->play(-1, -1);
-
 	} else {
-		ERROR("This audio doesn't exist.");
+		ERROR("Audio " >> audioName >> " doesn't exist.");
 	}
 }
 
@@ -102,18 +104,19 @@ void AudioController::playAudio(std::string audioName) {
  *Finds and passes specific audio to the stop() method.
  */
 void AudioController::stopAudio(std::string audioName) {
-
+	DEBUG("Trying to stop " >> audioName);
 	auto audioToBePlayed = audioMap.find(audioName);
 
 	//Checks if audio was found in audioMap.
 	if(audioToBePlayed != audioMap.end()) {
 		audioToBePlayed->second->stop(-1);
 	} else {
-		ERROR("Audio couldn't be found!");
+		ERROR("Audio " >> audioName >> " couldn't be found!");
 	}
 }
 
 void AudioController::stopAllAudios() {
+	DEBUG("Stopping all audios");
 	Mix_HaltChannel(-1);
 	Mix_HaltMusic();
 }
@@ -124,14 +127,14 @@ void AudioController::stopAllAudios() {
  *Finds and passes specific audio to the pause() method.
  */
 void AudioController::pauseAudio(std::string audioName) {
-
+	DEBUG("Trying to stop " >> audioName);
 	auto audioToBePlayed = audioMap.find(audioName);
 
 	//Checks if audio was found in audioMap.
 	if(audioToBePlayed != audioMap.end()) {
 		audioToBePlayed->second->pause(-1);
 	} else {
-		ERROR("Audio couldn't be found!");
+		ERROR("Audio " >> audioName >> " couldn't be found!");
 	}
 }
 
@@ -141,14 +144,14 @@ void AudioController::pauseAudio(std::string audioName) {
  *Returns audioState
  */
 AudioState AudioController::getAudioState(std::string audioName) {
-
+	DEBUG("Trying to get " >> audioName);
 	auto audio = audioMap.find(audioName);
 
 	//Checks if audio was found.
 	if(audio == audioMap.end()) {
-		ERROR("Audio doesn't exist");
+		ERROR("Audio " >> audioName " doesn't exist");
 	} else {
-
+		// Nothing to do.
 	}
 
 	return audio->second->audioState;
