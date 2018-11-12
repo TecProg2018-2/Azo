@@ -23,6 +23,17 @@ Timer::Timer() {
 
 Timer::~Timer() {}
 
+
+/*
+ *@brief Method to do a timer step
+ *
+ *updated the total elapsed time with present time
+ */
+void Timer::step() {
+	elapsedTicks = SDL_GetTicks();
+}
+
+
 /*
  *@brief Method to reset the timer
  *
@@ -52,13 +63,4 @@ void Timer::DeltaTime() {
 float Timer::getDeltaTime() {
   DEBUG("Getting DeltaTime"); // Logging done here so it doesn't affect the timer.
 	return deltaTime;
-}
-
-/*
- *@brief Method to do a timer step
- *
- *updated the total elapsed time with present time
- */
-void Timer::step() {
-	elapsedTicks = SDL_GetTicks();
 }
