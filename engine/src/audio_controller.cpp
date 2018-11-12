@@ -11,30 +11,41 @@
 
 using namespace engine;
 
+
+/*
+ *@brief overwritten constructor for the AudioController.
+ */
+AudioController::AudioController() {
+	DEBUG("Create AudioController");
+	this->componentState = State::ENABLED;
+}
+
+
 AudioController::~AudioController() {}
+
+
+/*
+ *@brief overwritten
+ *
+ *@param Game Object to the audioController.
+ */
+AudioController::AudioController(GameObject &gameObject) {
+	DEBUG("Create AudioController");
+	this->gameObject = &gameObject;
+	this->componentState = State::ENABLED;
+}
+
 
 /*
  *@brief Method to initialize the in game audio.
+ *
+ * Initializes the AudioController by iterating through the audio map.
  */
 void AudioController::init() {
 	DEBUG("Init AudioController");
 	for(auto audioRow : audioMap) {
 		auto audio = audioRow.second;
 		audio->init();
-	}
-}
-
-/*
- *@brief Method to shut down in game audio.
- *
- *passes audio to shutdown() method and resets it to NULL.
- */
-void AudioController::shutdown() {
-	DEBUG("Shutdown AudioController");
-	for(auto audioRow : audioMap) {
-		auto audio = audioRow.second;
-		audio->shutdown();
-		audio = NULL;
 	}
 }
 
@@ -53,24 +64,6 @@ void AudioController::updateCode() {
 	}
 }
 
-/*
- *@brief overwritten constructor for the AudioController.
- */
-AudioController::AudioController() {
-	DEBUG("Create AudioController");
-	this->componentState = State::ENABLED;
-}
-
-/*
- *@brief overwritten
- *
- *@param Game Object to the audioController.
- */
-AudioController::AudioController(GameObject &gameObject) {
-	DEBUG("Create AudioController");
-	this->gameObject = &gameObject;
-	this->componentState = State::ENABLED;
-}
 
 /*
  *@brief Method to add audio
@@ -115,11 +108,6 @@ void AudioController::stopAudio(std::string audioName) {
 	}
 }
 
-void AudioController::stopAllAudios() {
-	DEBUG("Stopping all audios");
-	Mix_HaltChannel(-1);
-	Mix_HaltMusic();
-}
 
 /*
  *@brief Method to pause in game audio.
@@ -137,6 +125,19 @@ void AudioController::pauseAudio(std::string audioName) {
 		ERROR("Audio " >> audioName >> " couldn't be found!");
 	}
 }
+
+
+/*
+ *@brief Method to stop playing all audios.
+ *
+ * Stops the SDL2 mixer from playing audio.
+ */
+void AudioController::stopAllAudios() {
+	DEBUG("Stopping all audios");
+	Mix_HaltChannel(-1);
+	Mix_HaltMusic();
+}
+
 
 /*
  *@brief Method to retrieve an audioState.
@@ -156,3 +157,18 @@ AudioState AudioController::getAudioState(std::string audioName) {
 
 	return audio->second->audioState;
 }
+
+/*
+ *@brief Method to shut down in game audio.
+ *
+ *passes audio to shutdown() method and resets it to NULL.
+ */
+void AudioController::shutdown() {
+	DEBUG("Shutdown AudioController");
+	for(auto audioRow : audioMap) {
+		auto audio = audioRow.second;
+		audio->shutdown();
+		audio = NULL;
+	}
+}
+

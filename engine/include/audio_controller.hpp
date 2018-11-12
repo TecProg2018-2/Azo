@@ -32,15 +32,15 @@ namespace engine {
 			AudioController();
 			virtual ~AudioController();
 			AudioController(GameObject &gameObject);
+			void init();
+			void updateCode();
 			void addAudio(std::string audioName, AudioComponent &audio);
 			void playAudio(std::string audioName);
 			void stopAudio(std::string audioName);
 			void pauseAudio(std::string audioName);
 			void stopAllAudios();
 			AudioState getAudioState(std::string audioName);
-			void init();
 			void shutdown();
-			void updateCode();
 
 	};
 
