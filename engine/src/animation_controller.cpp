@@ -1,48 +1,18 @@
 /**
- * @file animation_controller.cpp
- * @brief Purpose: Contains the animaton controller component.
- * 
- * GPL v3.0 License
- * Copyright (c) 2017 Azo
- * 
- * Notice: TheAzo, TheAzoTeam
- * https://github.com/TecProg2018-2/Azo
- * 
- * This file implements the main game component its declaration and state.
+* @file animation_controller.cpp
+* @brief Purpose: Contains the animaton controller component.
+*
+* GPL v3.0 License
+* Copyright (c) 2017 Azo
+*
+* Notice: TheAzo, TheAzoTeam
+* https://github.com/TecProg2018-2/Azo
+*
+* This file implements the main game component its declaration and state.
 */
 #include "animation_controller.hpp"
 
 using namespace engine;
-
-void AnimationController::init() {
-	for (auto animationRow : mAnimationMap) {
-		auto animation = animationRow.second;
-		animation->init();
-		ASSERT(animation != NULL, "animation can't be null");
-	}
-}
-
-void AnimationController::draw() {
-	for (auto animationRow : mAnimationMap) {
-		auto animation = animationRow.second;
-		ASSERT(animation != NULL,
-			   "AnimationController::draw, animation map can't be null");
-		if (animation->isEnabled()) {
-			animation->draw();
-		}else{
-			//Nothing to do
-		}
-	}
-}
-
-void AnimationController::shutdown() {
-	for (auto animationRow : mAnimationMap) {
-		auto animation = animationRow.second;
-		ASSERT(animation != NULL,
-			   "AnimationController::shutdown, animation map can't be null");
-		animation->shutdown();
-	}
-}
 
 AnimationController::AnimationController() {
 	this->componentState = State::ENABLED;
@@ -54,30 +24,74 @@ AnimationController::AnimationController(GameObject &gameObject) {
 	this->componentState = State::ENABLED;
 }
 
+void AnimationController::init() {
+	for (auto animationRow : mAnimationMap) {
+		auto animation = animationRow.second;
+		animation->init();
+		ASSERT(animation != NULL, "animation can't be null");
+	}
+}
+
+void AnimationController::shutdown() {
+	for (auto animationRow : mAnimationMap) {
+		auto animation = animationRow.second;
+		ASSERT(
+			animation != NULL,
+			"AnimationController::shutdown, animation map can't be null"
+		);
+		animation->shutdown();
+	}
+}
+
+void AnimationController::draw() {
+	for (auto animationRow : mAnimationMap) {
+		auto animation = animationRow.second;
+		ASSERT(
+			animation != NULL,
+			"AnimationController::draw, animation map can't be null"
+		);
+		if (animation->isEnabled()) {
+			animation->draw();
+		} else {
+			//Nothing to do
+		}
+	}
+}
+
 void AnimationController::addAnimation(std::string animationName, Animation &animation) {
-	ASSERT(animationName != "",
-		   "AnimationController::addAnimation, animationName is empty.");
+	ASSERT(
+		animationName != "",
+		"AnimationController::addAnimation, animationName is empty."
+	);
 	ASSERT(&animation != NULL, "The animation can't be null.");
 	std::pair<std::string, Animation *> newAnimation(animationName, &animation);
-	ASSERT(newAnimation.second != NULL,
-		   "AnimationController::addAnimation, newAnimation can't be null");
-	ASSERT(newAnimation.first != "",
-		   "AnimationController::addAnimation, newAnimation must have a name");
+	ASSERT(
+		newAnimation.second != NULL,
+		"AnimationController::addAnimation, newAnimation can't be null"
+	);
+	ASSERT(
+		newAnimation.first != "",
+		"AnimationController::addAnimation, newAnimation must have a name"
+	);
 
 	mAnimationMap.insert(newAnimation);
 }
 
 void AnimationController::startUniqueAnimation(std::string animationName) {
-	ASSERT(animationName != "",
-		   "AnimationController::startUniqueAnimation, animationName is empty.");
+	ASSERT(
+		animationName != "",
+		"AnimationController::startUniqueAnimation, animationName is empty."
+	);
 	auto animationToBePlayed = mAnimationMap.find(animationName);
-	ASSERT(animationToBePlayed->second != NULL, 
-		   "AnimationController::startUniqueAnimation, animationToBePlayed is empty.");
+	ASSERT(
+		animationToBePlayed->second != NULL,
+		"AnimationController::startUniqueAnimation, animationToBePlayed is empty."
+	);
 
 	//Default is to fail
 	if (animationToBePlayed == mAnimationMap.end()) {
 		ERROR("Animation " << animationName << "doesn't exist!");
-	}else{
+	} else {
 		//Nothing to do
 	}
 
@@ -89,43 +103,51 @@ void AnimationController::startUniqueAnimation(std::string animationName) {
 		if (animationToBePlayed != mAnimationMap.end()) {
 			animationToBePlayed->second->enableComponent();
 			animationToBePlayed->second->mState = AnimationState::PLAYING;
-		}else{
+		} else {
 			//Nothing to do
 		}
-	}else{
+	} else {
 		//Nothing to do
 	}
 }
 
 void AnimationController::startAnimation(std::string animationName) {
-	ASSERT(animationName != "",
-		   "AnimationController::startAnimation, animationName is empty.");
+	ASSERT(
+		animationName != "",
+		"AnimationController::startAnimation, animationName is empty."
+	);
 	auto animationToBePlayed = mAnimationMap.find(animationName);
-	ASSERT(animationToBePlayed->second != NULL, 
-		   "AnimationController::startAnimation, animationToBePlayed is empty.");
+	ASSERT(
+		animationToBePlayed->second != NULL,
+		"AnimationController::startAnimation, animationToBePlayed is empty."
+	);
 
 	//Default is to fail
 	if (animationToBePlayed == mAnimationMap.end()) {
 		ERROR("Animation " << animationName << "doesn't exist!");
-	}else{
+	} else {
 		//Nothing to do
 	}
 
 	if (!animationToBePlayed->second->isEnabled()) {
 		animationToBePlayed->second->enableComponent();
 		animationToBePlayed->second->mState = AnimationState::PLAYING;
-	}else{
+	} else {
 		//Nothing to do
 	}
 }
 
 
 void AnimationController::stopAnimation(std::string animationName) {
-	ASSERT(animationName != "",
-		   "AnimationController::stopAnimation, animationName is empty.");
+	ASSERT(
+		animationName != "",
+		"AnimationController::stopAnimation, animationName is empty."
+	);
 	auto animationToBePlayed = mAnimationMap.find(animationName);
-	ASSERT(animationToBePlayed->second != NULL, 
-		   "AnimationController::stopAnimation, animationToBePlayed is empty.");
+	ASSERT(
+		animationToBePlayed->second != NULL,
+		"AnimationController::stopAnimation, animationToBePlayed is empty."
+	);
 
 	if (animationToBePlayed != mAnimationMap.end()) {
 		animationToBePlayed->second->disableComponent();
@@ -135,11 +157,15 @@ void AnimationController::stopAnimation(std::string animationName) {
 }
 
 AnimationState AnimationController::getAnimationStatus(std::string animationName) {
-	ASSERT(animationName != "",
-		   "AnimationController::stopAnimation, animationName is empty.");
+	ASSERT(
+		animationName != "",
+		"AnimationController::stopAnimation, animationName is empty."
+	);
 	auto animation = mAnimationMap.find(animationName);
-	ASSERT(animation->second != NULL, 
-		   "AnimationController::getAnimationStatus, animation is empty.");
+	ASSERT(
+		animation->second != NULL,
+		"AnimationController::getAnimationStatus, animation is empty."
+	);
 
 	if (animation != mAnimationMap.end()) {
 		return animation->second->mState;
