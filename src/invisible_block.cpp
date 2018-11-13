@@ -51,6 +51,7 @@ InvisibleBlock::InvisibleBlock(std::string name, std::pair<double, double> posit
  * Used for shutting down ImageComponent so as to free memory when closing the game.
  */
 void InvisibleBlock::shutdown() {
+	DEBUG("Shutting down images");
 	mImage->shutdown();
 	mImage = NULL;
 }
