@@ -28,14 +28,13 @@ namespace engine {
 			GameObject &gameObject,
 			std::string imagePath,
 			double zoomFactor,
-			std::pair<double,
-			double> positionRelativeToObject
+			std::pair<double, double> positionRelativeToObject
 		);
 
 	protected:
 		double zoomFactor;
 		SDL_Rect canvasQuad;
-		std::pair<double, double> mPositionRelativeToObject = std::make_pair(0, 0);
+		std::pair<double, double> mPositionRelativeToObject = std::make_pair(0.0, 0.0);
 
 	public:
 		ImageComponent();

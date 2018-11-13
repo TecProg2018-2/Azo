@@ -26,7 +26,7 @@ ImageComponent::ImageComponent(
 ) {
 	ASSERT(&gameObject != NULL, "The gameObject can't be null.");
 	ASSERT(imagePath != "", "ImageComponent::ImageComponent, imagePath is empty.");
-	ASSERT(zoomFactor < 100, "zoomFactor cant be bigger than 100.");
+	ASSERT(zoomFactor < 100.0, "zoomFactor cant be bigger than 100.");
 	this->gameObject = &gameObject;
 	this->imagePath = imagePath;
 	this->zoomFactor = zoomFactor;
@@ -40,9 +40,9 @@ ImageComponent::ImageComponent(
 ) {
 	ASSERT(&gameObject != NULL, "The gameObject can't be null.");
 	ASSERT(imagePath != "", "ImageComponent::ImageComponent, imagePath is empty.");
-	ASSERT(zoomFactor < 100, "zoomFactor cant be bigger than 100.");
-	ASSERT(positionRelativeToObject.first >= 0, "The relative position must be bigger than zero.");
-	ASSERT(positionRelativeToObject.second >= 0, "The relative position must be bigger than zero.");
+	ASSERT(zoomFactor < 100.0, "zoomFactor cant be bigger than 100.");
+	ASSERT(positionRelativeToObject.first >= 0.0, "The relative position must be bigger than zero.");
+	ASSERT(positionRelativeToObject.second >= 0.0, "The relative position must be bigger than zero.");
 	this->gameObject = &gameObject;
 	this->imagePath = imagePath;
 	this->zoomFactor = zoomFactor;
