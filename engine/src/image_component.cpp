@@ -24,6 +24,7 @@ ImageComponent::ImageComponent(
 	std::string imagePath,
 	double zoomFactor
 ) {
+	DEBUG("Calling ImageComponent::ImageComponent");
 	ASSERT(&gameObject != NULL, "The gameObject can't be null.");
 	ASSERT(imagePath != "", "ImageComponent::ImageComponent, imagePath is empty.");
 	ASSERT(zoomFactor < 100.0, "zoomFactor cant be bigger than 100.");
@@ -38,6 +39,7 @@ ImageComponent::ImageComponent(
 	double zoomFactor,
 	std::pair<double, double> positionRelativeToObject
 ) {
+	DEBUG("Calling ImageComponent::ImageComponent");
 	ASSERT(&gameObject != NULL, "The gameObject can't be null.");
 	ASSERT(imagePath != "", "ImageComponent::ImageComponent, imagePath is empty.");
 	ASSERT(zoomFactor < 100.0, "zoomFactor cant be bigger than 100.");
@@ -50,7 +52,9 @@ ImageComponent::ImageComponent(
 }
 
 void ImageComponent::init() {
-	// Check AssetsManager to see if image is already loaded.
+	DEBUG("Calling ImageComponent::init");
+
+	//Check AssetsManager to see if image is already loaded.
 	auto assetsImage = Game::instance.getAssetsManager().LoadImage(imagePath);
 	ASSERT(
 		assetsImage != NULL,
@@ -77,6 +81,8 @@ void ImageComponent::init() {
 
 
 void ImageComponent::draw() {
+	DEBUG("Calling ImageComponent::draw");
+
 	updateQuad();
 	SDL_RenderCopy(
 		Game::instance.sdlElements.getCanvas(),
@@ -87,6 +93,8 @@ void ImageComponent::draw() {
 }
 
 void ImageComponent::updateQuad() {
+	DEBUG("Calling ImageComponent::updateQuad");
+
 	canvasQuad = {
 		(int)(gameObject->mCurrentPosition.first + mPositionRelativeToObject.first),
 		(int)(gameObject->mCurrentPosition.second + mPositionRelativeToObject.second),

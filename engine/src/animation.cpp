@@ -33,7 +33,8 @@ Animation::Animation(
 	bool loop,
 	double zoomFactor
 ) {
-	ASSERT(imagePath != "", "Animation::CreateAnimation, imagePath is empty.");
+	DEBUG("Calling Animation::Animation");
+	ASSERT(imagePath != "", "Animation::Animation, imagePath is empty.");
 	ASSERT(
 		animationTime > ANIMATION_NULL_VALUE,
 		"Animation time can't be zero or less."
@@ -66,6 +67,7 @@ Animation::Animation(
 	double zoomFactor,
 	std::pair<double, double> positionRelativeToObject
 ) {
+	DEBUG("Calling Animation::Animation");
 	ASSERT(imagePath != "", "Animation::CreateAnimation, imagePath is empty.");
 	ASSERT(
 		animationTime > ANIMATION_NULL_VALUE,
@@ -93,6 +95,7 @@ Animation::Animation(
 Animation::~Animation() {}
 
 void Animation::shutdown() {
+	DEBUG("Shutting down Animation");
 	if (mSpriteList.size() > 0) {
 		for (auto eachSprite : mSpriteList) {
 			delete(eachSprite);
@@ -104,29 +107,31 @@ void Animation::shutdown() {
 }
 
 void Animation::draw() {
+	DEBUG("Drawing Animation");
+
 	checkLimits();
-
 	updateQuad();
-
 	updateGameObjectMeasures();
-
 	SDL_RenderCopy(
 		Game::instance.sdlElements.getCanvas(),
 		imageTexture,
 		&renderQuad,
 		&canvasQuad
 	);
-
 	updateFrameBasedOntime();
 }
 
 void Animation::disableComponent() {
+	DEBUG("Disabling Animation Component");
+
 	this->componentState = State::DISABLED;
 	mCurrentAnimationTime = CURRENT_ANIMATION_TIME;
 	mCurrentSprite = mStartFrame;
 }
 
 void Animation::checkLimits() {
+	DEBUG("Checking Animation Limits");
+
 	if(mCurrentSprite > mEndFrame) {
 		if (mLoop) {
 			mCurrentSprite = CURRENT_SPRITE;
@@ -140,6 +145,8 @@ void Animation::checkLimits() {
 }
 
 void Animation::updateQuad() {
+	DEBUG("Updating Animation Quad");
+
 	renderQuad = {
 		mSpriteList[mCurrentSprite]->getSpriteX(),
 		mSpriteList[mCurrentSprite]->getSpriteY(),
@@ -157,6 +164,8 @@ void Animation::updateQuad() {
 }
 
 void Animation::updateFrameBasedOntime() {
+	DEBUG("Calling Animation::updateFrameBasedOntime");
+
 	mCurrentAnimationTime += Game::instance.getTimer().getDeltaTime();
 	ASSERT((mEachFrameTime + mStartFrame) != 0, "Division by zero");
 
@@ -164,6 +173,8 @@ void Animation::updateFrameBasedOntime() {
 }
 
 void Animation::updateGameObjectMeasures() {
+	DEBUG("Calling Animation::updateGameObjectMeasures");
+
 	ASSERT(
 		DIVISOR_NUMBER != 0,
 		"Animation::updateGameObjectMeasures, DIVISOR_NUMBER can't be zero."

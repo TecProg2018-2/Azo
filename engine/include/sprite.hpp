@@ -18,7 +18,10 @@ namespace engine {
 	class Sprite {
 
 	public:
-		Sprite(unsigned int spriteWidth, unsigned int spriteHeight, unsigned int spriteX, unsigned int spriteY);
+		Sprite(
+			unsigned int spriteWidth, unsigned int spriteHeight,
+			unsigned int spriteX, unsigned int spriteY
+		);
 
 		void setSpriteWidth(unsigned int newSpriteWidth);
 		unsigned int getSpriteWidth();

@@ -23,6 +23,7 @@ const int COMPONENT_Y = 0;
 BackgroundComponent::BackgroundComponent(){}
 
 BackgroundComponent::BackgroundComponent(std::string imagePath){
+	DEBUG("Calling BackgroundComponent::BackgroundComponent");
 	this->imagePath = imagePath;
 	this->componentState = State::ENABLED;
 }
@@ -30,6 +31,7 @@ BackgroundComponent::BackgroundComponent(std::string imagePath){
 BackgroundComponent::BackgroundComponent(
 	GameObject & gameObject, std::string imagePath
 ){
+	DEBUG("Calling BackgroundComponent::BackgroundComponent");
 	this->gameObject = &gameObject;
 	this->imagePath = imagePath;
 	this->componentState = State::ENABLED;
@@ -38,7 +40,7 @@ BackgroundComponent::BackgroundComponent(
 BackgroundComponent::~BackgroundComponent(){}
 
 void BackgroundComponent::init(){
-	//DEBUG("BackgroundComponent::init method.");
+	DEBUG("Calling BackgroundComponent::init");
 	auto assetsImage = Game::instance.getAssetsManager().LoadImage(imagePath);
 
 	imageTexture = assetsImage->texture;
@@ -49,12 +51,13 @@ void BackgroundComponent::init(){
 }
 
 void BackgroundComponent::shutdown(){
+	DEBUG("Calling BackgroundComponent::shutdown");
 	// Terminate Texture
 	imageTexture = NULL;
 }
 
 void BackgroundComponent::draw(){
-	//DEBUG("BackgroundComponent::draw method.");
+	DEBUG("Calling BackgroundComponent::draw");
 	SDL_RenderCopy(
 		Game::instance.sdlElements.getCanvas(),
 		imageTexture,

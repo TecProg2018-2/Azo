@@ -15,16 +15,19 @@
 using namespace engine;
 
 AnimationController::AnimationController() {
+	DEBUG("Calling AnimationController::AnimationController");
 	this->componentState = State::ENABLED;
 }
 
 AnimationController::AnimationController(GameObject &gameObject) {
+	DEBUG("Calling AnimationController::AnimationController");
 	ASSERT(&gameObject != NULL, "The gameObject can't be null.");
 	this->gameObject = &gameObject;
 	this->componentState = State::ENABLED;
 }
 
 void AnimationController::init() {
+	DEBUG("Calling AnimationController::init");
 	for (auto animationRow : mAnimationMap) {
 		auto animation = animationRow.second;
 		animation->init();
@@ -33,6 +36,7 @@ void AnimationController::init() {
 }
 
 void AnimationController::shutdown() {
+	DEBUG("Shutting down AnimationController");
 	for (auto animationRow : mAnimationMap) {
 		auto animation = animationRow.second;
 		ASSERT(
@@ -44,6 +48,7 @@ void AnimationController::shutdown() {
 }
 
 void AnimationController::draw() {
+	DEBUG("Drawing AnimationController");
 	for (auto animationRow : mAnimationMap) {
 		auto animation = animationRow.second;
 		ASSERT(
@@ -59,6 +64,7 @@ void AnimationController::draw() {
 }
 
 void AnimationController::addAnimation(std::string animationName, Animation &animation) {
+	DEBUG("Calling AnimationController::addAnimation");
 	ASSERT(
 		animationName != "",
 		"AnimationController::addAnimation, animationName is empty."
@@ -78,6 +84,7 @@ void AnimationController::addAnimation(std::string animationName, Animation &ani
 }
 
 void AnimationController::startUniqueAnimation(std::string animationName) {
+	DEBUG("Calling AnimationController::startUniqueAnimation");
 	ASSERT(
 		animationName != "",
 		"AnimationController::startUniqueAnimation, animationName is empty."
@@ -112,6 +119,7 @@ void AnimationController::startUniqueAnimation(std::string animationName) {
 }
 
 void AnimationController::startAnimation(std::string animationName) {
+	DEBUG("Calling AnimationController::startAnimation");
 	ASSERT(
 		animationName != "",
 		"AnimationController::startAnimation, animationName is empty."
@@ -139,6 +147,7 @@ void AnimationController::startAnimation(std::string animationName) {
 
 
 void AnimationController::stopAnimation(std::string animationName) {
+	DEBUG("Calling AnimationController::stopAnimation");
 	ASSERT(
 		animationName != "",
 		"AnimationController::stopAnimation, animationName is empty."
@@ -157,6 +166,7 @@ void AnimationController::stopAnimation(std::string animationName) {
 }
 
 AnimationState AnimationController::getAnimationStatus(std::string animationName) {
+	DEBUG("Calling AnimationController::getAnimationStatus");
 	ASSERT(
 		animationName != "",
 		"AnimationController::stopAnimation, animationName is empty."
