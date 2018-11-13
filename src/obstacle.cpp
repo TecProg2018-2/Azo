@@ -8,6 +8,9 @@
  * https://github.com/TecProg2018-2/Azo/blob/master/LICENSE.md
 */
 #include "obstacle.hpp"
+#include <ctime>
+#include <fstream>
+#include <iostream>
 
 using namespace Azo;
 
@@ -139,7 +142,9 @@ Obstacle::Obstacle(std::string name, std::pair<double, double> positionRelativeT
 void Obstacle::createComponents() {
 	DEBUG("Creating obstacle components.");
 	// If and else if blocks for each ObstacleType and its respective initialization.
+
 	switch (mObstacleType) {
+
 		case ObstacleType::WESTERN_CAR:
 			DEBUG("obstacle is a WESTERN CAR!");
 			mObstacleImage = new engine::ImageComponent(*this, "backgrounds/broken_caravan.png", 1.0);
@@ -154,6 +159,7 @@ void Obstacle::createComponents() {
 			ASSERT(mObstacleImage != NULL, "ObstacleType::WESTERN_BOX, mObstacleImage can't be NULL.");
 			this->addComponent(*mObstacleImage);
 			createBlocks();
+			errorCode = FunctionStatus::SUCCESS;
 			break;
 
 		case ObstacleType::WESTERN_RAISED_BOX:
@@ -162,6 +168,7 @@ void Obstacle::createComponents() {
 			ASSERT(mObstacleImage != NULL, "ObstacleType::WESTERN_RAISED_BOX, mObstacleImage can't be NULL.");
 			this->addComponent(*mObstacleImage);
 			createBlocks();
+			errorCode = FunctionStatus::SUCCESS;
 			break;
 
 		case ObstacleType::WESTERN_ROCK:
@@ -170,6 +177,7 @@ void Obstacle::createComponents() {
 			ASSERT(mObstacleImage != NULL, "ObstacleType::WESTERN_ROCK, mObstacleImage can't be NULL.");
 			this->addComponent(*mObstacleImage);
 			createBlocks();
+			errorCode = FunctionStatus::SUCCESS;
 			break;
 
 		case ObstacleType::MACHINE_PART:
@@ -189,6 +197,7 @@ void Obstacle::createComponents() {
 			mMachinePartCode = new MachinePartCode(this);
 			ASSERT(mMachinePartCode != NULL, "MachinePartCode, mMachinePartCode can't return NULL.");
 			this->addComponent(*mMachinePartCode);
+			errorCode = FunctionStatus::SUCCESS;
 			break;
 
 		case ObstacleType::WESTERN_SPIKE:
@@ -197,6 +206,7 @@ void Obstacle::createComponents() {
 			ASSERT(mObstacleImage != NULL, "engine::ImageComponent, mObstacleImage can't be NULL.");
 			this->addComponent(*mObstacleImage);
 			createBlocks();
+			errorCode = FunctionStatus::SUCCESS;
 			break;
 
 		case ObstacleType::WESTERN_POST:
@@ -205,15 +215,19 @@ void Obstacle::createComponents() {
 			ASSERT(mObstacleImage != NULL, "engine::ImageComponent, mObstacleImage can't be NULL.");
 			this->addComponent(*mObstacleImage);
 			createBlocks();
+			errorCode = FunctionStatus::SUCCESS;
 			break;
 
 		case ObstacleType::GROUND:
 			DEBUG("obstacle is ground type");
 			createBlocks();
+			errorCode = FunctionStatus::SUCCESS;
 			break;
 
 		default:
 			//Nothing to do, there is no component with this type
+			errorCode = FunctionStatus::WRONGTYPE;
+			errorLog("Obstacle::createComponents");
 			break;
 	}
 }
@@ -236,11 +250,13 @@ void Obstacle::createBlocks() {
 
 	// If and else if blocks for setting obstacle position based on its type ObstacleType.
 	switch (mObstacleType) {
+
 		DEBUG("Setting obstacle position");
 		case ObstacleType::GROUND:
 			mBlockList.push_back(new InvisibleBlock("block_1",
 													blockPosition,
 													std::make_pair(21000.0, 100.0)));
+			errorCode = FunctionStatus::SUCCESS;
 			break;
 
 		case ObstacleType::WESTERN_CAR:
@@ -249,6 +265,7 @@ void Obstacle::createBlocks() {
 			mBlockList.push_back(new InvisibleBlock("block_2",
 													blockPosition,
 													std::make_pair(109.0, 143.0)));
+			errorCode = FunctionStatus::SUCCESS;
 			break;
 
 		case ObstacleType::WESTERN_BOX:
@@ -257,6 +274,7 @@ void Obstacle::createBlocks() {
 			mBlockList.push_back(new InvisibleBlock("block_3",
 													blockPosition,
 													std::make_pair(63.0, 73.0)));
+			errorCode = FunctionStatus::SUCCESS;
 			break;
 
 		case ObstacleType::WESTERN_RAISED_BOX:
@@ -265,6 +283,7 @@ void Obstacle::createBlocks() {
 			mBlockList.push_back(new InvisibleBlock("block_4",
 													blockPosition,
 													std::make_pair(50.0, 68.0)));
+			errorCode = FunctionStatus::SUCCESS;
 			break;
 
 		case ObstacleType::WESTERN_ROCK:
@@ -273,6 +292,7 @@ void Obstacle::createBlocks() {
 			mBlockList.push_back(new InvisibleBlock("block_5",
 													blockPosition,
 													std::make_pair(4.0, 100.0)));
+			errorCode = FunctionStatus::SUCCESS;
 			break;
 
 		case ObstacleType::WESTERN_SPIKE:
@@ -281,6 +301,7 @@ void Obstacle::createBlocks() {
 			mBlockList.push_back(new InvisibleBlock("block_6",
 													blockPosition,
 													std::make_pair(210.0, 92.0)));
+			errorCode = FunctionStatus::SUCCESS;
 			break;
 
 		case ObstacleType::WESTERN_POST:
@@ -289,10 +310,13 @@ void Obstacle::createBlocks() {
 			mBlockList.push_back(new InvisibleBlock("block_7",
 													blockPosition,
 													std::make_pair(23.0, 106.0)));
+		  errorCode = FunctionStatus::SUCCESS;
 			break;
 
 		default:
 			//Nothing to do, there is no component with this type
+			errorCode = FunctionStatus::WRONGTYPE;
+			errorLog("Obstacle::createBlocks");
 			break;
 	}
 
@@ -462,4 +486,24 @@ void Obstacle::generateTurningAnimation() {
 	mTurningAnimationSprites[23]->setSpriteWidth((unsigned int)(905 - 874));
 	mTurningAnimationSprites[23]->setSpriteHeight((unsigned int)(47 - 11));
 
+}
+
+void Obstacle::errorLog(std::string file) {
+    std::ofstream outfile;
+    outfile.open("../errorLog.txt", std::ofstream::out | std::ofstream::app);
+    time_t now = time(0);
+		std::string dt = ctime(&now);
+    std::string message = "===============\n";
+	message += "Function: " + file + "\n";
+    message += "Date: " + dt + "\n";
+
+		switch(errorCode) {
+					case FunctionStatus::WRONGTYPE:
+		        message += "wrong type\n";
+            break;
+        	default:
+            outfile << "wrong type" << std::endl;
+    }
+    outfile << message;
+    outfile.close();
 }

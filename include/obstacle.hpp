@@ -47,6 +47,16 @@ namespace Azo {
 		FINISHED,
 	};
 
+	/**
+		 * @brief Class to inform possible error and fucntion status.
+		 *
+		 * Enum class used to differentiate errors inside the obstacle.
+		 */
+		enum class FunctionStatus {
+			WRONGTYPE,
+			SUCCESS,
+	};
+
 
 	/**
 	 * @brief Obstacle class for in-game objects with collision.
@@ -64,6 +74,7 @@ namespace Azo {
 			virtual ~Obstacle();
 			Obstacle(std::string name, std::pair<double, double> positionRelativeToParent, ObstacleType obstacleType);
 			void shutdown();
+			void errorLog(std::string file);
 			/**
 			 * @brief Method for class name.
 			 *
@@ -80,6 +91,7 @@ namespace Azo {
 			engine::AudioComponent *mCollected = NULL;
 			std::vector<engine::Sprite *> mTurningAnimationSprites;
 			MachinePartCode *mMachinePartCode = NULL;
+			FunctionStatus errorCode = FunctionStatus::SUCCESS;
 			void createComponents();
 			void createBlocks();
 			void generateTurningAnimation();
