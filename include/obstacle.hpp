@@ -52,7 +52,7 @@ namespace Azo {
 		 *
 		 * Enum class used to differentiate errors inside the obstacle.
 		 */
-		enum class FunctionStatus {
+		enum class FunctionStatusObstacle {
 			WRONGTYPE,
 			SUCCESS,
 	};
@@ -91,7 +91,7 @@ namespace Azo {
 			engine::AudioComponent *mCollected = NULL;
 			std::vector<engine::Sprite *> mTurningAnimationSprites;
 			MachinePartCode *mMachinePartCode = NULL;
-			FunctionStatus errorCode = FunctionStatus::SUCCESS;
+			FunctionStatusObstacle errorCode = FunctionStatusObstacle::SUCCESS;
 			void createComponents();
 			void createBlocks();
 			void generateTurningAnimation();
