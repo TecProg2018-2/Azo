@@ -18,30 +18,41 @@
 
 namespace engine {
 
+|   /*
+	 * @brief Class for possible errors types.
+	 * 
+	 * Enum class used to differentiate errors inside the menu.
+	 */ 
+	enum class ErrorType {
+		DIVI_BY_ZERO,
+		NULL_POINTER,
+		EMPTYS_TRING,
+		WRONG_TYPE,
+		NO_MATCHING_FILE
+	};
 	/*
 	 *@brief Audio contoller class to control in game audio.
 	 *
 	 *Used to control the behavior defined by the AudioComponent
 	 */
 	class AudioController : public AudioComponent {
+	private:
+		std::map <std::string, AudioComponent *> audioMap;
 
-		private:
-			std::map <std::string, AudioComponent *> audioMap;
-
-		public:
-			AudioController();
-			virtual ~AudioController();
-			AudioController(GameObject &gameObject);
-			void addAudio(std::string audioName, AudioComponent &audio);
-			void playAudio(std::string audioName);
-			void stopAudio(std::string audioName);
-			void pauseAudio(std::string audioName);
-			void stopAllAudios();
-			AudioState getAudioState(std::string audioName);
-			void init();
-			void shutdown();
-			void updateCode();
-
+	public:
+		AudioController();
+		virtual ~AudioController();
+		AudioController(GameObject &gameObject);
+		void init();
+		void updateCode();
+		void addAudio(std::string audioName, AudioComponent &audio);
+		void playAudio(std::string audioName);
+		void stopAudio(std::string audioName);
+		void pauseAudio(std::string audioName);
+		void stopAllAudios();
+		AudioState getAudioState(std::string audioName);
+		void shutdown();
+		void errorLog(ErrorType code, std::string file);
 	};
 
 }
