@@ -61,20 +61,6 @@ void PlayerCode::findAudioController() {
 }
 
 /**
- * @brief free the animation pointer
- * when charcter dies, free the animation pointer
- * @return 'void'.
-*/
-void PlayerCode::shutdown(){
-	//ASSERT(mAnimationController == NULL, "Animation Controller is null");
-	if (mAnimationController != NULL) {
-		 mAnimationController = NULL;
-	}else{
-			//null pointer
-	}
-}
-
-/**
  * @brief handle player behaviour
  * defines what happens in each case of player's state
  * according to enum class PlayerStae
@@ -188,7 +174,7 @@ void PlayerCode::updateCode() {
 				if (mAnimationController->getAnimationStatus("losing") == engine::AnimationState::FINISHED) {
 					mAudioController->playAudio("lost");
 				}else{
-						// animationStatus is not losing    
+						// animationStatus is not losing
 				}
 			} else {
 				mAnimationController->startUniqueAnimation("victory");
@@ -196,5 +182,19 @@ void PlayerCode::updateCode() {
 			}
 
 			break;
+	}
+}
+
+/**
+ * @brief free the animation pointer
+ * when charcter dies, free the animation pointer
+ * @return 'void'.
+*/
+void PlayerCode::shutdown(){
+	//ASSERT(mAnimationController == NULL, "Animation Controller is null");
+	if (mAnimationController != NULL) {
+		 mAnimationController = NULL;
+	}else{
+			//null pointer
 	}
 }
