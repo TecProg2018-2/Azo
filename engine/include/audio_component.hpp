@@ -32,10 +32,10 @@ ra	 *Enum Class used to differentiate Audio States
 	 * 
 	 * Enum class used to differentiate errors inside the menu.
 	 */ 
-	enum class ErrorType {
+	enum class ErrorTypeAudioComponent {
 		DIVI_BY_ZERO,
 		NULL_POINTER,
-		EMPTYS_TRING,
+		EMPTY_STRING,
 		WRONG_TYPE,
 		NO_MATCHING_FILE
 	};
@@ -50,9 +50,9 @@ ra	 *Enum Class used to differentiate Audio States
 	class AudioComponent : public Component {
 	public:
 		AudioState audioState;
+		std::string audioPath;
 
 	private:
-		std::string audioPath;
 		bool isMusic;
 		bool playOnStart;
 
@@ -77,7 +77,7 @@ ra	 *Enum Class used to differentiate Audio States
 		inline bool getIsMusic() {
 			return isMusic;
 		}
-		void errorLog(ErrorType code, std::string file);
+		void errorLog(ErrorTypeAudioComponent code, std::string file);
 	};
 
 }

@@ -58,7 +58,7 @@ void AudioComponent::init() {
 
 		if (music == NULL) {
 			ERROR("Invalid Music Path (Music = NULL): " << audioPath);
-			errorLog(ErrorType::NULL_POINTER, "AudioComponent::init")
+			errorLog(ErrorTypeAudioComponent::NULL_POINTER, "AudioComponent::init");
 		} else {
 
 		}
@@ -69,7 +69,7 @@ void AudioComponent::init() {
 
 		if (sound == NULL) {
 			ERROR("Invalid Sound Path (Sound = NULL): " << audioPath);
-			errorLog(ErrorType::NULL_POINTER, "AudioComponent::init");
+			errorLog(ErrorTypeAudioComponent::NULL_POINTER, "AudioComponent::init");
 		} else {
 			//Nothing to do
 		}
@@ -202,7 +202,7 @@ void AudioComponent::pause(int channel) {
  *
  * Writes a file with error message, function containing error and time.
  */
-void Timer::errorLog(ErrorType code, std::string file){
+void AudioComponent::errorLog(ErrorTypeAudioComponent code, std::string file){
     std::ofstream outfile;
     outfile.open("../errorLog.txt", std::ofstream::out | std::ofstream::app);
     time_t now = time(0);
@@ -211,16 +211,16 @@ void Timer::errorLog(ErrorType code, std::string file){
     outfile << "Date: " + dt << std::endl;
 	
     switch(code) {
-        case ErrorType::DIVI_BY_ZERO:
+        case ErrorTypeAudioComponent::DIVI_BY_ZERO:
             outfile << "Error: division by zero" << std::endl;
             break;
-        case ErrorType::EMPTY_STRING:
+        case ErrorTypeAudioComponent::EMPTY_STRING:
             outfile << "Error: empty String" << std::endl;
             break;
-        case ErrorType::NULL_POINTER:
+        case ErrorTypeAudioComponent::NULL_POINTER:
             outfile << "Error: null pointer" << std::endl;
             break;
-        case ErrorType::WRONG_TYPE:
+        case ErrorTypeAudioComponent::WRONG_TYPE:
             outfile << "Error: wrong type" << std::endl;
 			break;
 		default:

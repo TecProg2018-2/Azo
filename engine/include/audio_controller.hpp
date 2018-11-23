@@ -18,15 +18,15 @@
 
 namespace engine {
 
-|   /*
+   /*
 	 * @brief Class for possible errors types.
 	 * 
 	 * Enum class used to differentiate errors inside the menu.
 	 */ 
-	enum class ErrorType {
+	enum class ErrorTypeAudio {
 		DIVI_BY_ZERO,
 		NULL_POINTER,
-		EMPTYS_TRING,
+		EMPTY_STRING,
 		WRONG_TYPE,
 		NO_MATCHING_FILE
 	};
@@ -52,7 +52,7 @@ namespace engine {
 		void stopAllAudios();
 		AudioState getAudioState(std::string audioName);
 		void shutdown();
-		void errorLog(ErrorType code, std::string file);
+		void errorLog(ErrorTypeAudio code, std::string file);
 	};
 
 }

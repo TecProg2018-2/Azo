@@ -61,7 +61,7 @@ void AudioController::updateCode() {
 		if(audio->isEnabled()) {
 			audio->updateCode();
 		} else {
-			DEBUG("Audio" >> audio->audioPath >> "is disabled");
+			DEBUG("Audio" << audio->audioPath << "is disabled");
 			// Nothing to do.
 		}
 	}
@@ -74,7 +74,7 @@ void AudioController::updateCode() {
  *adds new audio to the audioMap.
  */
 void AudioController::addAudio(std::string audioName, AudioComponent &audio) {
-	DEBUG("Adding audio " >> audioName);
+	DEBUG("Adding audio " << audioName);
 	audioMap[audioName] = &audio;
 }
 
@@ -84,14 +84,14 @@ void AudioController::addAudio(std::string audioName, AudioComponent &audio) {
  *Finds and passes specific audio to play() method.
  */
 void AudioController::playAudio(std::string audioName) {
-	DEBUG("Trying to play " >> audioName);
+	DEBUG("Trying to play " << audioName);
 	auto audioToBePlayed = audioMap.find(audioName);
 
 	if(audioToBePlayed != audioMap.end()) {
 		audioToBePlayed->second->play(-1, -1);
 	} else {
-		ErrorType(ErrorType::NO_MATCHING_FILE, "AudioController::playAudio");
-		ERROR("Audio " >> audioName >> " doesn't exist.");
+		errorLog(ErrorTypeAudio::NO_MATCHING_FILE, "AudioController::playAudio");
+		ERROR("Audio " << audioName << " doesn't exist.");
 	}
 }
 
@@ -101,15 +101,15 @@ void AudioController::playAudio(std::string audioName) {
  *Finds and passes specific audio to the stop() method.
  */
 void AudioController::stopAudio(std::string audioName) {
-	DEBUG("Trying to stop " >> audioName);
+	DEBUG("Trying to stop " << audioName);
 	auto audioToBePlayed = audioMap.find(audioName);
 
 	//Checks if audio was found in audioMap.
 	if(audioToBePlayed != audioMap.end()) {
 		audioToBePlayed->second->stop(-1);
 	} else {
-			ErrorType(ErrorType::NO_MATCHING_FILE, "AudioController::stopAudio");
-		ERROR("Audio " >> audioName >> " couldn't be found!");
+			errorLog(ErrorTypeAudio::NO_MATCHING_FILE, "AudioController::stopAudio");
+		ERROR("Audio " << audioName << " couldn't be found!");
 	}
 }
 
@@ -120,15 +120,15 @@ void AudioController::stopAudio(std::string audioName) {
  *Finds and passes specific audio to the pause() method.
  */
 void AudioController::pauseAudio(std::string audioName) {
-	DEBUG("Trying to stop " >> audioName);
+	DEBUG("Trying to stop " << audioName);
 	auto audioToBePlayed = audioMap.find(audioName);
 
 	//Checks if audio was found in audioMap.
 	if(audioToBePlayed != audioMap.end()) {
 		audioToBePlayed->second->pause(-1);
 	} else {
-		ErrorType(ErrorType::NO_MATCHING_FILE, "AudioController::pauseAudio");
-		ERROR("Audio " >> audioName >> " couldn't be found!");
+		errorLog(ErrorTypeAudio::NO_MATCHING_FILE, "AudioController::pauseAudio");
+		ERROR("Audio " << audioName << " couldn't be found!");
 	}
 }
 
@@ -151,12 +151,12 @@ void AudioController::stopAllAudios() {
  *Returns audioState
  */
 AudioState AudioController::getAudioState(std::string audioName) {
-	DEBUG("Trying to get " >> audioName);
+	DEBUG("Trying to get " << audioName);
 	auto audio = audioMap.find(audioName);
 
 	//Checks if audio was found.
 	if(audio == audioMap.end()) {
-		ERROR("Audio " >> audioName " doesn't exist");
+		ERROR("Audio " << audioName << " doesn't exist");
 	} else {
 		// Nothing to do.
 	}
@@ -184,7 +184,7 @@ void AudioController::shutdown() {
  *
  * Writes a file with error message, function containing error and time.
  */
-void Timer::errorLog(ErrorType code, std::string file){
+void AudioController::errorLog(ErrorTypeAudio code, std::string file){
     std::ofstream outfile;
     outfile.open("../errorLog.txt", std::ofstream::out | std::ofstream::app);
     time_t now = time(0);
@@ -193,16 +193,16 @@ void Timer::errorLog(ErrorType code, std::string file){
     outfile << "Date: " + dt << std::endl;
 	
     switch(code) {
-        case ErrorType::DIVI_BY_ZERO:
+        case ErrorTypeAudio::DIVI_BY_ZERO:
             outfile << "Error: division by zero" << std::endl;
             break;
-        case ErrorType::EMPTY_STRING:
+        case ErrorTypeAudio::EMPTY_STRING:
             outfile << "Error: empty String" << std::endl;
             break;
-        case ErrorType::NULL_POINTER:
+        case ErrorTypeAudio::NULL_POINTER:
             outfile << "Error: null pointer" << std::endl;
             break;
-        case ErrorType::WRONG_TYPE:
+        case ErrorTypeAudio::WRONG_TYPE:
             outfile << "Error: wrong type" << std::endl;
 			break;
 		default:

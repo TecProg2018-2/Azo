@@ -32,10 +32,10 @@ namespace engine {
 	 * 
 	 * Enum class used to differentiate errors inside the menu.
 	 */ 
-	enum class ErrorType {
+	enum class ErrorTypeScene {
 		DIVI_BY_ZERO,
 		NULL_POINTER,
-		EMPTYS_TRING,
+		EMPTY_STRING,
 		WRONG_TYPE,
 		NO_MATCHING_FILE
 	};
@@ -72,7 +72,7 @@ namespace engine {
 		void deleteKeyList();
 		void addGameObject(engine::GameObject &gameObject);
 		void removeGameObject(std::string &gameObjectName);
-		void errorLog(ErrorType code, std::string file);
+		void errorLog(ErrorTypeScene code, std::string file);
 	};
 }
 

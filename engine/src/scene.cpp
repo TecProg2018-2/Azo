@@ -22,7 +22,7 @@ Scene::Scene() {}
  * initializes the SceneName attribute
  */
 Scene::Scene(std::string sceneName) {
-	DEBUG("Creating Scene " >> sceneName);
+	DEBUG("Creating Scene " << sceneName);
 	this->sceneName = sceneName;
 }
 
@@ -32,7 +32,7 @@ Scene::Scene(std::string sceneName) {
  *Initializes every key in the gameObjectMap
  */
 void Scene::init(){
-	DEBUG("Init Scene " >> sceneName);
+	DEBUG("Init Scene " << sceneName);
 	for (auto eachKey : mKeyList) {
 		gameObjectMap[eachKey]->init();
 	}
@@ -44,7 +44,7 @@ void Scene::init(){
  *passes every object in the gameObjectMap to the shutdown method
  */
 void Scene::shutdown() {
-	DEBUG("Shutdown Scene " >> sceneName)
+	DEBUG("Shutdown Scene " << sceneName)
 	for (auto eachKey : mKeyList) {
 		gameObjectMap[eachKey]->shutdown();
 	}
@@ -83,7 +83,7 @@ void Scene::draw() {
  *Passes every element of the gameObjectMap to the updateCode() method.
  */
 void Scene::updateCode(){
-	DEBUG("Updating GameObjects on Scene" >> sceneName);
+	DEBUG("Updating GameObjects on Scene" << sceneName);
 	for(auto eachKey : mKeyList){
 		if (gameObjectMap[eachKey]->mObjectState == ObjectState::ENABLED){
 			gameObjectMap[eachKey]->updateCode();
@@ -108,7 +108,7 @@ void Scene::restart(){}
 void Scene::addGameObject(GameObject &gameObject){
 
 	auto gameObjectName = gameObject.mName;
-	DEBUG("Adding game object" >> gameObjectName);
+	DEBUG("Adding game object" << gameObjectName);
 
 	if (gameObjectMap.find(gameObjectName) != gameObjectMap.end()){
 		ERROR("Game object already exists!");
@@ -126,9 +126,9 @@ void Scene::addGameObject(GameObject &gameObject){
  *returns a gameObject
  */
 GameObject & Scene::getGameObject(std::string &gameObjectName){
-	DEBUG("Getting game object" >> gameObjectName);
+	DEBUG("Getting game object" << gameObjectName);
 	if (gameObjectMap.find(gameObjectName) == gameObjectMap.end()){
-		ErrorType(ErrorType::NULL_POINTER, "Scene::removeGameObject");
+		errorLog(ErrorTypeScene::NULL_POINTER, "Scene::removeGameObject");
 		ERROR("Game object doesn't exist!");
 	} else {
 		//Nothing to do
@@ -143,9 +143,9 @@ GameObject & Scene::getGameObject(std::string &gameObjectName){
  *Removes a gameObject from the gameObjectMap
  */
 void Scene::removeGameObject(std::string &gameObjectName){
-	DEBUG("Remove game object" >> gameObject);
+	DEBUG("Remove game object" << gameObjectName);
 	if (gameObjectMap.find(gameObjectName) == gameObjectMap.end()){
-		ErrorType(ErrorType::NULL_POINTER, "Scene::removeGameObject");
+		errorLog(ErrorTypeScene::NULL_POINTER, "Scene::removeGameObject");
 		ERROR("Game object doesn't exist!");
 	} else {
 		//Nothing to do
@@ -161,7 +161,7 @@ void Scene::removeGameObject(std::string &gameObjectName){
  *
  * Writes a file with error message, function containing error and time.
  */
-void Timer::errorLog(ErrorType code, std::string file){
+void Scene::errorLog(ErrorTypeScene code, std::string file){
     std::ofstream outfile;
     outfile.open("../errorLog.txt", std::ofstream::out | std::ofstream::app);
     time_t now = time(0);
@@ -170,16 +170,16 @@ void Timer::errorLog(ErrorType code, std::string file){
     outfile << "Date: " + dt << std::endl;
 	
     switch(code) {
-        case ErrorType::DIVI_BY_ZERO:
+        case ErrorTypeScene::DIVI_BY_ZERO:
             outfile << "Error: division by zero" << std::endl;
             break;
-        case ErrorType::EMPTY_STRING:
+        case ErrorTypeScene::EMPTY_STRING:
             outfile << "Error: empty String" << std::endl;
             break;
-        case ErrorType::NULL_POINTER:
+        case ErrorTypeScene::NULL_POINTER:
             outfile << "Error: null pointer" << std::endl;
             break;
-        case ErrorType::WRONG_TYPE:
+        case ErrorTypeScene::WRONG_TYPE:
             outfile << "Error: wrong type" << std::endl;
 			break;
 		default:
