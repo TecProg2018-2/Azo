@@ -1,13 +1,13 @@
 /**
  * @file game.cpp
  * @brief Purpose: Contains general scope to the game.
- * 
+ *
  * GPL v3.0 License
  * Copyright (c) 2017 Azo
- * 
+ *
  * Notice: TheAzo, TheAzoTeam
  * https://github.com/TecProg2018-2/Azo
- * 
+ *
  * This file is responsible for create the model to all game and scene management.
 */
 #include "sdl2include.h"
@@ -21,7 +21,7 @@ Game Game::instance; // Used to initialize in fact the static instance of game;
 
 /**
  * @brief Default constructor for the Game component.
- *  
+ *
  * @return "void".
 */
 Game::Game(){
@@ -32,10 +32,10 @@ Game::Game(){
 }
 
 /**
- * @brief Main Game Loop and SDL Initiators.  
- * 
+ * @brief Main Game Loop and SDL Initiators.
+ *
  * Run all the game.
- *  
+ *
  * @return "void".
 */
 void Game::run(){
@@ -99,12 +99,12 @@ void Game::run(){
 }
 
 /**
- * @brief add scenes to the game.  
- * 
+ * @brief add scenes to the game.
+ *
  * Used to add a Scene to map that have all Game's Scenes.
- *  
- * @param Scene that represent a game stage. 
- * 
+ *
+ * @param Scene that represent a game stage.
+ *
  * @return a bool that indicates the add scene success.
 */
 bool Game::addScene(Scene &scene){
@@ -124,12 +124,12 @@ bool Game::addScene(Scene &scene){
 }
 
 /**
- * @brief Restart game scene. 
- * 
+ * @brief Restart game scene.
+ *
  * Load the scene. Used every time a scene needs to be reseted.
- *  
+ *
  * @param sceneName string that has the scene name.
- * 
+ *
  * @return "void".
 */
 void Game::restartScene(std::string sceneName){
@@ -139,14 +139,35 @@ void Game::restartScene(std::string sceneName){
 
 	scene->restart();
 }
+/**
+ * @brief set the game attributtes to SDL instance.
+ *
+ * Transfer the game attributes to SDL instace and set Game's frameRate.
+ *
+ * @param gameName string that has the name of the game
+ * @param windowWidth sets the width of the game screen
+ * @param windowHeight sets the height of the game screen
+ * @param frameRate Frames per Second of the Game (FPS).
+ *
+ * @return "void".
+*/
+void Game::setAttributes(std::string gameName, int windowWidth, int windowHeight, int frameRate){
+	ASSERT(gameName != "", "The game name can't be blank.");
+	ASSERT(windowWidth >= 0, "The window width can't be lower than zero.");
+	ASSERT(windowHeight >= 0, "The window height can't be lower than zero.");
+	ASSERT(frameRate >= 0, "The frame rate can't be lower than zero.");
+
+	sdlElements.setSDLAttributes(gameName, windowWidth, windowHeight);
+	this->frameRate = frameRate;
+}
 
 /**
- * @brief change the game scene. 
- * 
+ * @brief change the game scene.
+ *
  * Perform the necessary checks and prepare the structure to switch Scenes.
- *  
+ *
  * @param sceneName string that has the scene name
- * 
+ *
  * @return "void".
 */
 void Game::changeScene(std::string sceneName){
@@ -162,12 +183,12 @@ void Game::changeScene(std::string sceneName){
 }
 
 /**
- * @brief switch the game scene  
- * 
+ * @brief switch the game scene
+ *
  * Perform scene switching effectively.
- *  
+ *
  * @param sceneName string that has the scene name
- * 
+ *
  * @return bool that represents the success on change scene.
 */
 bool Game::startAndStopScenes(){
@@ -209,26 +230,4 @@ bool Game::startAndStopScenes(){
 	}
 
 	return true;
-}
-
-/**
- * @brief set the game attributtes to SDL instance. 
- * 
- * Transfer the game attributes to SDL instace and set Game's frameRate.
- *  
- * @param gameName string that has the name of the game
- * @param windowWidth sets the width of the game screen
- * @param windowHeight sets the height of the game screen
- * @param frameRate Frames per Second of the Game (FPS).
- * 
- * @return "void".
-*/
-void Game::setAttributes(std::string gameName, int windowWidth, int windowHeight, int frameRate){
-	ASSERT(gameName != "", "The game name can't be blank.");
-	ASSERT(windowWidth >= 0, "The window width can't be lower than zero.");
-	ASSERT(windowHeight >= 0, "The window height can't be lower than zero.");
-	ASSERT(frameRate >= 0, "The frame rate can't be lower than zero.");
-
-	sdlElements.setSDLAttributes(gameName, windowWidth, windowHeight);
-	this->frameRate = frameRate;
 }

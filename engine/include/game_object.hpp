@@ -1,13 +1,13 @@
 /**
  * @file game_object.hpp
  * @brief Purpose: Contains the Game Object class declaration.
- * 
+ *
  * GPL v3.0 License
  * Copyright (c) 2017 Azo
- * 
+ *
  * Notice: TheAzo, TheAzoTeam
  * https://github.com/TecProg2018-2/Azo
- * 
+ *
  * This file implements the main game object component its declaration and state.
 */
 #ifndef gameObject_HPP
@@ -53,9 +53,6 @@ namespace engine {
 			std::string mName; // Name of game object
 			ObjectState mObjectState = ObjectState::ENABLED; // Sets the game object state
 
-		protected:
-			std::unordered_multimap<std::type_index, Component *> mComponentMap; // Component that represents game object's map.
-
 		public:
 			GameObject();
 			GameObject(std::string gameObjectName,
@@ -76,6 +73,9 @@ namespace engine {
 			std::pair<double, double> calcRightDown();
 			std::pair<double, double> calcLeftUp();
 			std::pair<double, double> calcLeftDown();
+
+		protected:
+			std::unordered_multimap<std::type_index, Component *> mComponentMap; // Component that represents game object's map.
 	};
 
 }
