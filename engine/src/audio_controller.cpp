@@ -54,7 +54,6 @@ void AudioController::init() {
 
 
 void AudioController::updateCode() {
-	DEBUG("Update AudioController");
 	for(auto audioRow : audioMap) {
 		auto audio = audioRow.second;
 
@@ -191,7 +190,7 @@ void AudioController::errorLog(ErrorTypeAudio code, std::string file){
     std::string dt = ctime(&now); //convert to string
 	outfile << "Function: " + file << std::endl;
     outfile << "Date: " + dt << std::endl;
-	
+
     switch(code) {
         case ErrorTypeAudio::DIVI_BY_ZERO:
             outfile << "Error: division by zero" << std::endl;

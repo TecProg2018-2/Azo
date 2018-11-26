@@ -85,7 +85,6 @@ void AudioComponent::updateCode() {
 		play (-1, -1); // Plays audio once until end
 		playOnStart = false;
 	} else {
-		DEBUG("Startup audio already played");
 		//Nothing to do
 	}
 }
@@ -209,7 +208,7 @@ void AudioComponent::errorLog(ErrorTypeAudioComponent code, std::string file){
     std::string dt = ctime(&now); //convert to string
 	outfile << "Function: " + file << std::endl;
     outfile << "Date: " + dt << std::endl;
-	
+
     switch(code) {
         case ErrorTypeAudioComponent::DIVI_BY_ZERO:
             outfile << "Error: division by zero" << std::endl;

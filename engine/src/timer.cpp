@@ -55,7 +55,7 @@ void Timer::Reset() {
  *
  * Calculates difference from present tick to total elapsed ticks
  */
-void Timer::DeltaTime() {  
+void Timer::DeltaTime() {
 	deltaTime = SDL_GetTicks() - elapsedTicks;
 }
 
@@ -65,6 +65,5 @@ void Timer::DeltaTime() {
  *@return the elapsed time
  */
 float Timer::getDeltaTime() {
-  DEBUG("Getting DeltaTime"); // Logging done here so it doesn't affect the timer.
 	return deltaTime;
 }

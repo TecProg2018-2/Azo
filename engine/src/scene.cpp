@@ -66,12 +66,10 @@ void Scene::deleteKeyList() {
  *Passes every gameObjectin the gameObjectMap to the draw() method
  */
 void Scene::draw() {
-	DEBUG("Drawing Game Objects");
 	for (auto eachKey : mKeyList) {
 		if(gameObjectMap[eachKey]->mObjectState == ObjectState::ENABLED) {
 			gameObjectMap[eachKey]->draw();
 		} else {
-			DEBUG("No object to draw");
 			//Nothing to do
 		}
 	}
@@ -83,7 +81,6 @@ void Scene::draw() {
  *Passes every element of the gameObjectMap to the updateCode() method.
  */
 void Scene::updateCode(){
-	DEBUG("Updating GameObjects on Scene" << sceneName);
 	for(auto eachKey : mKeyList){
 		if (gameObjectMap[eachKey]->mObjectState == ObjectState::ENABLED){
 			gameObjectMap[eachKey]->updateCode();
@@ -168,7 +165,7 @@ void Scene::errorLog(ErrorTypeScene code, std::string file){
     std::string dt = ctime(&now); //convert to string
 	outfile << "Function: " + file << std::endl;
     outfile << "Date: " + dt << std::endl;
-	
+
     switch(code) {
         case ErrorTypeScene::DIVI_BY_ZERO:
             outfile << "Error: division by zero" << std::endl;

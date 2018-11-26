@@ -98,7 +98,6 @@ void MenuCode::changeOption(){
 	switch (mCurrentButton) {
 		// Start Option.
 		case ButtonType::START_BUTTON:
-			DEBUG("Start Button is selected.");
 
 			mAnimationController->startAnimation("arrow_start");
 
