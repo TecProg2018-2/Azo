@@ -25,6 +25,19 @@ namespace engine {
 		unsigned int height;
 	};
 
+	/*
+	 * @brief Class for possible errors types.
+	 * 
+	 * Enum class used to differentiate errors inside the menu.
+	 */ 
+	enum class ErrorType {
+		DIVI_BY_ZERO,
+		NULL_POINTER,
+		EMPTY_STRING,
+		WRONG_TYPE,
+		NO_MATCHING_FILE,
+	};
+
 	/**
 	 * @brief AssetsManager class.
 	 *
@@ -45,6 +58,7 @@ namespace engine {
 
 			Mix_Chunk * LoadSound(std::string audioPath);
 
+			void errorLog(ErrorType code, std::string file);
 
 		private:
 			void InsertIntoImageMap(std::string imagePath, SDL_Surface* image, SDL_Texture *imageTexture);
