@@ -1,10 +1,10 @@
 /**
  * @file: level_one.hpp
  * @brief Purpose: LevelOne class declaration
- * 
+ *
  * GPL v3.0 Licence
  * Copyright (c) 2017 Azo
- * 
+ *
  * Notice: TheAzo, TheAzoTeam
  * https://github.com/TecProg2018-2/Azo
 */
@@ -19,6 +19,18 @@
 #include "audio_controller.hpp"
 
 namespace Azo {
+	/**
+   * @brief Class for possible errors types.
+   *
+   * Enum class used to differentiate errors
+   */
+  enum class FunctionStatusLevelOne {
+    DIVIBYZERO,
+    NULLPOINTER,
+    EMPTYSTRING,
+    WRONGTYPE,
+    SUCCESS,
+  };
 
 	/**
 	* @brief LevelOne class
@@ -136,16 +148,19 @@ namespace Azo {
 			Obstacle *mObstacleAerial22;
 			Obstacle *mPart22;
 			Obstacle *mGround;
-
-		private:
-			void createGameObjects(); //function that add new objects to level one
-			void createEndingScreen(); //functon that add the ending menu to level one
-			void addLevelParents(); //function that add parents to level one. Use after adding objects that collide.
+			FunctionStatusLevelOne errorCode = FunctionStatusLevelOne::SUCCESS;
 
 		public:
 			LevelOne();
 			LevelOne(std::string name);
 			void restart(); //function that restarts level one
+
+		private:
+			void createGameObjects(); //function that add new objects to level one
+			void createEndingScreen(); //functon that add the ending menu to level one
+			void addLevelParents(); //function that add parents to level one. Use after adding objects that collide.
+			void errorLog(std::string file);
+
 	};
 }
 
