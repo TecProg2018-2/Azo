@@ -50,8 +50,6 @@ namespace engine {
 			bool keyDownOnce(Button button);
 			bool keyState(Button button);
 			void clear();
-
-		private:
 	};
 }
 
