@@ -23,7 +23,6 @@ using namespace engine;// Used to avoid write engine::Game engine::Game::instanc
 	// Load image into image map.
 	Image* AssetsManager::LoadImage(std::string imagePath) {
 		ASSERT(imagePath != "", "Animation::CreateAnimation, imagePath is empty.");
-		DEBUG("Trying to load image " << imagePath);
 		//DEBUG("Image Map size before loading " << imageMap.size());
 
 		if (imageMap.find(imagePath) == imageMap.end()) {
@@ -31,7 +30,7 @@ using namespace engine;// Used to avoid write engine::Game engine::Game::instanc
 
 			SDL_Surface *image = NULL;
 
-			if (imagePath != "") {																														
+			if (imagePath != "") {
 				//Nothing to do for the imagePath is valid
 			} else {
 				ERROR("Invalid Image Path: " << imagePath);
@@ -58,8 +57,6 @@ using namespace engine;// Used to avoid write engine::Game engine::Game::instanc
 			SDL_FreeSurface(image);
 
 		} else {
-
-			DEBUG("Image: " << imagePath << " already loaded!");
 		}
 
 		return imageMap[imagePath];
@@ -87,7 +84,6 @@ using namespace engine;// Used to avoid write engine::Game engine::Game::instanc
 
 		// Insert image into image map.
 		imageMap[imagePath] = assetsManagerImage;
-		DEBUG("Image Map size after inserting " << imageMap.size());
 	}
 
 	// Load music into music map.
@@ -109,8 +105,6 @@ using namespace engine;// Used to avoid write engine::Game engine::Game::instanc
 			InsertIntoMusicMap(audioPath, music);
 
 		} else {
-
-			DEBUG("Music: " << audioPath << " already loaded!");
 		}
 
 		return musicMap[audioPath];
@@ -154,7 +148,6 @@ using namespace engine;// Used to avoid write engine::Game engine::Game::instanc
 			InsertIntoSoundMap(audioPath, sound);
 
 		} else {
-			DEBUG("Sound: " << audioPath << " already loaded!");
 		}
 
 		return soundMap[audioPath];

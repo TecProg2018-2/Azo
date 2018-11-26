@@ -28,6 +28,19 @@ ra	 *Enum Class used to differentiate Audio States
 	};
 
 	/*
+	 * @brief Class for possible errors types.
+	 * 
+	 * Enum class used to differentiate errors inside the menu.
+	 */ 
+	enum class ErrorTypeAudioComponent {
+		DIVI_BY_ZERO,
+		NULL_POINTER,
+		EMPTY_STRING,
+		WRONG_TYPE,
+		NO_MATCHING_FILE
+	};
+	
+	/*
 	 *
 	 *@brief AudioComponent class for in-game audio
 	 *
@@ -35,8 +48,11 @@ ra	 *Enum Class used to differentiate Audio States
 	 *
 	 */
 	class AudioComponent : public Component {
-	private:
+	public:
+		AudioState audioState;
 		std::string audioPath;
+
+	private:
 		bool isMusic;
 		bool playOnStart;
 
@@ -44,7 +60,6 @@ ra	 *Enum Class used to differentiate Audio States
 		Mix_Chunk * sound;
 
 	public:
-		AudioState audioState;
 		AudioComponent();
 		virtual ~AudioComponent();
 		AudioComponent(GameObject &gameObject, std::string audioPath,
@@ -55,10 +70,14 @@ ra	 *Enum Class used to differentiate Audio States
 		void play(int loops, int channel);
 		void stop(int channel);
 		void pause(int channel);
-
+		/*
+		 *@brief Function to get bool isMusic.
+		 *
+		*/
 		inline bool getIsMusic() {
 			return isMusic;
 		}
+		void errorLog(ErrorTypeAudioComponent code, std::string file);
 	};
 
 }

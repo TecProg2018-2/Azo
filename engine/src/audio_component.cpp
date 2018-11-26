@@ -9,7 +9,9 @@
   */
 #include "audio_component.hpp"
 #include "game.hpp"
-
+#include <ctime>
+#include <fstream>
+#include <iostream>
 
 using namespace engine;
 
@@ -30,7 +32,7 @@ AudioComponent::~AudioComponent() {}
  */
 AudioComponent::AudioComponent(GameObject &gameObject,std::string audioPath,
 							  	bool isMusic, bool playOnStart) {
-
+	DEBUG("Creating Audio Component.");
 	this->gameObject = &gameObject;
 	this->audioPath = audioPath;//path to audio file
 	this->isMusic = isMusic;	//bool to check if music exists
@@ -47,23 +49,27 @@ AudioComponent::AudioComponent(GameObject &gameObject,std::string audioPath,
  */
 void AudioComponent::init() {
 
-	INFO("init audio component");
+	DEBUG("Init audio component");
 
 	// Checks if audio in question is music or sound effect
 	if (isMusic) {
+		DEBUG("Playing Music" << audioPath);
 		music = Game::instance.getAssetsManager().LoadMusic(audioPath);
 
 		if (music == NULL) {
 			ERROR("Invalid Music Path (Music = NULL): " << audioPath);
+			errorLog(ErrorTypeAudioComponent::NULL_POINTER, "AudioComponent::init");
 		} else {
 
 		}
 
 	} else {
+		DEBUG("Playing Sound" << audioPath);
 		sound = Game::instance.getAssetsManager().LoadSound(audioPath);
 
 		if (sound == NULL) {
 			ERROR("Invalid Sound Path (Sound = NULL): " << audioPath);
+			errorLog(ErrorTypeAudioComponent::NULL_POINTER, "AudioComponent::init");
 		} else {
 			//Nothing to do
 		}
@@ -75,6 +81,7 @@ void AudioComponent::init() {
 void AudioComponent::updateCode() {
 
 	if (playOnStart) {
+		DEBUG("Playing audio on startup");
 		play (-1, -1); // Plays audio once until end
 		playOnStart = false;
 	} else {
@@ -89,7 +96,7 @@ void AudioComponent::updateCode() {
 */
 void AudioComponent::shutdown() {
 
-	INFO("shutdown audio component");
+	DEBUG("Shutdown audio component");
 
 	stop(-1);
 
@@ -97,10 +104,12 @@ void AudioComponent::shutdown() {
 		Mix_FreeMusic(music);
 		music = nullptr;
 	} else {
+		DEBUG("No music to shutdown");
 		//Nothing to do
 	}
 
 	if(sound != nullptr) {
+		DEBUG("No sound to shutdown");
 		sound = nullptr;
 	} else {
 		//Nothing to do
@@ -118,7 +127,7 @@ void AudioComponent::play(int loops, int channel) {
 
 	//checks if the audio in question is music or sound effect
 	if (isMusic) {
-
+		DEBUG("Audio is music");
 		if (audioState == AudioState::STOPPED) {
 			Mix_PlayMusic (music, loops);
 			INFO("Play music: " << audioPath);
@@ -130,7 +139,7 @@ void AudioComponent::play(int loops, int channel) {
 		}
 
 	} else {
-
+		DEBUG("Audio is sound");
 		if (audioState == AudioState::STOPPED){
 			Mix_PlayChannel(channel, sound, 0);
 			INFO("Play sound: " << audioPath);
@@ -141,7 +150,7 @@ void AudioComponent::play(int loops, int channel) {
 			//Nothing to do
 		}
 	}
-
+	DEBUG("Changing AudioState to PLAYING");
 	audioState = AudioState::PLAYING;
 }
 
@@ -162,7 +171,7 @@ void AudioComponent::stop(int channel){
 		Mix_HaltChannel(channel);
 		INFO("Stop sound: " << audioPath);
 	}
-
+	DEBUG("Changing AudioState to PAUSED");
 	audioState = AudioState::STOPPED;
 }
 
@@ -182,6 +191,40 @@ void AudioComponent::pause(int channel) {
 		Mix_Pause(channel);
 		INFO("Pause sound: " << audioPath);
 	}
-
+	DEBUG("Changing AudioState to PAUSED");
 	audioState = AudioState::PAUSED;
+}
+
+
+/*
+ *@brief Method to log error messages.
+ *
+ * Writes a file with error message, function containing error and time.
+ */
+void AudioComponent::errorLog(ErrorTypeAudioComponent code, std::string file){
+    std::ofstream outfile;
+    outfile.open("../errorLog.txt", std::ofstream::out | std::ofstream::app);
+    time_t now = time(0);
+    std::string dt = ctime(&now); //convert to string
+	outfile << "Function: " + file << std::endl;
+    outfile << "Date: " + dt << std::endl;
+
+    switch(code) {
+        case ErrorTypeAudioComponent::DIVI_BY_ZERO:
+            outfile << "Error: division by zero" << std::endl;
+            break;
+        case ErrorTypeAudioComponent::EMPTY_STRING:
+            outfile << "Error: empty String" << std::endl;
+            break;
+        case ErrorTypeAudioComponent::NULL_POINTER:
+            outfile << "Error: null pointer" << std::endl;
+            break;
+        case ErrorTypeAudioComponent::WRONG_TYPE:
+            outfile << "Error: wrong type" << std::endl;
+			break;
+		default:
+			outfile << "Error: no matching file" << std::endl;
+    }
+    outfile << "===============" << std::endl;
+    outfile.close();
 }
