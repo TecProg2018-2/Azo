@@ -9,7 +9,8 @@
  * https://github.com/TecProg2018-2/Azo
  * 
  * This file implements the game globals constants.
-*/#ifndef GAME_GLOBALS_HPP
+*/
+#ifndef GAME_GLOBALS_HPP
 #define GAME_GLOBALS_HPP
 
 #include <string>

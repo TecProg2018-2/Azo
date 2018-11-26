@@ -41,7 +41,27 @@ namespace Azo {  //Used to avoid writing all the path from Azo context
 	* This class is used to characterize player and set its configurations and behaviour
 	*/
 	class Player : public engine::GameObject {
-		private: 
+		public:
+			Player();
+			Player(std::string name, std::pair<double, double> currentPosition);
+
+			const std::pair<double, double> M_ZERO_VECTOR = std::make_pair(0.0f, 0.0f); //constant pair of double. Always [0.0f, 0.0f]
+			const double M_GRAVITY = 0.003f; //constant double for gravity. The vertical movement
+			const double M_JUMPING_SPEED = -1.0f; //constante double. Used along M_GRAVITY to set the vertical movement.
+			//Vertical speed should be negative, so the character goes up on canvas.
+			const double M_WALKING_SPEED = 4.8f; //constant double for speed. The horizontal movement
+			const int M_TOTAL_PARTS = 25; //constant integer for the total parts objects present in game
+			PlayerState mState; //PlayerState variable of PlayerState enum class
+			std::pair<double, double> mSpeed; //pair of double to set mSpeed
+			bool mPushesRightWall; // boolean variable, 1 = true, 0 = false
+			bool mPushesLeftWall; // boolean variable, 1 = true, 0 = false
+			bool mAtCeiling; // boolean variable, 1 = true, 0 = false
+			bool mOnGround; // boolean variable, 1 = true, 0 = false
+			int mCollectedParts = 0; // integer, ranges 0 to 25
+
+			void shutdown();
+			
+		private:
 			engine::AnimationController *mAnimationController; //pointer to corresponding current animation
 			engine::AudioController *mAudioController; //pointer to corresponding current audio
 			// Add new audios here.
@@ -78,25 +98,7 @@ namespace Azo {  //Used to avoid writing all the path from Azo context
 				return "Player";
 			}
 
-		public:
-			Player();
-			Player(std::string name, std::pair<double, double> currentPosition);
 
-			const std::pair<double, double> M_ZERO_VECTOR = std::make_pair(0.0f, 0.0f); //constant pair of double. Always [0.0f, 0.0f]
-			const double M_GRAVITY = 0.003f; //constant double for gravity. The vertical movement
-			const double M_JUMPING_SPEED = -1.0f; //constante double. Used along M_GRAVITY to set the vertical movement.
-			//Vertical speed should be negative, so the character goes up on canvas.
-			const double M_WALKING_SPEED = 4.8f; //constant double for speed. The horizontal movement
-			const int M_TOTAL_PARTS = 25; //constant integer for the total parts objects present in game
-			PlayerState mState; //PlayerState variable of PlayerState enum class
-			std::pair<double, double> mSpeed; //pair of double to set mSpeed
-			bool mPushesRightWall; // boolean variable, 1 = true, 0 = false
-			bool mPushesLeftWall; // boolean variable, 1 = true, 0 = false
-			bool mAtCeiling; // boolean variable, 1 = true, 0 = false
-			bool mOnGround; // boolean variable, 1 = true, 0 = false
-			int mCollectedParts = 0; // integer, ranges 0 to 25
-
-			void shutdown();
 	};
 }
 

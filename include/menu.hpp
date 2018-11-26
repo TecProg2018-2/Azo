@@ -23,12 +23,6 @@ namespace Azo {
 		 * Class responsible for creating the ' menu '
 		 */
 	class Menu : public engine::Scene {
-		public:
-			Menu();
-			Menu(std::string name);
-			void restart();
-			void shutdown();
-
 		private:
 			engine::GameObject *mMenu; // Miscellaneous comment
 
@@ -54,7 +48,14 @@ namespace Azo {
 			MenuCode *mCode;
 			engine::AudioController *mAudioController;
 			engine::AudioComponent *mMenuTheme; // Variable referring to the menu
-			
+		
+		public:
+			Menu();
+			Menu(std::string name);
+			void restart();
+			void shutdown();
+
+		private:
 			void createGameObjects();
 			void createMenuComponents();
 			void generateButtonsAnimation();

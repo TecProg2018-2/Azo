@@ -8,6 +8,10 @@
   * https://github.com/TecProg2018-2/Azo/blob/master/LICENSE.md
  */
 #include "timer.hpp"
+#include <ctime>
+#include <fstream>
+#include <iostream>
+#include "log.h"
 
 using namespace engine;
 
@@ -17,10 +21,22 @@ using namespace engine;
  *Resets elapsed time to zero
  */
 Timer::Timer() {
+  DEBUG("Creating Timer");
 	Reset();
 }
 
 Timer::~Timer() {}
+
+
+/*
+ *@brief Method to do a timer step
+ *
+ *updated the total elapsed time with present time
+ */
+void Timer::step() {
+	elapsedTicks = SDL_GetTicks();
+}
+
 
 /*
  *@brief Method to reset the timer
@@ -28,7 +44,7 @@ Timer::~Timer() {}
  * Reset startTicks and sets all other attributes to zero
  */
 void Timer::Reset() {
-
+  DEBUG("Resetting Timer");
 	startTicks = SDL_GetTicks();
 	elapsedTicks = 0.0f;
 	deltaTime = 0.0f;
@@ -50,13 +66,4 @@ void Timer::DeltaTime() {
  */
 float Timer::getDeltaTime() {
 	return deltaTime;
-}
-
-/*
- *@brief Method to do a timer step
- *
- *updated the total elapsed time with present time
- */
-void Timer::step() {
-	elapsedTicks = SDL_GetTicks();
 }

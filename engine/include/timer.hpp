@@ -13,7 +13,6 @@
 #include "sdl2include.h"
 
 namespace engine {
- 
 	//@brief class to calculate time operations	 
 	class Timer {
 		private:
@@ -24,9 +23,9 @@ namespace engine {
 			Timer();
 			~Timer();
 
+			void step();
 			void Reset();
 			void DeltaTime();
-			void step();
 			float getDeltaTime();
 	};
 }
