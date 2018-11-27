@@ -1,14 +1,14 @@
 /**
- * @file animation.hpp
- * @brief Purpose: Defines the general scope of animation.
- * 
- * GPL v3.0 License
- * Copyright (c) 2017 Azo
- * 
- * Notice: TheAzo, TheAzoTeam
- * https://github.com/TecProg2018-2/Azo
- * 
- * This file implements the main animation component its declaration and state.
+* @file animation.hpp
+* @brief Purpose: Defines the general scope of animation.
+*
+* GPL v3.0 License
+* Copyright (c) 2017 Azo
+*
+* Notice: TheAzo, TheAzoTeam
+* https://github.com/TecProg2018-2/Azo
+*
+* This file implements the main animation component its declaration and state.
 */
 #ifndef ANIMATION_MANAGER_HPP
 #define ANIMATION_MANAGER_HPP
@@ -27,6 +27,10 @@ namespace engine {
 	};
 
 	class Animation : public ImageComponent {
+	public:
+		std::string animationName;
+		AnimationState mState = AnimationState::STOPPED;
+
 	private:
 		std::vector<Sprite *> mSpriteList;
 		int mCurrentSprite;
@@ -36,7 +40,7 @@ namespace engine {
 		int mEachFrameTime;
 		float mAnimationTime;
 		bool mLoop;
-		std::pair<double, double> mPositionRelativeToObject;
+		//std::pair<double, double> mPositionRelativeToObject;
 
 		void checkLimits();
 		void updateQuad();
@@ -45,17 +49,29 @@ namespace engine {
 
 	public:
 		Animation();
-		Animation(GameObject & gameObject, std::string imagePath,
-				  float animationTime, std::vector<Sprite *> spriteList,
-				  int startFrame, int endFrame, bool loop, double zoomFactor);
-		Animation(GameObject & gameObject, std::string imagePath,
-				  float animationTime, std::vector<Sprite *> spriteList,
-				  int startFrame, int endFrame, bool loop, double zoomFactor,
-				  std::pair<double, double> positionRelativeToObject);
+		Animation(
+			GameObject & gameObject,
+			std::string imagePath,
+			float animationTime,
+			std::vector<Sprite *> spriteList,
+			int startFrame,
+			int endFrame,
+			bool loop,
+			double zoomFactor
+		);
+		Animation(
+			GameObject & gameObject,
+			std::string imagePath,
+			float animationTime,
+			std::vector<Sprite *> spriteList,
+			int startFrame,
+			int endFrame,
+			bool loop,
+			double zoomFactor,
+			std::pair<double, double> positionRelativeToObject
+		);
 		virtual ~Animation();
 
-		std::string animationName;
-		AnimationState mState = AnimationState::STOPPED;
 		void shutdown();
 		void draw();
 		void disableComponent();
