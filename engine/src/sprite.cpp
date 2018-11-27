@@ -35,41 +35,41 @@ Sprite::Sprite(
 }
 
 void Sprite::setSpriteWidth(unsigned int newSpriteWidth){
-	DEBUG("Calling Sprite::setSpriteWidth");
+	//DEBUG("Calling Sprite::setSpriteWidth");
 	this->spriteWidth = newSpriteWidth;
 }
 
 unsigned int Sprite::getSpriteWidth(){
-	DEBUG("Calling Sprite::getSpriteWidth");
+	//DEBUG("Calling Sprite::getSpriteWidth");
 	return this->spriteWidth;
 }
 
 void Sprite::setSpriteHeight(unsigned int newSpriteHeight){
-	DEBUG("Calling Sprite::setSpriteHeight");
+	//DEBUG("Calling Sprite::setSpriteHeight");
 	this->spriteHeight = newSpriteHeight;
 }
 
 unsigned int Sprite::getSpriteHeight(){
-	DEBUG("Calling Sprite::getSpriteHeight");
+	//DEBUG("Calling Sprite::getSpriteHeight");
 	return this->spriteHeight;
 }
 
 void Sprite::setSpriteX(unsigned int newSpriteX){
-	DEBUG("Calling Sprite::setSpriteX");
+	//DEBUG("Calling Sprite::setSpriteX");
 	this->spriteX = newSpriteX;
 }
 
 unsigned int Sprite::getSpriteX(){
-	DEBUG("Calling Sprite::getSpriteX");
+	//DEBUG("Calling Sprite::getSpriteX");
 	return this->spriteX;
 }
 
 void Sprite::setSpriteY(unsigned int newSpriteY){
-	DEBUG("Calling Sprite::setSpriteY");
+	//DEBUG("Calling Sprite::setSpriteY");
 	this->spriteY = newSpriteY;
 }
 
 unsigned int Sprite::getSpriteY(){
-	DEBUG("Calling Sprite::getSpriteY");
+	//DEBUG("Calling Sprite::getSpriteY");
 	return this->spriteY;
 }

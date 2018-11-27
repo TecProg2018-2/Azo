@@ -81,7 +81,7 @@ void ImageComponent::init() {
 
 
 void ImageComponent::draw() {
-	DEBUG("Calling ImageComponent::draw");
+	//DEBUG("Calling ImageComponent::draw");
 
 	updateQuad();
 	SDL_RenderCopy(
@@ -93,7 +93,7 @@ void ImageComponent::draw() {
 }
 
 void ImageComponent::updateQuad() {
-	DEBUG("Calling ImageComponent::updateQuad");
+	//DEBUG("Calling ImageComponent::updateQuad");
 
 	canvasQuad = {
 		(int)(gameObject->mCurrentPosition.first + mPositionRelativeToObject.first),

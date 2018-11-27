@@ -107,7 +107,7 @@ void Animation::shutdown() {
 }
 
 void Animation::draw() {
-	DEBUG("Drawing Animation");
+	//DEBUG("Drawing Animation");
 
 	checkLimits();
 	updateQuad();
@@ -122,7 +122,7 @@ void Animation::draw() {
 }
 
 void Animation::disableComponent() {
-	DEBUG("Disabling Animation Component");
+	//DEBUG("Disabling Animation Component");
 
 	this->componentState = State::DISABLED;
 	mCurrentAnimationTime = CURRENT_ANIMATION_TIME;
@@ -130,7 +130,7 @@ void Animation::disableComponent() {
 }
 
 void Animation::checkLimits() {
-	DEBUG("Checking Animation Limits");
+	//DEBUG("Checking Animation Limits");
 
 	if(mCurrentSprite > mEndFrame) {
 		if (mLoop) {
@@ -145,7 +145,7 @@ void Animation::checkLimits() {
 }
 
 void Animation::updateQuad() {
-	DEBUG("Updating Animation Quad");
+	//DEBUG("Updating Animation Quad");
 
 	renderQuad = {
 		mSpriteList[mCurrentSprite]->getSpriteX(),
@@ -164,7 +164,7 @@ void Animation::updateQuad() {
 }
 
 void Animation::updateFrameBasedOntime() {
-	DEBUG("Calling Animation::updateFrameBasedOntime");
+	//DEBUG("Calling Animation::updateFrameBasedOntime");
 
 	mCurrentAnimationTime += Game::instance.getTimer().getDeltaTime();
 	ASSERT((mEachFrameTime + mStartFrame) != 0, "Division by zero");
@@ -173,7 +173,7 @@ void Animation::updateFrameBasedOntime() {
 }
 
 void Animation::updateGameObjectMeasures() {
-	DEBUG("Calling Animation::updateGameObjectMeasures");
+	//DEBUG("Calling Animation::updateGameObjectMeasures");
 
 	ASSERT(
 		DIVISOR_NUMBER != 0,
