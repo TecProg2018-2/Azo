@@ -128,11 +128,7 @@ void LevelOne::createObstacleCar() {
 	mObstacleCar5 = new Obstacle("obstacle_car_5", std::make_pair(14200, 300), ObstacleType::WESTERN_CAR);
 	this->addGameObject(*mObstacleCar5);
 
-	mLevelOne->mParentList.push_back(mObstacleCar1);
-	mLevelOne->mParentList.push_back(mObstacleCar2);
-	mLevelOne->mParentList.push_back(mObstacleCar3);
-	mLevelOne->mParentList.push_back(mObstacleCar4);
-	mLevelOne->mParentList.push_back(mObstacleCar5);
+	addLevelParentsCar();
 }
 
 void LevelOne::createObstacleSpike() {
@@ -156,11 +152,7 @@ void LevelOne::createObstacleSpike() {
 	mSpike5 = new Obstacle("obstacle_spike_5", std::make_pair(14414, 340), ObstacleType::WESTERN_SPIKE);
 	this->addGameObject(*mSpike5);
 
-	mLevelOne->mParentList.push_back(mSpike1);
-	mLevelOne->mParentList.push_back(mSpike2);
-	mLevelOne->mParentList.push_back(mSpike3);
-	mLevelOne->mParentList.push_back(mSpike4);
-	mLevelOne->mParentList.push_back(mSpike5);
+	addLevelParentsSpike();
 }
 
 void LevelOne::createObstacleBox() {
@@ -216,19 +208,7 @@ void LevelOne::createObstacleBox() {
 	mObstacleBox11 = new Obstacle("obstacle_box_11", std::make_pair(14374, 310), ObstacleType::WESTERN_BOX);
 	this->addGameObject(*mObstacleBox11);
 
-	mLevelOne->mParentList.push_back(mObstacleBox01);
-	mLevelOne->mParentList.push_back(mObstacleBox1);
-	mLevelOne->mParentList.push_back(mObstacleBox2);
-	mLevelOne->mParentList.push_back(mObstacleBox21);
-	mLevelOne->mParentList.push_back(mObstacleBox3);
-	mLevelOne->mParentList.push_back(mObstacleBox4);
-	mLevelOne->mParentList.push_back(mObstacleBox5);
-	mLevelOne->mParentList.push_back(mObstacleBox6);
-	mLevelOne->mParentList.push_back(mObstacleBox7);
-	mLevelOne->mParentList.push_back(mObstacleBox8);
-	mLevelOne->mParentList.push_back(mObstacleBox9);
-	mLevelOne->mParentList.push_back(mObstacleBox10);
-	mLevelOne->mParentList.push_back(mObstacleBox11);
+	addLevelParentsBox();
 }
 
 void LevelOne::createObstacleAerial() {
@@ -320,28 +300,7 @@ void LevelOne::createObstacleAerial() {
 	mObstacleAerial22 = new Obstacle("obstacle_aerial_22", std::make_pair(15300, 185), ObstacleType::WESTERN_POST);
 	this->addGameObject(*mObstacleAerial22);
 
-	mLevelOne->mParentList.push_back(mObstacleAerial1);
-	mLevelOne->mParentList.push_back(mObstacleAerial2);
-	mLevelOne->mParentList.push_back(mObstacleAerial3);
-	mLevelOne->mParentList.push_back(mObstacleAerial4);
-	mLevelOne->mParentList.push_back(mObstacleAerial5);
-	mLevelOne->mParentList.push_back(mObstacleAerial6);
-	mLevelOne->mParentList.push_back(mObstacleAerial7);
-	mLevelOne->mParentList.push_back(mObstacleAerial8);
-	mLevelOne->mParentList.push_back(mObstacleAerial9);
-	mLevelOne->mParentList.push_back(mObstacleAerial10);
-	mLevelOne->mParentList.push_back(mObstacleAerial11);
-	mLevelOne->mParentList.push_back(mObstacleAerial12);
-	mLevelOne->mParentList.push_back(mObstacleAerial13);
-	mLevelOne->mParentList.push_back(mObstacleAerial14);
-	mLevelOne->mParentList.push_back(mObstacleAerial15);
-	mLevelOne->mParentList.push_back(mObstacleAerial16);
-	mLevelOne->mParentList.push_back(mObstacleAerial17);
-	mLevelOne->mParentList.push_back(mObstacleAerial18);
-	mLevelOne->mParentList.push_back(mObstacleAerial19);
-	mLevelOne->mParentList.push_back(mObstacleAerial20);
-	mLevelOne->mParentList.push_back(mObstacleAerial21);
-	mLevelOne->mParentList.push_back(mObstacleAerial22);
+	addLevelParentsAerial();
 }
 
 void LevelOne::createPart() {
@@ -445,31 +404,7 @@ void LevelOne::createPart() {
 	mPart22 = new Obstacle("part_22", std::make_pair(15530, 140), ObstacleType::MACHINE_PART);
 	this->addGameObject(*mPart22);
 
-	mLevelOne->mParentList.push_back(mPart1);
-	mLevelOne->mParentList.push_back(mPart1_1);
-	mLevelOne->mParentList.push_back(mPart2);
-	mLevelOne->mParentList.push_back(mPart3);
-	mLevelOne->mParentList.push_back(mPart4);
-	mLevelOne->mParentList.push_back(mPart41);
-	mLevelOne->mParentList.push_back(mPart5);
-	mLevelOne->mParentList.push_back(mPart6);
-	mLevelOne->mParentList.push_back(mPart7);
-	mLevelOne->mParentList.push_back(mPart7_1);
-	mLevelOne->mParentList.push_back(mPart8);
-	mLevelOne->mParentList.push_back(mPart9);
-	mLevelOne->mParentList.push_back(mPart10);
-	mLevelOne->mParentList.push_back(mPart11);
-	mLevelOne->mParentList.push_back(mPart12);
-	mLevelOne->mParentList.push_back(mPart13);
-	mLevelOne->mParentList.push_back(mPart14);
-	mLevelOne->mParentList.push_back(mPart15);
-	mLevelOne->mParentList.push_back(mPart16);
-	mLevelOne->mParentList.push_back(mPart17);
-	mLevelOne->mParentList.push_back(mPart18);
-	mLevelOne->mParentList.push_back(mPart19);
-	mLevelOne->mParentList.push_back(mPart20);
-	mLevelOne->mParentList.push_back(mPart21);
-	mLevelOne->mParentList.push_back(mPart22);
+	addLevelParentsPart();
 }
 
 void LevelOne::createObstacleRock() {
@@ -509,15 +444,7 @@ void LevelOne::createObstacleRock() {
 	mObstacleRock9 = new Obstacle("obstacle_rock_9", std::make_pair(15000, 340), ObstacleType::WESTERN_ROCK);
 	this->addGameObject(*mObstacleRock9);
 
-	mLevelOne->mParentList.push_back(mObstacleRock1);
-	mLevelOne->mParentList.push_back(mObstacleRock2);
-	mLevelOne->mParentList.push_back(mObstacleRock3);
-	mLevelOne->mParentList.push_back(mObstacleRock4);
-	mLevelOne->mParentList.push_back(mObstacleRock5);
-	mLevelOne->mParentList.push_back(mObstacleRock6);
-	mLevelOne->mParentList.push_back(mObstacleRock7);
-	mLevelOne->mParentList.push_back(mObstacleRock8);
-	mLevelOne->mParentList.push_back(mObstacleRock9);
+	addLevelParentsRock();
 }
 
 //function that instantiate game over screen/menu
@@ -559,7 +486,106 @@ void LevelOne::addLevelParents() {
 	mLevelOne->mParentList.push_back(mGround);
 }
 
-void LevelOne::errorLog(std::string file){ // technique 32
+void LevelOne::addLevelParentsCar() {
+	DEBUG("adding level parents car.");
+	mLevelOne->mParentList.push_back(mObstacleCar1);
+	mLevelOne->mParentList.push_back(mObstacleCar2);
+	mLevelOne->mParentList.push_back(mObstacleCar3);
+	mLevelOne->mParentList.push_back(mObstacleCar4);
+	mLevelOne->mParentList.push_back(mObstacleCar5);
+}
+
+void LevelOne::addLevelParentsSpike() {
+	DEBUG("adding level parents spike.");
+	mLevelOne->mParentList.push_back(mSpike1);
+	mLevelOne->mParentList.push_back(mSpike2);
+	mLevelOne->mParentList.push_back(mSpike3);
+	mLevelOne->mParentList.push_back(mSpike4);
+	mLevelOne->mParentList.push_back(mSpike5);
+}
+
+void LevelOne::addLevelParentsBox() {
+	mLevelOne->mParentList.push_back(mObstacleBox01);
+	mLevelOne->mParentList.push_back(mObstacleBox1);
+	mLevelOne->mParentList.push_back(mObstacleBox2);
+	mLevelOne->mParentList.push_back(mObstacleBox21);
+	mLevelOne->mParentList.push_back(mObstacleBox3);
+	mLevelOne->mParentList.push_back(mObstacleBox4);
+	mLevelOne->mParentList.push_back(mObstacleBox5);
+	mLevelOne->mParentList.push_back(mObstacleBox6);
+	mLevelOne->mParentList.push_back(mObstacleBox7);
+	mLevelOne->mParentList.push_back(mObstacleBox8);
+	mLevelOne->mParentList.push_back(mObstacleBox9);
+	mLevelOne->mParentList.push_back(mObstacleBox10);
+	mLevelOne->mParentList.push_back(mObstacleBox11);
+}
+
+void LevelOne::addLevelParentsAerial() {
+	mLevelOne->mParentList.push_back(mObstacleAerial1);
+	mLevelOne->mParentList.push_back(mObstacleAerial2);
+	mLevelOne->mParentList.push_back(mObstacleAerial3);
+	mLevelOne->mParentList.push_back(mObstacleAerial4);
+	mLevelOne->mParentList.push_back(mObstacleAerial5);
+	mLevelOne->mParentList.push_back(mObstacleAerial6);
+	mLevelOne->mParentList.push_back(mObstacleAerial7);
+	mLevelOne->mParentList.push_back(mObstacleAerial8);
+	mLevelOne->mParentList.push_back(mObstacleAerial9);
+	mLevelOne->mParentList.push_back(mObstacleAerial10);
+	mLevelOne->mParentList.push_back(mObstacleAerial11);
+	mLevelOne->mParentList.push_back(mObstacleAerial12);
+	mLevelOne->mParentList.push_back(mObstacleAerial13);
+	mLevelOne->mParentList.push_back(mObstacleAerial14);
+	mLevelOne->mParentList.push_back(mObstacleAerial15);
+	mLevelOne->mParentList.push_back(mObstacleAerial16);
+	mLevelOne->mParentList.push_back(mObstacleAerial17);
+	mLevelOne->mParentList.push_back(mObstacleAerial18);
+	mLevelOne->mParentList.push_back(mObstacleAerial19);
+	mLevelOne->mParentList.push_back(mObstacleAerial20);
+	mLevelOne->mParentList.push_back(mObstacleAerial21);
+	mLevelOne->mParentList.push_back(mObstacleAerial22);
+}
+
+void LevelOne::addLevelParentsPart() {
+	mLevelOne->mParentList.push_back(mPart1);
+	mLevelOne->mParentList.push_back(mPart1_1);
+	mLevelOne->mParentList.push_back(mPart2);
+	mLevelOne->mParentList.push_back(mPart3);
+	mLevelOne->mParentList.push_back(mPart4);
+	mLevelOne->mParentList.push_back(mPart41);
+	mLevelOne->mParentList.push_back(mPart5);
+	mLevelOne->mParentList.push_back(mPart6);
+	mLevelOne->mParentList.push_back(mPart7);
+	mLevelOne->mParentList.push_back(mPart7_1);
+	mLevelOne->mParentList.push_back(mPart8);
+	mLevelOne->mParentList.push_back(mPart9);
+	mLevelOne->mParentList.push_back(mPart10);
+	mLevelOne->mParentList.push_back(mPart11);
+	mLevelOne->mParentList.push_back(mPart12);
+	mLevelOne->mParentList.push_back(mPart13);
+	mLevelOne->mParentList.push_back(mPart14);
+	mLevelOne->mParentList.push_back(mPart15);
+	mLevelOne->mParentList.push_back(mPart16);
+	mLevelOne->mParentList.push_back(mPart17);
+	mLevelOne->mParentList.push_back(mPart18);
+	mLevelOne->mParentList.push_back(mPart19);
+	mLevelOne->mParentList.push_back(mPart20);
+	mLevelOne->mParentList.push_back(mPart21);
+	mLevelOne->mParentList.push_back(mPart22);
+}
+
+void LevelOne::addLevelParentsRock() {
+	mLevelOne->mParentList.push_back(mObstacleRock1);
+	mLevelOne->mParentList.push_back(mObstacleRock2);
+	mLevelOne->mParentList.push_back(mObstacleRock3);
+	mLevelOne->mParentList.push_back(mObstacleRock4);
+	mLevelOne->mParentList.push_back(mObstacleRock5);
+	mLevelOne->mParentList.push_back(mObstacleRock6);
+	mLevelOne->mParentList.push_back(mObstacleRock7);
+	mLevelOne->mParentList.push_back(mObstacleRock8);
+	mLevelOne->mParentList.push_back(mObstacleRock9);
+}
+
+void LevelOne::errorLog(std::string file){
     std::ofstream outfile;
     outfile.open("../errorLog.txt", std::ofstream::out | std::ofstream::app);
     time_t now = time(0);

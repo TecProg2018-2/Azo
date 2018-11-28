@@ -166,6 +166,12 @@ namespace Azo {
 			void createObstacleRock();
 			void createEndingScreen(); //functon that add the ending menu to level one
 			void addLevelParents(); //function that add parents to level one. Use after adding objects that collide.
+			void addLevelParentsCar();
+			void addLevelParentsSpike();
+			void addLevelParentsBox();
+			void addLevelParentsAerial();
+			void addLevelParentsPart();
+			void addLevelParentsRock();
 			void errorLog(std::string file);
 
 	};
