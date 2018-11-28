@@ -157,6 +157,13 @@ namespace Azo {
 
 		private:
 			void createGameObjects(); //function that add new objects to level one
+			void createSceneGeneral();
+			void createObstacleCar();
+			void createObstacleSpike();
+			void createObstacleBox();
+			void createObstacleAerial();
+			void createPart();
+			void createObstacleRock();
 			void createEndingScreen(); //functon that add the ending menu to level one
 			void addLevelParents(); //function that add parents to level one. Use after adding objects that collide.
 			void errorLog(std::string file);
