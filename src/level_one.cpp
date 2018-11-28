@@ -22,18 +22,18 @@ LevelOne::LevelOne() {}
 LevelOne::LevelOne(std::string name){
 	ASSERT(name != "", "Name can`t be blank.");
 	this->sceneName = name;
-	createGameObjects();
+	startLevel();
 }
 
 //function that restarts level one
 void LevelOne::restart(){
 	gameObjectMap.clear();
 	//To Do: add objects to be recreated one by one here, instead of recalling createGameObjects.
-	createGameObjects();
+	startLevel();
 }
 
 //function that create all new game objects of level one in order.
-void LevelOne::createGameObjects() {
+void LevelOne::startLevel() {
 	DEBUG("Creating LevelOne GameObjects.");
 	createSceneGeneral();
 	if(mLevelBackground1 == NULL) {

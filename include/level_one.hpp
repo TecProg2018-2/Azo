@@ -156,7 +156,7 @@ namespace Azo {
 			void restart(); //function that restarts level one
 
 		private:
-			void createGameObjects(); //function that add new objects to level one
+			void startLevel(); //function that add new objects to level one
 			void createSceneGeneral();
 			void createObstacleCar();
 			void createObstacleSpike();
@@ -173,7 +173,6 @@ namespace Azo {
 			void addLevelParentsPart();
 			void addLevelParentsRock();
 			void errorLog(std::string file);
-
 	};
 }
 
