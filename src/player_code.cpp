@@ -115,6 +115,11 @@ void PlayerCode::slidingTest(){
 		}
 }
 
+/**
+ * @brief checks whether the parts have been collected
+ * Defines what will happen after the pieces are collected
+ * @return ' void '.
+*/
 void PlayerCode::collectedTeste(){
 		if (mPlayer->mCollectedParts < mPlayer->M_TOTAL_PARTS) {
 			mAnimationController->startUniqueAnimation("losing");
