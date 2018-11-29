@@ -73,14 +73,10 @@ void LevelOne::startLevel() {
 	createObstacleAerial();
 	createPart();
 	createObstacleRock();
-
-	//instantiates player at level one
-	DEBUG("Creating Player.");
-	mPlayer = new Player("player", std::make_pair(165, 280));
-	this->addGameObject(*mPlayer);
+	createPlayer();
 
 	createEndingScreen();
-	addLevelParents();
+	addLevelParentsGeneral();
 
 	mLevelCode = new LevelOneCode(*mLevelOne);
 	mLevelOne->addComponent(*mLevelCode);
@@ -88,6 +84,7 @@ void LevelOne::startLevel() {
 
 void LevelOne::createSceneGeneral() {
 	mLevelOne = new engine::GameObject("level_one", std::make_pair(0, 0));
+
 	//instantiates level one background
 	mLevelBackground1 = new engine::ImageComponent(*mLevelOne, "backgrounds/level_one_part_one.png", 1);
 	mLevelOne->addComponent(*mLevelBackground1);
@@ -95,19 +92,24 @@ void LevelOne::createSceneGeneral() {
 	mLevelOne->addComponent(*mLevelBackground2);
 	mLevelBackground3 = new engine::ImageComponent(*mLevelOne, "backgrounds/level_one_part_three.png", 1, std::make_pair(16379, 0));
 	mLevelOne->addComponent(*mLevelBackground3);
+
 	//instantiates level one audio, and its controller
 	mAudioController = new engine::AudioController();
 	mLevelTheme = new engine::AudioComponent(*mLevelOne, "audios/banjo.ogg", true, true);
 	mAudioController->addAudio("tema_level_one", *mLevelTheme);
 	mLevelOne->addComponent(*mAudioController);
 	this->addGameObject(*mLevelOne);
+
 	//instantiates level one ground
 	DEBUG("Creating ground.");
 	mGround = new Obstacle("ground", std::make_pair(0, 404.5), ObstacleType::GROUND);
 	this->addGameObject(*mGround);
+
+	
 }
 
 void LevelOne::createObstacleCar() {
+	
 	DEBUG("Creating obstacle car 1.");
 	mObstacleCar1 = new Obstacle("obstacle_car_1", std::make_pair(1135, 300), ObstacleType::WESTERN_CAR);
 	this->addGameObject(*mObstacleCar1);
@@ -447,6 +449,12 @@ void LevelOne::createObstacleRock() {
 	addLevelParentsRock();
 }
 
+void LevelOne::createPlayer() {
+	DEBUG("Creating Player.");
+	mPlayer = new Player("player", std::make_pair(165, 280));
+	this->addGameObject(*mPlayer);
+}
+
 //function that instantiate game over screen/menu
 void LevelOne::createEndingScreen() {
 	mWinningScreenObject = new engine::GameObject("winning_screen", std::make_pair(0, 0));
@@ -475,7 +483,7 @@ void LevelOne::createEndingScreen() {
 }
 
 //function that adds level one parents
-void LevelOne::addLevelParents() {
+void LevelOne::addLevelParentsGeneral() {
 	DEBUG("adding level parents.");
 	mLevelOne->mParentList.push_back(mWinningScreenObject);
 	mLevelOne->mParentList.push_back(mLosingPartsScreenObject);
