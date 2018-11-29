@@ -76,6 +76,11 @@ void PlayerCode::obstacleHit(){
 		}
 }
 
+/**
+ * @brief Checks if the button has been pressed
+ * Sets what will occur after a certain button is pressed
+ * @return ' void '.
+*/
 void PlayerCode::buttonTest(){
 		//check if button 'w' is pressed
 		if (engine::Game::instance.inputManager.keyState(engine::Button::W)) {
