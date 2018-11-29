@@ -60,7 +60,7 @@ void PlayerCode::findAudioController() {
 	 mAudioController = (mPlayer->getAudioController(typeid(engine::AudioController)));
 }
 
-void PlayerCode::ObstacleHit(){ 
+void PlayerCode::obstacleHit(){
 		//Check if player hit some obstacle
 		if (mPlayer->mPushesRightWall || mPlayer->mPushesLeftWall) {
 			//DEBUG("Update code method. Player Speed in X: " << mPlayer->mSpeed.first);
@@ -68,6 +68,35 @@ void PlayerCode::ObstacleHit(){
 		} else {
 			mPlayer->mSpeed.first = mPlayer->M_WALKING_SPEED;
 			//DEBUG("PLAYER SHOULD HAVE SPEED! PLAYER SPEED " << mPlayer->mSpeed.first);
+		}
+}
+
+void PlayerCode::buttonTest(){
+		//check if button 'w' is pressed
+		if (engine::Game::instance.inputManager.keyState(engine::Button::W)) {
+			//DEBUG("W pressed!");
+			mPlayer->mState = PlayerState::JUMP; //Updates mPlayer's state to JUMP
+			mPlayer->mSpeed.second = mPlayer->M_JUMPING_SPEED; // Jumping speed.
+
+		} else if (!mPlayer->mOnGround) { //checks if character is not on ground
+			//DEBUG("Player isn't on ground. (WALK)");
+			mPlayer->mState = PlayerState::JUMP;
+		}
+
+		//checks if button 'S' is pressed
+		if (engine::Game::instance.inputManager.keyState(engine::Button::S)) {
+			mPlayer->mState = PlayerState::SLIDE;
+		}else{
+				// button is not pressed
+		}
+}
+
+void PlayerCode::slidingTest(){
+		//check if character was sliding
+		if (mAnimationController->getAnimationStatus("sliding") == engine::AnimationState::FINISHED) {
+			mPlayer->mState = PlayerState::WALK;
+		}else{
+				// character is not sliding
 		}
 }
 /**
@@ -85,25 +114,8 @@ void PlayerCode::updateCode() {
 		case PlayerState::WALK:
 			mAnimationController->startUniqueAnimation("walking");
 
-			ObstacleHit();
-
-			//check if button 'w' is pressed
-			if (engine::Game::instance.inputManager.keyState(engine::Button::W)) {
-				//DEBUG("W pressed!");
-				mPlayer->mState = PlayerState::JUMP; //Updates mPlayer's state to JUMP
-				mPlayer->mSpeed.second = mPlayer->M_JUMPING_SPEED; // Jumping speed.
-
-			} else if (!mPlayer->mOnGround) { //checks if character is not on ground
-				//DEBUG("Player isn't on ground. (WALK)");
-				mPlayer->mState = PlayerState::JUMP;
-			}
-
-			//checks if button 'S' is pressed
-			if (engine::Game::instance.inputManager.keyState(engine::Button::S)) {
-				mPlayer->mState = PlayerState::SLIDE;
-			}else{
-					// button is not pressed
-			}
+			obstacleHit();
+			buttonTest();
 
 			break;
 
@@ -123,24 +135,13 @@ void PlayerCode::updateCode() {
 			//DEBUG("UpdateCode method. Player Speed in Y: " << mPlayer->m_speed.second);
 
 			//Check if player hit some obstacle
-			if (mPlayer->mPushesRightWall) {
-				mPlayer->mSpeed.first = mPlayer->M_ZERO_VECTOR.first; //clear mPlayer walking speed
-			} else {
-				mPlayer->mSpeed.first = mPlayer->M_WALKING_SPEED;         // Walking speed.
-			}
+			obstacleHit();
 
 			break;
 
 		case PlayerState::SLIDE:
 			mAnimationController->startUniqueAnimation("sliding");
-
-			//check if character was sliding
-			if (mAnimationController->getAnimationStatus("sliding") == engine::AnimationState::FINISHED) {
-				mPlayer->mState = PlayerState::WALK;
-				break;
-			}else{
-					// character is not sliding
-			}
+			slidingTest();
 
 
 			// sets the normal speed of walking
