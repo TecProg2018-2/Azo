@@ -729,8 +729,11 @@ void Player::generateDyingAnimation() {
 	mDyingAnimationSprites[35]->setSpriteHeight((unsigned int)139 - 47);
 }
 
-//This method free all the pointers of player. It passes through its pointers
-//attributes, free them and point to null
+/**
+ * @brief This method free all the pointers of player. It passes through its pointers
+* attributes, free them and point to null
+* @return 'void'.
+*/
 void Player::shutdown() {
 
 	//checks if mAnimationController is null
