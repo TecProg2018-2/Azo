@@ -349,7 +349,10 @@ void Player::generateWalkingAnimation() {
 	mWalkingAnimationSprites[22]->setSpriteHeight((unsigned int)139 - 29);
 }
 
-//This method sets the jumping sprites on its desgined variables
+/**
+ * @brief This method sets the jumping sprites on its desgined variables
+ * @return 'void'.
+*/
 void Player::generateJumpingAnimation() {
 	DEBUG("Generating Player Jumping Animation.");
 	const int JUMPING_SPRITES = 8;
@@ -405,7 +408,10 @@ void Player::generateJumpingAnimation() {
 	mJumpingAnimationSprites[7]->setSpriteHeight((unsigned int)1107 - 997);
 }
 
-//This method sets the sliding sprites on its desgined variables
+/**
+ * @brief This method sets the sliding sprites on its desgined variables
+* @return 'void'.
+*/
 void Player::generateSlidingAnimation() {
 	const int SLIDING_SPRITES = 21;
 	//create a vector with designed number of sprites
