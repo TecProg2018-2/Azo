@@ -294,6 +294,38 @@ void LevelOneCode::handleCollisionCeiling(Obstacle *obstacle, Player *mPlayer, d
 }
 
 
+bool LevelOneCode::collectMachinePart(double playerTop, double playerBottom, double playerRight, double playerLeft,
+									  Obstacle *obstacle, Player *mPlayer, std::list<Obstacle *> mObstacleList){
+
+    std::pair<double, double> blockBottomLeft = eachObstacle->calcBottomLeft();
+	std::pair<double, double> blockTopRight = eachObstacle->calcTopRight();
+
+	const int DISTANCE_RIGHT = 5;
+	const int DISTANCE_LEFT = 5;
+	const int DISTANCE_TOP = 16;
+	const int DISTANCE_BOTTOM = 16;
+	// These magic numbers are used because the walls must be a bit at the front of the top
+	double blockRight = blockTopRight.first + DISTANCE_RIGHT;
+	double blockLeft = blockBottomLeft.first - DISTANCE_LEFT;
+	double blockTop = blockTopRight.second + DISTANCE_TOP;
+	double blockBottom = blockBottomLeft.second - DISTANCE_BOTTOM;
+
+	if (playerLeft < blockLeft && playerLeft < blockRight &&
+		playerTop <= blockBottom && playerBottom >= blockTop &&
+		playerRight >= blockLeft) {
+
+		eachObstacle->mMachinePartState = MachinePartState::COLLECTED;
+		mPlayer->mCollectedParts++;
+		mObstacleList.remove(eachObstacle);
+
+		return true;
+	} else {
+		//Nothing to do.
+		return false;
+	}
+}
+
+
 bool LevelOneCode::hasGround(double *groundY) {
 	ASSERT(*groundY == 0.0,"groundY must be initialized at 0.0");
 	std::pair<double, double> playerBottomLeft = mPlayer->calcBottomLeft();
@@ -337,15 +369,6 @@ bool LevelOneCode::hasGround(double *groundY) {
 				double blockLeft = blockBottomLeft.first;
 				double blockTop = blockTopRight.second;
 
-				// DEBUG("obstacle: " << eachObstacle->mName);
-				// DEBUG("Player left: " << playerLeft);
-				// DEBUG("Player right: " << playerRight);
-				// DEBUG("Player top: " << playerTop);
-				// DEBUG("Player bottom: " << playerBottom);
-				// DEBUG("Block left: " << blockLeft);
-				// DEBUG("Block right: " << blockRight);
-				// DEBUG("Block top: " << blockTop);
-
 				if (playerLeft <= blockRight && playerRight >= blockLeft &&
 					playerBottom > blockTop && playerTop < blockTop) {
 						*groundY = blockTop;
@@ -380,33 +403,11 @@ bool LevelOneCode::hasWallOnRight(double *wallX) {
 	double playerRight = playerTopRight.first;
 
 	for (auto eachObstacle : mObstacleList) {
-		const int DISTANCE_RIGHT = 5;
-		const int DISTANCE_LEFT = 5;
-		const int DISTANCE_TOP = 16;
-		const int DISTANCE_BOTTOM = 16;
-
 		if (eachObstacle->mObstacleType == ObstacleType::MACHINE_PART) {
-			std::pair<double, double> blockBottomLeft = eachObstacle->calcBottomLeft();
-			std::pair<double, double> blockTopRight = eachObstacle->calcTopRight();
-
-			// These magic numbers are used because the walls must be a bit at the front of the top
-			double blockRight = blockTopRight.first + DISTANCE_RIGHT;
-			double blockLeft = blockBottomLeft.first - DISTANCE_LEFT;
-			double blockTop = blockTopRight.second + DISTANCE_TOP;
-			double blockBottom = blockBottomLeft.second - DISTANCE_BOTTOM;
-
-			if (playerLeft < blockLeft && playerLeft < blockRight &&
-				playerTop <= blockBottom && playerBottom >= blockTop &&
-				playerRight >= blockLeft) {
-
-					eachObstacle->mMachinePartState = MachinePartState::COLLECTED;
-					mPlayer->mCollectedParts++;
-					mObstacleList.remove(eachObstacle);
-
-					return false;
-				}
-				else {
-					//Nothing to do.
+				if(collectMachinePart(playerTop, playerBottom, playerRight, playerLeft,
+									  eachObstacle, mPlayer, mObstacleList)){
+					// Abort if MachinePart collected, nothing to collide with
+				    return false;
 				}
 			} else {
 				for (auto eachBlock : eachObstacle->mBlockList) {
