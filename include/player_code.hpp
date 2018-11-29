@@ -38,6 +38,7 @@ namespace Azo { //Used to avoid writing all the path from Azo context
 			engine::AudioController *mAudioController = nullptr; // Pointer that handle the sounds corresponding player's behavour
 
 			void updateCode();
+			void ObstacleHit();
 			void updatePhysics();
 			void findAnimationController();
 			void findAudioController();

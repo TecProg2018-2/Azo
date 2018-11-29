@@ -60,6 +60,16 @@ void PlayerCode::findAudioController() {
 	 mAudioController = (mPlayer->getAudioController(typeid(engine::AudioController)));
 }
 
+void PlayerCode::ObstacleHit(){ 
+		//Check if player hit some obstacle
+		if (mPlayer->mPushesRightWall || mPlayer->mPushesLeftWall) {
+			//DEBUG("Update code method. Player Speed in X: " << mPlayer->mSpeed.first);
+			mPlayer->mSpeed.first = mPlayer->M_ZERO_VECTOR.first; //clear mPlayer walking speed
+		} else {
+			mPlayer->mSpeed.first = mPlayer->M_WALKING_SPEED;
+			//DEBUG("PLAYER SHOULD HAVE SPEED! PLAYER SPEED " << mPlayer->mSpeed.first);
+		}
+}
 /**
  * @brief handle player behaviour
  * defines what happens in each case of player's state
@@ -75,14 +85,7 @@ void PlayerCode::updateCode() {
 		case PlayerState::WALK:
 			mAnimationController->startUniqueAnimation("walking");
 
-			//Check if player hit some obstacle
-			if (mPlayer->mPushesRightWall || mPlayer->mPushesLeftWall) {
-				//DEBUG("Update code method. Player Speed in X: " << mPlayer->mSpeed.first);
-				mPlayer->mSpeed.first = mPlayer->M_ZERO_VECTOR.first; //clear mPlayer walking speed
-			} else {
-				mPlayer->mSpeed.first = mPlayer->M_WALKING_SPEED;
-				//DEBUG("PLAYER SHOULD HAVE SPEED! PLAYER SPEED " << mPlayer->mSpeed.first);
-			}
+			ObstacleHit();
 
 			//check if button 'w' is pressed
 			if (engine::Game::instance.inputManager.keyState(engine::Button::W)) {
