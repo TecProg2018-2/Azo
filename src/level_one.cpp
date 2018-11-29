@@ -34,8 +34,11 @@ void LevelOne::restart(){
 
 //function that create all new game objects of level one in order.
 void LevelOne::startLevel() {
+
 	DEBUG("Creating LevelOne GameObjects.");
 	createSceneGeneral();
+
+	// Execute errors tests
 	if(mLevelBackground1 == NULL) {
 		errorCode = FunctionStatusLevelOne::NULLPOINTER;
 		errorLog("LevelOne::findLevelBackground1");
@@ -67,6 +70,7 @@ void LevelOne::startLevel() {
 		errorCode = FunctionStatusLevelOne::SUCCESS;
   	}
 
+	// Create the game objects
 	createObstacleCar();
 	createObstacleSpike();
 	createObstacleBox();
@@ -75,7 +79,9 @@ void LevelOne::startLevel() {
 	createObstacleRock();
 	createPlayer();
 
+	// Create the ending screen
 	createEndingScreen();
+
 	addLevelParentsGeneral();
 
 	mLevelCode = new LevelOneCode(*mLevelOne);
@@ -109,7 +115,8 @@ void LevelOne::createSceneGeneral() {
 }
 
 void LevelOne::createObstacleCar() {
-	
+	// Create car osbstacle
+
 	DEBUG("Creating obstacle car 1.");
 	mObstacleCar1 = new Obstacle("obstacle_car_1", std::make_pair(1135, 300), ObstacleType::WESTERN_CAR);
 	this->addGameObject(*mObstacleCar1);
@@ -134,6 +141,8 @@ void LevelOne::createObstacleCar() {
 }
 
 void LevelOne::createObstacleSpike() {
+	// Create spike osbstacle
+
 	DEBUG("Creating spike 1.");
 	mSpike1 = new Obstacle("obstacle_spike_1", std::make_pair(1349, 340), ObstacleType::WESTERN_SPIKE);
 	this->addGameObject(*mSpike1);
@@ -158,6 +167,8 @@ void LevelOne::createObstacleSpike() {
 }
 
 void LevelOne::createObstacleBox() {
+	// Create box osbstacle
+
 	DEBUG("Creating obstacle box 0_1.");
 	mObstacleBox01 = new Obstacle("obstacle_box_0_1", std::make_pair(1309, 310), ObstacleType::WESTERN_BOX);
 	this->addGameObject(*mObstacleBox01);
@@ -214,6 +225,8 @@ void LevelOne::createObstacleBox() {
 }
 
 void LevelOne::createObstacleAerial() {
+	// Create aerial osbstacle
+	
 	DEBUG("Creating obstacle aerial 1 - box.");
 	mObstacleAerial1 = new Obstacle("obstacle_aerial_1", std::make_pair(1350, 250), ObstacleType::WESTERN_RAISED_BOX);
 	this->addGameObject(*mObstacleAerial1);
@@ -306,6 +319,8 @@ void LevelOne::createObstacleAerial() {
 }
 
 void LevelOne::createPart() {
+	// Create part collectible osbstacle
+
 	DEBUG("Creating part 1.");
 	mPart1 = new Obstacle("part_1", std::make_pair(1500, 80), ObstacleType::MACHINE_PART);
 	this->addGameObject(*mPart1);
@@ -410,6 +425,8 @@ void LevelOne::createPart() {
 }
 
 void LevelOne::createObstacleRock() {
+	// Create rock osbstacle
+
 	DEBUG("Creating obstacle rock 1");
 	mObstacleRock1 = new Obstacle("obstacle_rock_1", std::make_pair(4300, 340), ObstacleType::WESTERN_ROCK);
 	this->addGameObject(*mObstacleRock1);
@@ -450,6 +467,7 @@ void LevelOne::createObstacleRock() {
 }
 
 void LevelOne::createPlayer() {
+	// Create player
 	DEBUG("Creating Player.");
 	mPlayer = new Player("player", std::make_pair(165, 280));
 	this->addGameObject(*mPlayer);
@@ -457,24 +475,28 @@ void LevelOne::createPlayer() {
 
 //function that instantiate game over screen/menu
 void LevelOne::createEndingScreen() {
+	// Create the winning screen
 	mWinningScreenObject = new engine::GameObject("winning_screen", std::make_pair(0, 0));
 	mWinningScreenObject->mObjectState = engine::ObjectState::DISABLED;
 	mWinningScreen = new engine::BackgroundComponent(*mWinningScreenObject, "general_images/tela_vitoria.png");
 	mWinningScreenObject->addComponent(*mWinningScreen);
 	this->addGameObject(*mWinningScreenObject);
 
+	// Create the losing on finish screen
 	mLosingPartsScreenObject = new engine::GameObject("losing_parts", std::make_pair(0, 0));
 	mLosingPartsScreenObject->mObjectState = engine::ObjectState::DISABLED;
 	mLosingPartsScreen = new engine::BackgroundComponent(*mLosingPartsScreenObject, "general_images/tela_derrota.png");
 	mLosingPartsScreenObject->addComponent(*mLosingPartsScreen);
 	this->addGameObject(*mLosingPartsScreenObject);
 
+	// Create the losing on death screen
 	mLosingDeathScreenObject = new engine::GameObject("losing_death", std::make_pair(0, 0));
 	mLosingDeathScreenObject->mObjectState = engine::ObjectState::DISABLED;
 	mLosingDeathScreen = new engine::BackgroundComponent(*mLosingDeathScreenObject, "general_images/tela_morte.png");
 	mLosingDeathScreenObject->addComponent(*mLosingDeathScreen);
 	this->addGameObject(*mLosingDeathScreenObject);
 
+	// Create the arrow key on ending screen
 	mArrow = new engine::GameObject("arrow", std::make_pair(0, 0));
 	mArrow->mObjectState = engine::ObjectState::DISABLED;
 	mArrowImage = new engine::ImageComponent(*mArrow, "general_images/arrow.png", 1);
@@ -484,6 +506,7 @@ void LevelOne::createEndingScreen() {
 
 //function that adds level one parents
 void LevelOne::addLevelParentsGeneral() {
+	// Adding parents to general on level
 	DEBUG("adding level parents.");
 	mLevelOne->mParentList.push_back(mWinningScreenObject);
 	mLevelOne->mParentList.push_back(mLosingPartsScreenObject);
@@ -495,6 +518,7 @@ void LevelOne::addLevelParentsGeneral() {
 }
 
 void LevelOne::addLevelParentsCar() {
+	// Adding parents to car obstacle on level
 	DEBUG("adding level parents car.");
 	mLevelOne->mParentList.push_back(mObstacleCar1);
 	mLevelOne->mParentList.push_back(mObstacleCar2);
@@ -504,6 +528,7 @@ void LevelOne::addLevelParentsCar() {
 }
 
 void LevelOne::addLevelParentsSpike() {
+	// Adding parents to spike obstacle on level
 	DEBUG("adding level parents spike.");
 	mLevelOne->mParentList.push_back(mSpike1);
 	mLevelOne->mParentList.push_back(mSpike2);
@@ -513,6 +538,7 @@ void LevelOne::addLevelParentsSpike() {
 }
 
 void LevelOne::addLevelParentsBox() {
+	// Adding parents to box obstacle on level
 	mLevelOne->mParentList.push_back(mObstacleBox01);
 	mLevelOne->mParentList.push_back(mObstacleBox1);
 	mLevelOne->mParentList.push_back(mObstacleBox2);
@@ -529,6 +555,7 @@ void LevelOne::addLevelParentsBox() {
 }
 
 void LevelOne::addLevelParentsAerial() {
+	// Adding parents to aerial obstacle on level
 	mLevelOne->mParentList.push_back(mObstacleAerial1);
 	mLevelOne->mParentList.push_back(mObstacleAerial2);
 	mLevelOne->mParentList.push_back(mObstacleAerial3);
@@ -554,6 +581,7 @@ void LevelOne::addLevelParentsAerial() {
 }
 
 void LevelOne::addLevelParentsPart() {
+	// Adding parents to part obstacle on level
 	mLevelOne->mParentList.push_back(mPart1);
 	mLevelOne->mParentList.push_back(mPart1_1);
 	mLevelOne->mParentList.push_back(mPart2);
@@ -582,6 +610,7 @@ void LevelOne::addLevelParentsPart() {
 }
 
 void LevelOne::addLevelParentsRock() {
+	// Adding parents to rock obstacle on level
 	mLevelOne->mParentList.push_back(mObstacleRock1);
 	mLevelOne->mParentList.push_back(mObstacleRock2);
 	mLevelOne->mParentList.push_back(mObstacleRock3);

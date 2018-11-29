@@ -173,6 +173,7 @@ namespace Azo {
 			void addLevelParentsAerial();
 			void addLevelParentsPart();
 			void addLevelParentsRock();
+			void addLevelParentsPlayer();
 			void errorLog(std::string file);
 	};
 }
