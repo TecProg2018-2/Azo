@@ -41,6 +41,7 @@ namespace Azo { //Used to avoid writing all the path from Azo context
 			void obstacleHit();
 			void buttonTest();
 			void slidingTest();
+			void collectedTeste();
 			void updatePhysics();
 			void findAnimationController();
 			void findAudioController();

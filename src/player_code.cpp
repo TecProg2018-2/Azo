@@ -99,6 +99,21 @@ void PlayerCode::slidingTest(){
 				// character is not sliding
 		}
 }
+
+void PlayerCode::collectedTeste(){
+		if (mPlayer->mCollectedParts < mPlayer->M_TOTAL_PARTS) {
+			mAnimationController->startUniqueAnimation("losing");
+			//checks if animationStatus is losing
+			if (mAnimationController->getAnimationStatus("losing") == engine::AnimationState::FINISHED) {
+				mAudioController->playAudio("lost");
+			}else{
+					// animationStatus is not losing
+			}
+		} else {
+			mAnimationController->startUniqueAnimation("victory");
+			mAudioController->playAudio("victory");
+		}
+}
 /**
  * @brief handle player behaviour
  * defines what happens in each case of player's state
@@ -167,18 +182,7 @@ void PlayerCode::updateCode() {
 
 		case PlayerState::END:
 			//checks if player collected parts is less that the total avaliable in game
-			if (mPlayer->mCollectedParts < mPlayer->M_TOTAL_PARTS) {
-				mAnimationController->startUniqueAnimation("losing");
-				//checks if animationStatus is losing
-				if (mAnimationController->getAnimationStatus("losing") == engine::AnimationState::FINISHED) {
-					mAudioController->playAudio("lost");
-				}else{
-						// animationStatus is not losing
-				}
-			} else {
-				mAnimationController->startUniqueAnimation("victory");
-				mAudioController->playAudio("victory");
-			}
+			collectedTeste();
 
 			break;
 	}
