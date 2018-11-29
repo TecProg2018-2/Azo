@@ -13,23 +13,25 @@
 
 using namespace Azo;
 
+
 LevelOneCode::LevelOneCode(engine::GameObject &gameObject){
-ASSERT(&gameObject != NULL, "The game object can't be null.");
-this->gameObject = &gameObject;
-getParents();
-findAudioController();
+	ASSERT(&gameObject != NULL, "The game object can't be null.");
+	this->gameObject = &gameObject;
+	getParents();
+	findAudioController();
 }
+
 
 void LevelOneCode::shutdown() {
-for (auto Obstacle : mObstacleList) Obstacle = nullptr;
+	for (auto Obstacle : mObstacleList) Obstacle = nullptr;
+		mAudioController = nullptr;
+		mPlayer = nullptr;
+	}
 
-mAudioController = nullptr;
-mPlayer = nullptr;
+	void LevelOneCode::findAudioController() {
+	mAudioController = (gameObject->getAudioController(typeid(engine::AudioController)));
 }
 
-void LevelOneCode::findAudioController() {
-mAudioController = (gameObject->getAudioController(typeid(engine::AudioController)));
-}
 
 void LevelOneCode::getParents() {
 for (auto parent : gameObject->mParentList) {
@@ -52,40 +54,77 @@ for (auto parent : gameObject->mParentList) {
 }
 }
 
+
 void LevelOneCode::updateCode() {
-//DEBUG("Position: " << gameObject->mCurrentPosition.first );
-//DEBUG("Collected parts: " << mPlayer->mCollectedParts);
-const double PLAYER_MAX_POSITION = 300.0; 
-const int GAME_OBJECT_MAX_POSITION = -17600; 
+	//DEBUG("Position: " << gameObject->mCurrentPosition.first );
+	//DEBUG("Collected parts: " << mPlayer->mCollectedParts);
+	const double PLAYER_MAX_POSITION = 300.0; 
+	const int GAME_OBJECT_MAX_POSITION = -17600; 
 
-if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION && gameObject->mCurrentPosition.first > GAME_OBJECT_MAX_POSITION) {
-	const double CONTROLLER_POSITION_GAME_OBJECT = 4.0; 
-	gameObject->mCurrentPosition.first -= CONTROLLER_POSITION_GAME_OBJECT;
-	const int CONTROLLER_POSITION_PLAYER = 299; 
-	mPlayer->mCurrentPosition.first = CONTROLLER_POSITION_PLAYER;
-} else if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION) {
-	mWaitingTime += engine::Game::instance.getTimer().getDeltaTime();
-	mPlayer->mSpeed.first = 0.0; 
-	mAudioController->stopAudio("tema_level_one");
-	mPlayer->mState = PlayerState::END;
+	if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION && gameObject->mCurrentPosition.first > GAME_OBJECT_MAX_POSITION) {
+		const double CONTROLLER_POSITION_GAME_OBJECT = 4.0; 
+		gameObject->mCurrentPosition.first -= CONTROLLER_POSITION_GAME_OBJECT;
+		const int CONTROLLER_POSITION_PLAYER = 299; 
+		mPlayer->mCurrentPosition.first = CONTROLLER_POSITION_PLAYER;
+	} else if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION) {
+		mWaitingTime += engine::Game::instance.getTimer().getDeltaTime();
+		mPlayer->mSpeed.first = 0.0; 
+		mAudioController->stopAudio("tema_level_one");
+		mPlayer->mState = PlayerState::END;
 
-	const double MAX_LOSING_WAITING = 10000.0; 
-	if (mPlayer->mCollectedParts != mPlayer->M_TOTAL_PARTS && mWaitingTime >= MAX_LOSING_WAITING) {
-		mLosingParts->mObjectState = engine::ObjectState::ENABLED;
-		changeOption();
-		if (engine::Game::instance.inputManager.keyDownOnce(engine::Button::ENTER)) {
-			chooseOption();
+		const double MAX_LOSING_WAITING = 10000.0; 
+		if (mPlayer->mCollectedParts != mPlayer->M_TOTAL_PARTS && mWaitingTime >= MAX_LOSING_WAITING) {
+			mLosingParts->mObjectState = engine::ObjectState::ENABLED;
+			changeOption();
+			if (engine::Game::instance.inputManager.keyDownOnce(engine::Button::ENTER)) {
+				chooseOption();
+			}
+			else {
+				//Nothing to do.
+			}
+
+			const double MAX_WAITING_TIME = 2300.0; 
+
+			if (mWaitingTime >= MAX_WAITING_TIME) {
+				mLosingDeath->mObjectState = engine::ObjectState::ENABLED;
+				changeOption();
+				if (engine::Game::instance.inputManager.keyDownOnce(engine::Button::ENTER)) {
+					chooseOption();
+				}
+				else {
+					//Nothing to do.
+				}
+			}
+			else {
+				//Nothing to do.
+			}
+
+			if (mAudioController->getAudioState("tema_level_one") == engine::AudioState::PLAYING) {
+				mAudioController->stopAudio("tema_level_one");
+			}
+			else {
+				//Nothing to do.
+			}
+
 		}
 		else {
 			//Nothing to do.
 		}
+	}
+	else {
+		//Nothing to do.
+	}
+	updateObstaclePosition();
 
-		const double MAX_WAITING_TIME = 2300.0; 
+	if (mPlayer->mState != PlayerState::DIE) {
+		updatePhysics();
+	} else {
+		mWaitingTime += engine::Game::instance.getTimer().getDeltaTime();
 
-		if (mWaitingTime >= MAX_WAITING_TIME) {
+		if (mWaitingTime >= 2300.0) { 
 			mLosingDeath->mObjectState = engine::ObjectState::ENABLED;
 			changeOption();
-			if (engine::Game::instance.inputManager.keyDownOnce(engine::Button::ENTER)) {
+			if (engine::Game::instance.inputManager.keyDownOnce(engine::Button::ENTER)){
 				chooseOption();
 			}
 			else {
@@ -96,50 +135,15 @@ if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION && gameObject->mCurre
 			//Nothing to do.
 		}
 
-		if (mAudioController->getAudioState("tema_level_one") == engine::AudioState::PLAYING) {
+		if (mAudioController->getAudioState("tema_level_one") == engine::AudioState::PLAYING){
 			mAudioController->stopAudio("tema_level_one");
 		}
 		else {
 			//Nothing to do.
 		}
-
-	}
-	else {
-		//Nothing to do.
 	}
 }
-else {
-	//Nothing to do.
-}
-updateObstaclePosition();
 
-if (mPlayer->mState != PlayerState::DIE) {
-	updatePhysics();
-} else {
-	mWaitingTime += engine::Game::instance.getTimer().getDeltaTime();
-
-	if (mWaitingTime >= 2300.0) { 
-		mLosingDeath->mObjectState = engine::ObjectState::ENABLED;
-		changeOption();
-		if (engine::Game::instance.inputManager.keyDownOnce(engine::Button::ENTER)){
-			chooseOption();
-		}
-		else {
-			//Nothing to do.
-		}
-	}
-	else {
-		//Nothing to do.
-	}
-
-	if (mAudioController->getAudioState("tema_level_one") == engine::AudioState::PLAYING){
-		mAudioController->stopAudio("tema_level_one");
-	}
-	else {
-		//Nothing to do.
-	}
-}
-}
 
 void LevelOneCode::changeOption() {
 	switch(mCurrentOption) {
@@ -167,6 +171,7 @@ void LevelOneCode::changeOption() {
 	}
 }
 
+
 void LevelOneCode::chooseOption() {
 	switch(mCurrentOption){
 		case 1:
@@ -178,6 +183,7 @@ void LevelOneCode::chooseOption() {
 			break;
 	}
 }
+
 
 void LevelOneCode::updateObstaclePosition() {
 	for (auto eachObstacle : mObstacleList) {
@@ -199,10 +205,12 @@ void LevelOneCode::updateObstaclePosition() {
 	}
 }
 
+
 void LevelOneCode::updatePhysics() {
 	mPlayer->mCurrentPosition.second += mPlayer->mSpeed.second * engine::Game::instance.getTimer().getDeltaTime();
 	double groundY = 0.0; 
 	const int PLAYER_RELATIVE_POSITION = 15;
+	
 	if (mPlayer->mSpeed.second < 0.0 && hasCeiling(&groundY)) { 
 		mPlayer->mCurrentPosition.second = groundY + PLAYER_RELATIVE_POSITION;
 		mPlayer->mAtCeiling = true;
@@ -215,27 +223,26 @@ void LevelOneCode::updatePhysics() {
 	} else {
 		mPlayer->mOnGround = false;
 		mPlayer->mAtCeiling = false;
-}
-
-//double deltaWalked =  mPlayer->mSpeed.first * engine::Game::instance.getTimer().getDeltaTime();
-double deltaWalked =  mPlayer->mSpeed.first;
-// DEBUG("Speed: " << mPlayer->mSpeed.first);
-// DEBUG("Delta walked: " << deltaWalked);
-
-mPlayer->mCurrentPosition.first += deltaWalked;
-
-double wallX = 0.0;
-
-//Limiting player position on canvas.
-const int PLAYER_MAX_POSITION_CANVAS = 300;
-const int  GAME_OBJECT_MAX_POSITION_CANVAS = -7390;
-
-if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION_CANVAS &&
-	gameObject->mCurrentPosition.first > GAME_OBJECT_MAX_POSITION_CANVAS) {
-		mPlayer->mCurrentPosition.first = PLAYER_MAX_POSITION_CANVAS;
 	}
-	else {
-		//Nothing to do.
+
+	//double deltaWalked =  mPlayer->mSpeed.first * engine::Game::instance.getTimer().getDeltaTime();
+	double deltaWalked =  mPlayer->mSpeed.first;
+	// DEBUG("Speed: " << mPlayer->mSpeed.first);
+	// DEBUG("Delta walked: " << deltaWalked);
+
+	mPlayer->mCurrentPosition.first += deltaWalked;
+
+	double wallX = 0.0;
+
+	//Limiting player position on canvas.
+	const int PLAYER_MAX_POSITION_CANVAS = 300;
+	const int  GAME_OBJECT_MAX_POSITION_CANVAS = -7390;
+
+	if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION_CANVAS &&
+		gameObject->mCurrentPosition.first > GAME_OBJECT_MAX_POSITION_CANVAS) {
+			mPlayer->mCurrentPosition.first = PLAYER_MAX_POSITION_CANVAS;
+	} else {
+			//Nothing to do.
 	}
 
 	if (mPlayer->mSpeed.first > 0 && hasWallOnRight(&wallX)) {
@@ -243,15 +250,13 @@ if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION_CANVAS &&
 		mPlayer->mCurrentPosition.first = wallX - (mPlayer->mHalfSize.first * 2);
 		mPlayer->mPushesLeftWall = true;
 		mPlayer->mState = PlayerState::DIE;
-	}
-	else {
+	} else {
 		mPlayer->mPushesLeftWall = false;
 	}
 
 	if (mPlayer->mSpeed.first < 0.0 && hasWallOnLeft(&wallX)) { 
 		mPlayer->mState = PlayerState::DIE;
-	}
-	else {
+	} else {
 		mPlayer->mPushesRightWall = false;
 	}
 }
