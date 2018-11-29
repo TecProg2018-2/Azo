@@ -531,7 +531,10 @@ void Player::generateSlidingAnimation() {
 	mSlidingAnimationSprites[20]->setSpriteHeight((unsigned int)139 - 40);
 }
 
-//This method sets the jumping sprites on its desgined variables
+/**
+ * @brief This method sets the jumping sprites on its desgined variables
+* @return 'void'.
+*/
 void Player::generateDyingAnimation() {
 	const int DYING_SPRITES = 36;
 	//create a vector with designed number of sprites
