@@ -144,7 +144,10 @@ void Player::createComponents() {
 	this->addComponent(*mPlayerCode);
 }
 
-//This method sets the configuration for winning scenario
+/**
+ * @brief This method sets the configuration for winning scenario
+ * @return 'void'.
+*/
 void Player::generateVictoryAnimation() {
 	mVictoryAnimationSprites.push_back(new engine::Sprite());
 
