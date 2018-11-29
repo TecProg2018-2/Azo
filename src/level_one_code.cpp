@@ -34,24 +34,24 @@ void LevelOneCode::shutdown() {
 
 
 void LevelOneCode::getParents() {
-for (auto parent : gameObject->mParentList) {
-	if (parent->getClassName() == "Player") {
-		mPlayer = dynamic_cast<Player *>(parent);
-	} else if (parent->getClassName() == "obstacle") {
-		mObstacleList.push_back(dynamic_cast<Obstacle *>(parent));
-	} else if (parent->mName == "winning_screen") {
-		mWinningScreen = parent;
-	} else if (parent->mName == "losing_parts") {
-		mLosingParts = parent;
-	} else if (parent->mName == "losing_death") {
-		mLosingDeath = parent;
-	} else if (parent->mName == "arrow") {
-		mArrow = parent;
+	for (auto parent : gameObject->mParentList) {
+		if (parent->getClassName() == "Player") {
+			mPlayer = dynamic_cast<Player *>(parent);
+		} else if (parent->getClassName() == "obstacle") {
+			mObstacleList.push_back(dynamic_cast<Obstacle *>(parent));
+		} else if (parent->mName == "winning_screen") {
+			mWinningScreen = parent;
+		} else if (parent->mName == "losing_parts") {
+			mLosingParts = parent;
+		} else if (parent->mName == "losing_death") {
+			mLosingDeath = parent;
+		} else if (parent->mName == "arrow") {
+			mArrow = parent;
+		}
+		else {
+			//Nothing to do.
+		}
 	}
-	else {
-		//Nothing to do.
-	}
-}
 }
 
 
@@ -210,7 +210,7 @@ void LevelOneCode::updatePhysics() {
 	mPlayer->mCurrentPosition.second += mPlayer->mSpeed.second * engine::Game::instance.getTimer().getDeltaTime();
 	double groundY = 0.0; 
 	const int PLAYER_RELATIVE_POSITION = 15;
-	
+
 	if (mPlayer->mSpeed.second < 0.0 && hasCeiling(&groundY)) { 
 		mPlayer->mCurrentPosition.second = groundY + PLAYER_RELATIVE_POSITION;
 		mPlayer->mAtCeiling = true;
@@ -260,6 +260,39 @@ void LevelOneCode::updatePhysics() {
 		mPlayer->mPushesRightWall = false;
 	}
 }
+
+
+void LevelOneCode::handleCollisionGround(Obstacle *obstacle, Player *mPlayer){
+	if (obstacle->mObstacleType == ObstacleType::WESTERN_POST) {
+		mPlayer->mState = PlayerState::DIE;
+	}
+	else {
+		//Nothing to do
+	}
+}
+
+
+void LevelOneCode::handleCollisionSide(Obstacle *obstacle, Player *mPlayer, double *wallX, double offset, double blockSide){
+	if (obstacle->mObstacleType == ObstacleType::WESTERN_POST) {
+		mPlayer->mState = PlayerState::DIE;
+	}
+	else {
+		//Nothing to do
+	}
+	*wallX = blockSide + offset;
+}
+
+
+void LevelOneCode::handleCollisionCeiling(Obstacle *obstacle, Player *mPlayer, double *groundY, double blockBottom){
+	if (obstacle->mObstacleType == ObstacleType::WESTERN_POST) {
+		mPlayer->mState = PlayerState::DIE;
+	}
+	else {
+		//Nothing to do
+	}
+	*groundY = blockBottom;
+}
+
 
 bool LevelOneCode::hasGround(double *groundY) {
 	ASSERT(*groundY == 0.0,"groundY must be initialized at 0.0");
@@ -336,19 +369,6 @@ bool LevelOneCode::hasGround(double *groundY) {
 }
 
 
-
-void LevelOneCode::handleCollisionCeiling(Obstacle *obstacle, Player *mPlayer, double *wallX, double offset, double blockSide){
-	if (eachObstacle->mObstacleType == ObstacleType::WESTERN_POST) {
-		mPlayer->mState = PlayerState::DIE;
-	}
-	else {
-		//Nothing to do
-	}
-	*wallX = blockSide + offset;
-}
-
-
-
 bool LevelOneCode::hasWallOnRight(double *wallX) {
 	ASSERT(*wallX == 0.0,"wallX must be initialized at 0.0");
 	std::pair<double, double> playerBottomLeft = mPlayer->calcBottomLeft();
@@ -399,34 +419,11 @@ bool LevelOneCode::hasWallOnRight(double *wallX) {
 					double blockTop = blockTopRight.second + DISTANCE_TOP;
 					double blockBottom = blockBottomLeft.second - DISTANCE_BOTTOM;
 
-					// DEBUG("obstacle: " << eachObstacle->mName); //technique 29
-					// DEBUG("Game object position x: " << gameObject->mCurrentPosition.first); //technique 29
-					// DEBUG("Game object position y: " << gameObject->mCurrentPosition.second); //technique 29
-					//
-					// DEBUG("obstacle position x: " << eachObstacle->mCurrentPosition.first); //technique 29
-					// DEBUG("obstacle position y: " << eachObstacle->mCurrentPosition.second); //technique 29
-					//
-					// DEBUG("Player left: " << playerLeft); //technique 29
-					// DEBUG("Player right: " << playerRight); //technique 29
-					// DEBUG("Player top: " << playerTop); //technique 29
-					// DEBUG("Player bottom: " << playerBottom); //technique 29
-					// DEBUG("Block left: " << blockLeft); //technique 29
-					// DEBUG("Block right: " << blockRight); //technique 29
-					// DEBUG("Block top: " << blockTop); //technique 29
-					// DEBUG("Block bottom: " << blockBottom); //technique 29
-
 					if (playerLeft < blockLeft && playerLeft < blockRight &&
 						playerTop <= blockBottom && playerBottom >= blockTop &&
 						playerRight >= blockLeft) {
-
-							if (eachObstacle->mObstacleType == ObstacleType::WESTERN_POST) {
-								mPlayer->mState = PlayerState::DIE;
-							}
-							else {
-								//Nothing to do.
-							}
-
-							*wallX = blockLeft - 1.0; 
+							
+							handleCollisionSide(eachObstacle, mPlayer, wallX, -1.0, blockLeft);
 							return true;
 					}
 						else {
@@ -440,43 +437,32 @@ bool LevelOneCode::hasWallOnRight(double *wallX) {
 
 
 bool LevelOneCode::hasWallOnLeft(double *wallX) {
-ASSERT(*wallX == 0.0,"wallX must be initialized at 0.0");
-std::pair<double, double> playerBottomLeft = mPlayer->calcBottomLeft();
-std::pair<double, double> playerTopRight = mPlayer->calcTopRight();
+	ASSERT(*wallX == 0.0,"wallX must be initialized at 0.0");
+	std::pair<double, double> playerBottomLeft = mPlayer->calcBottomLeft();
+	std::pair<double, double> playerTopRight = mPlayer->calcTopRight();
 
-double playerTop = playerTopRight.second;
-double playerBottom = playerBottomLeft.second;
-double playerLeft = playerBottomLeft.first;
-double playerRight = playerTopRight.first;
+	double playerTop = playerTopRight.second;
+	double playerBottom = playerBottomLeft.second;
+	double playerLeft = playerBottomLeft.first;
+	double playerRight = playerTopRight.first;
 
-for (auto eachObstacle : mObstacleList) {
-for (auto eachBlock : eachObstacle->mBlockList) {
-	std::pair<double, double> blockBottomLeft = eachBlock->calcBottomLeft();
-	std::pair<double, double> blockTopRight = eachBlock->calcTopRight();
+	for (auto eachObstacle : mObstacleList) {
+		for (auto eachBlock : eachObstacle->mBlockList) {
+			std::pair<double, double> blockBottomLeft = eachBlock->calcBottomLeft();
+			std::pair<double, double> blockTopRight = eachBlock->calcTopRight();
 
-	double blockRight = blockTopRight.first;
-	double blockTop = blockTopRight.second;
-	double blockBottom = blockBottomLeft.second;
+			double blockRight = blockTopRight.first;
+			double blockTop = blockTopRight.second;
+			double blockBottom = blockBottomLeft.second;
 
-	if (playerLeft <= blockRight && playerRight > blockRight &&
-		playerTop <= blockBottom && playerBottom >= blockTop) {
-			*wallX = blockRight + 1.0;
-			return true;
+			if (playerLeft <= blockRight && playerRight > blockRight &&
+				playerTop <= blockBottom && playerBottom >= blockTop) {
+				handleCollisionSide(eachObstacle, mPlayer, wallX, +1.0, blockRight);
+				return true;
+			}
 		}
 	}
-}
-return false;
-}
-
-
-void LevelOneCode::handleCollisionCeiling(Obstacle *obstacle, Player *mPlayer, double *groundY, double blockBottom){
-	if (eachObstacle->mObstacleType == ObstacleType::WESTERN_POST) {
-		mPlayer->mState = PlayerState::DIE;
-	}
-	else {
-		//Nothing to do
-	}
-	*groundY = blockBottom;
+	return false;
 }
 
 
