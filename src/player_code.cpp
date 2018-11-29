@@ -157,12 +157,7 @@ void PlayerCode::updateCode() {
 			}
 
 			//check if button 'W' is pressed
-			if (engine::Game::instance.inputManager.keyState(engine::Button::W)) {
-				mPlayer->mState = PlayerState::JUMP;
-				mPlayer->mSpeed.second = mPlayer->M_JUMPING_SPEED; //normal jump speed of character
-			}else{
-					// 'w' button is not pressed
-			}
+			buttonTest();
 
 			break;
 		case PlayerState::DIE:
