@@ -24,8 +24,11 @@ Player::Player(std::string name, std::pair<double, double> currentPosition) {
 	createComponents();
 }
 
-//This method create the components corresponding to player. Components as the
-//possible animations and the possibles audios.
+/**
+ * @brief This method create the components corresponding to player. Components as the
+* possible animations and the possibles audios.
+ * @return 'void'.
+*/
 void Player::createComponents() {
 	DEBUG("Creating Player Components.");
 
