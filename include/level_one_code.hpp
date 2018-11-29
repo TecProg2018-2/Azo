@@ -51,6 +51,11 @@ namespace Azo {
 			bool hasWallOnRight(double *wallX);
 			bool hasWallOnLeft(double *wallX);
 			void updatePhysics();
+			void handleCollisionGround(Obstacle *obstacle, Player *mPlayer);
+			void handleCollisionSide(Obstacle *obstacle, Player *mPlayer, double *wallX, double offset, double blockSide);
+			void handleCollisionCeiling(Obstacle *obstacle, Player *mPlayer, double *groundY, double blockBottom);
+			bool collectMachinePart(double playerTop, double playerBottom, double playerRight, double playerLeft,
+									  Obstacle *obstacle, Player *mPlayer, std::list<Obstacle *> mObstacleList);
 	};
 }
 

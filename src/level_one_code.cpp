@@ -13,7 +13,11 @@
 
 using namespace Azo;
 
-
+/*
+ * @brief Standard LevelOneCode constructor
+ * 
+ * Creates LeveloneCode instance.
+ */
 LevelOneCode::LevelOneCode(engine::GameObject &gameObject){
 	ASSERT(&gameObject != NULL, "The game object can't be null.");
 	this->gameObject = &gameObject;
@@ -22,6 +26,11 @@ LevelOneCode::LevelOneCode(engine::GameObject &gameObject){
 }
 
 
+/*
+ * @brief Shutdown LevelOneCode component.
+ * 
+ * Iterates through each created obstacle and the audioController, then deletes them.
+ */
 void LevelOneCode::shutdown() {
 	for (auto Obstacle : mObstacleList) Obstacle = nullptr;
 		mAudioController = nullptr;
@@ -33,6 +42,11 @@ void LevelOneCode::shutdown() {
 }
 
 
+/*
+ * @brief Gets parents of target gameObject.
+ * 
+ * Used to identify gameObject's parents to use in later code.
+ */
 void LevelOneCode::getParents() {
 	for (auto parent : gameObject->mParentList) {
 		if (parent->getClassName() == "Player") {
@@ -55,6 +69,11 @@ void LevelOneCode::getParents() {
 }
 
 
+/*
+ * @brief Updates LevelOneCode state.
+ * 
+ * Checks the level state and makes changes to position, sound and game state accordingly.
+ */
 void LevelOneCode::updateCode() {
 	//DEBUG("Position: " << gameObject->mCurrentPosition.first );
 	//DEBUG("Collected parts: " << mPlayer->mCollectedParts);
@@ -145,6 +164,11 @@ void LevelOneCode::updateCode() {
 }
 
 
+/*
+ * @brief Changes option.
+ * 
+ * Used on Menus to change buttons.
+ */
 void LevelOneCode::changeOption() {
 	switch(mCurrentOption) {
 		case 1:
@@ -172,6 +196,11 @@ void LevelOneCode::changeOption() {
 }
 
 
+/*
+ * @brief Selects option.
+ * 
+ * Confirms user input on menu and changes the game scene.
+ */
 void LevelOneCode::chooseOption() {
 	switch(mCurrentOption){
 		case 1:
@@ -185,6 +214,11 @@ void LevelOneCode::chooseOption() {
 }
 
 
+/*
+ * @brief Self-explanatory.
+ * 
+ * Iterates through each obstacle and updates its position.
+ */
 void LevelOneCode::updateObstaclePosition() {
 	for (auto eachObstacle : mObstacleList) {
 		eachObstacle->mCurrentPosition.first = gameObject->mCurrentPosition.first + eachObstacle->mPositionRelativeToParent.first;
@@ -206,6 +240,11 @@ void LevelOneCode::updateObstaclePosition() {
 }
 
 
+/*
+ * @brief Updates player's physics.
+ * 
+ * 
+ */
 void LevelOneCode::updatePhysics() {
 	mPlayer->mCurrentPosition.second += mPlayer->mSpeed.second * engine::Game::instance.getTimer().getDeltaTime();
 	double groundY = 0.0; 
