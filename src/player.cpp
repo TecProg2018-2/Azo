@@ -163,7 +163,10 @@ void Player::generateVictoryAnimation() {
 	mVictoryAnimationSprites[0]->setSpriteHeight((unsigned int)140);
 }
 
-//This method sets the configuration for winning scenario
+/**
+ * @brief This method sets the configuration for winning scenario
+ * @return 'void'.
+*/
 void Player::generateLosingAnimation() {
 	const int LOSING_SPRITES = 7;
 	for (int i = 0; i < LOSING_SPRITES; i++) {
@@ -212,7 +215,10 @@ void Player::generateLosingAnimation() {
 	mLosingAnimationSprites[6]->setSpriteHeight((unsigned int)111 - 4);
 }
 
-//This method sets the walking sprites on its desgined variables
+/**
+ * @brief This method sets the walking sprites on its desgined variables
+ * @return 'void'.
+*/
 void Player::generateWalkingAnimation() {
 	DEBUG("Generating Player walking animation.");
 	const int WALKING_SPRITES = 23;
