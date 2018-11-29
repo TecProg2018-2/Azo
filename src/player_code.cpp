@@ -101,6 +101,11 @@ void PlayerCode::buttonTest(){
 		}
 }
 
+/**
+ * @brief checks if the player can skid
+ * Sets the time the player can drift
+ * @return ' void '.
+*/
 void PlayerCode::slidingTest(){
 		//check if character was sliding
 		if (mAnimationController->getAnimationStatus("sliding") == engine::AnimationState::FINISHED) {
