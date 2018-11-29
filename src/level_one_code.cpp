@@ -55,21 +55,21 @@ for (auto parent : gameObject->mParentList) {
 void LevelOneCode::updateCode() {
 //DEBUG("Position: " << gameObject->mCurrentPosition.first );
 //DEBUG("Collected parts: " << mPlayer->mCollectedParts);
-const double PLAYER_MAX_POSITION = 300.0; // technique 33
-const int GAME_OBJECT_MAX_POSITION = -17600; // technique 33
+const double PLAYER_MAX_POSITION = 300.0; 
+const int GAME_OBJECT_MAX_POSITION = -17600; 
 
 if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION && gameObject->mCurrentPosition.first > GAME_OBJECT_MAX_POSITION) {
-	const double CONTROLLER_POSITION_GAME_OBJECT = 4.0; // technique 33
+	const double CONTROLLER_POSITION_GAME_OBJECT = 4.0; 
 	gameObject->mCurrentPosition.first -= CONTROLLER_POSITION_GAME_OBJECT;
-	const int CONTROLLER_POSITION_PLAYER = 299; // technique 33
+	const int CONTROLLER_POSITION_PLAYER = 299; 
 	mPlayer->mCurrentPosition.first = CONTROLLER_POSITION_PLAYER;
 } else if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION) {
 	mWaitingTime += engine::Game::instance.getTimer().getDeltaTime();
-	mPlayer->mSpeed.first = 0.0; // technique 33
+	mPlayer->mSpeed.first = 0.0; 
 	mAudioController->stopAudio("tema_level_one");
 	mPlayer->mState = PlayerState::END;
 
-	const double MAX_LOSING_WAITING = 10000.0; // technique 33
+	const double MAX_LOSING_WAITING = 10000.0; 
 	if (mPlayer->mCollectedParts != mPlayer->M_TOTAL_PARTS && mWaitingTime >= MAX_LOSING_WAITING) {
 		mLosingParts->mObjectState = engine::ObjectState::ENABLED;
 		changeOption();
@@ -80,7 +80,7 @@ if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION && gameObject->mCurre
 			//Nothing to do.
 		}
 
-		const double MAX_WAITING_TIME = 2300.0; // technique 33
+		const double MAX_WAITING_TIME = 2300.0; 
 
 		if (mWaitingTime >= MAX_WAITING_TIME) {
 			mLosingDeath->mObjectState = engine::ObjectState::ENABLED;
@@ -118,7 +118,7 @@ if (mPlayer->mState != PlayerState::DIE) {
 } else {
 	mWaitingTime += engine::Game::instance.getTimer().getDeltaTime();
 
-	if (mWaitingTime >= 2300.0) { // technique 33
+	if (mWaitingTime >= 2300.0) { 
 		mLosingDeath->mObjectState = engine::ObjectState::ENABLED;
 		changeOption();
 		if (engine::Game::instance.inputManager.keyDownOnce(engine::Button::ENTER)){
@@ -200,12 +200,12 @@ for (auto eachObstacle : mObstacleList) {
 
 void LevelOneCode::updatePhysics() {
 	mPlayer->mCurrentPosition.second += mPlayer->mSpeed.second * engine::Game::instance.getTimer().getDeltaTime();
-	double groundY = 0.0; // technique 33
+	double groundY = 0.0; 
 	const int PLAYER_RELATIVE_POSITION = 15;
-		if (mPlayer->mSpeed.second < 0.0 && hasCeiling(&groundY)) { // technique 33
+		if (mPlayer->mSpeed.second < 0.0 && hasCeiling(&groundY)) { 
 			mPlayer->mCurrentPosition.second = groundY + PLAYER_RELATIVE_POSITION;
 			mPlayer->mAtCeiling = true;
-		} else if ((mPlayer->mSpeed.second >= 0.0 || mPlayer->mState == PlayerState::SLIDE) && hasGround(&groundY)) { // technique 33
+		} else if ((mPlayer->mSpeed.second >= 0.0 || mPlayer->mState == PlayerState::SLIDE) && hasGround(&groundY)) { 
 			mPlayer->mCurrentPosition.second = groundY - mPlayer->mHalfSize.second - mPlayer->mHalfSize.second + PLAYER_RELATIVE_POSITION;
 			mPlayer->mSpeed.second = mPlayer->M_ZERO_VECTOR.second;
 			mPlayer->mOnGround = true;
@@ -238,7 +238,7 @@ if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION_CANVAS &&
 	}
 
 	if (mPlayer->mSpeed.first > 0 && hasWallOnRight(&wallX)) {
-		DEBUG("Collision with the wall"); //technique 29
+		DEBUG("Collision with the wall"); 
 		mPlayer->mCurrentPosition.first = wallX - (mPlayer->mHalfSize.first * 2);
 		mPlayer->mPushesLeftWall = true;
 		mPlayer->mState = PlayerState::DIE;
@@ -247,7 +247,7 @@ if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION_CANVAS &&
 		mPlayer->mPushesLeftWall = false;
 	}
 
-	if (mPlayer->mSpeed.first < 0.0 && hasWallOnLeft(&wallX)) { // technique 33
+	if (mPlayer->mSpeed.first < 0.0 && hasWallOnLeft(&wallX)) { 
 		mPlayer->mState = PlayerState::DIE;
 	}
 	else {
@@ -410,17 +410,18 @@ bool LevelOneCode::hasWallOnRight(double *wallX) {
 								//Nothing to do.
 							}
 
-							*wallX = blockLeft - 1.0; // technique 33
+							*wallX = blockLeft - 1.0; 
 							return true;
-						}
+					}
 						else {
 							//Nothing to do.
 						}
-					}
-				}
 			}
-			return false;
 		}
+	}
+	return false;
+}
+
 
 bool LevelOneCode::hasWallOnLeft(double *wallX) {
 ASSERT(*wallX == 0.0,"wallX must be initialized at 0.0");
@@ -443,13 +444,25 @@ for (auto eachBlock : eachObstacle->mBlockList) {
 
 	if (playerLeft <= blockRight && playerRight > blockRight &&
 		playerTop <= blockBottom && playerBottom >= blockTop) {
-			*wallX = blockRight + 1.0; // technique 33
+			*wallX = blockRight + 1.0;
 			return true;
 		}
 	}
 }
 return false;
 }
+
+
+void LevelOneCode::handleCollisionCeiling(Obstacle *obstacle, Player *mPlayer, double *groundY, double blockBottom){
+	if (eachObstacle->mObstacleType == ObstacleType::WESTERN_POST) {
+		mPlayer->mState = PlayerState::DIE;
+	}
+	else {
+		//Nothing to do
+	}
+	*groundY = blockBottom;
+}
+
 
 bool LevelOneCode::hasCeiling(double *groundY) {
 ASSERT(*groundY == 0.0,"groundY must be initialized at 0.0");
@@ -474,15 +487,7 @@ for (auto eachObstacle : mObstacleList) {
 		if (playerLeft >= blockLeft && playerRight <= blockRight &&
 			playerTop <= blockBottom && playerBottom >= blockTop &&
 			playerTop >= blockTop) {
-
-				if (eachObstacle->mObstacleType == ObstacleType::WESTERN_POST) {
-					mPlayer->mState = PlayerState::DIE;
-				}
-				else {
-					//Nothing to do
-				}
-
-				*groundY = blockBottom;
+				handleCollision(eachObstacle, mPlayer, groundY, blockBottom);
 				return true;
 			} else {
 				//Nothing to do
