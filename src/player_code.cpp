@@ -60,6 +60,11 @@ void PlayerCode::findAudioController() {
 	 mAudioController = (mPlayer->getAudioController(typeid(engine::AudioController)));
 }
 
+/**
+ * @brief checks if the player has hit some obstacle
+ * Defines what happens when the player touches a game obstaclo
+ * @return ' void '.
+*/
 void PlayerCode::obstacleHit(){
 		//Check if player hit some obstacle
 		if (mPlayer->mPushesRightWall || mPlayer->mPushesLeftWall) {
