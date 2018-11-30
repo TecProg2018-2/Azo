@@ -105,6 +105,12 @@ namespace Azo {
 			void resetSpinningValue();
 			void shutdownMachinePartCode();
 
+			void initImageObstacle(
+				std::string obstacleName,
+				std::string obstaclePath
+			);
+			void initMachinePart();
+
 			void setLoadedAnimatedSprite(
 				unsigned int spriteNumber,
 				unsigned int spriteX

@@ -73,7 +73,7 @@ void Obstacle::shutdown() {
 * Used to clear eachBlock from mBlockList.
 * All of them must be shutted down before Obstacle can also be shutted down.
 */
-void Obstacle::clearEachBlock(){
+void Obstacle::clearEachBlock() {
 	for (auto eachBlock : mBlockList) {
 		DEBUG("Deleting eachBlock from mBlockList");
 		if (eachBlock != NULL) {
@@ -91,7 +91,7 @@ void Obstacle::clearEachBlock(){
 *
 * Used to clear any animations remaining before shutting down Obstacle.
 */
-void Obstacle::clearAnimations(){
+void Obstacle::clearAnimations() {
 	if (mSpinningAnimationSprites.size() > 0) {
 		DEBUG("Clearing mSpinningAnimationSprites that remained");
 		for (auto eachAnimation : mSpinningAnimationSprites) {
@@ -112,7 +112,7 @@ void Obstacle::clearAnimations(){
 *
 * Used to clear all remaining images before shutting down Obstacle.
 */
-void Obstacle::clearImages(){
+void Obstacle::clearImages() {
 	if (mObstacleImage != NULL) {
 		DEBUG("Clearing mObstacleImage");
 		delete(mObstacleImage);
@@ -127,7 +127,7 @@ void Obstacle::clearImages(){
 *
 * Used to clear all remaining audio before shutting down Obstacle.
 */
-void Obstacle::clearAudio(){
+void Obstacle::clearAudio() {
 	if (mAudioController != NULL) {
 		DEBUG("Clearing mAudioController");
 		mAudioController->shutdown();
@@ -143,7 +143,7 @@ void Obstacle::clearAudio(){
 *
 * Used to reset mCollected value before shutting down Obstacle.
 */
-void Obstacle::resetCollectedValue(){
+void Obstacle::resetCollectedValue() {
 	if (mCollected != NULL) {
 		DEBUG("Reseting mCollected");
 		mCollected = NULL;
@@ -157,7 +157,7 @@ void Obstacle::resetCollectedValue(){
 *
 * Used to reset mSpinning value before shutting down Obstacle.
 */
-void Obstacle::resetSpinningValue(){
+void Obstacle::resetSpinningValue() {
 	if (mSpinning != NULL) {
 		DEBUG("Reseting mSpinning");
 		delete(mSpinning);
@@ -172,7 +172,7 @@ void Obstacle::resetSpinningValue(){
 *
 * Used to shutdown MachinePartCode class.
 */
-void Obstacle::shutdownMachinePartCode(){
+void Obstacle::shutdownMachinePartCode() {
 	if (mMachinePartCode != NULL) {
 		DEBUG("Shutting down mMachinePartCode");
 		mMachinePartCode->shutdown();
@@ -194,76 +194,31 @@ void Obstacle::createComponents() {
 
 	switch (mObstacleType) {
 		case ObstacleType::WESTERN_CAR:
-		DEBUG("obstacle is a WESTERN CAR!");
-		mObstacleImage = new engine::ImageComponent(*this, "backgrounds/broken_caravan.png", 1.0);
-		ASSERT(mObstacleImage != NULL, "ObstacleType::WESTERN_CAR, mObstacleImage can't be NULL.");
-		this->addComponent(*mObstacleImage);
-		createBlocks();
+		initImageObstacle("WESTERN CAR", "backgrounds/broken_caravan.png");
 		break;
 
 		case ObstacleType::WESTERN_BOX:
-		DEBUG("obstacle is a WESTERN BOX!");
-		mObstacleImage = new engine::ImageComponent(*this, "backgrounds/box.png", 1.0);
-		ASSERT(mObstacleImage != NULL, "ObstacleType::WESTERN_BOX, mObstacleImage can't be NULL.");
-		this->addComponent(*mObstacleImage);
-		createBlocks();
-		errorCode = FunctionStatusObstacle::SUCCESS;
+		initImageObstacle("WESTERN BOX", "backgrounds/box.png");
 		break;
 
 		case ObstacleType::WESTERN_RAISED_BOX:
-		DEBUG("obstacle is a WESTERN RAISED BOX!");
-		mObstacleImage = new engine::ImageComponent(*this, "backgrounds/raised_box.png", 1.0);
-		ASSERT(mObstacleImage != NULL, "ObstacleType::WESTERN_RAISED_BOX, mObstacleImage can't be NULL.");
-		this->addComponent(*mObstacleImage);
-		createBlocks();
-		errorCode = FunctionStatusObstacle::SUCCESS;
+		initImageObstacle("WESTERN RAISED BOX", "backgrounds/raised_box.png");
 		break;
 
 		case ObstacleType::WESTERN_ROCK:
-		DEBUG("obstacle is a WESTERN ROCK");
-		mObstacleImage = new engine::ImageComponent(*this, "backgrounds/rock.png", 1.0);
-		ASSERT(mObstacleImage != NULL, "ObstacleType::WESTERN_ROCK, mObstacleImage can't be NULL.");
-		this->addComponent(*mObstacleImage);
-		createBlocks();
-		errorCode = FunctionStatusObstacle::SUCCESS;
+		initImageObstacle("WESTERN ROCK", "backgrounds/rock.png");
 		break;
 
 		case ObstacleType::MACHINE_PART:
-		DEBUG("obstacle is a MACHINE PART");
-		mMachinePartState = MachinePartState::NON_COLLECTED;
-		generateSpinAnimation();
-		mSpinning = new engine::Animation(*this, "sprites/machine_part.png", 1200.0f, mSpinningAnimationSprites, 0.0, 23.0, true, 1.0);
-		this->addComponent(*mSpinning);
-
-		mAudioController = new engine::AudioController();
-		ASSERT(mAudioController != NULL, "engine::AudioController, AudioController can't be NULL.");
-		mCollected = new engine::AudioComponent(*this, "audios/coleta.ogg", false, false);
-		ASSERT(mCollected != NULL, "engine::AudioComponent, AudioComponent can't be NULL.");
-		mAudioController->addAudio("coleta", *mCollected);
-		this->addComponent(*mAudioController);
-
-		mMachinePartCode = new MachinePartCode(this);
-		ASSERT(mMachinePartCode != NULL, "MachinePartCode, mMachinePartCode can't return NULL.");
-		this->addComponent(*mMachinePartCode);
-		errorCode = FunctionStatusObstacle::SUCCESS;
+		initMachinePart();
 		break;
 
 		case ObstacleType::WESTERN_SPIKE:
-		DEBUG("obstacle is a WESTERN SPIKE");
-		mObstacleImage = new engine::ImageComponent(*this, "backgrounds/Espinhos_rose.png", 1.0);
-		ASSERT(mObstacleImage != NULL, "engine::ImageComponent, mObstacleImage can't be NULL.");
-		this->addComponent(*mObstacleImage);
-		createBlocks();
-		errorCode = FunctionStatusObstacle::SUCCESS;
+		initImageObstacle("WESTERN SPIKE", "backgrounds/Espinhos_rose.png");
 		break;
 
 		case ObstacleType::WESTERN_POST:
-		DEBUG("obstacle is a WESTERN POST");
-		mObstacleImage = new engine::ImageComponent(*this, "backgrounds/obstaculoDescer2.png", 1.0);
-		ASSERT(mObstacleImage != NULL, "engine::ImageComponent, mObstacleImage can't be NULL.");
-		this->addComponent(*mObstacleImage);
-		createBlocks();
-		errorCode = FunctionStatusObstacle::SUCCESS;
+		initImageObstacle("WESTERN POST", "backgrounds/obstaculoDescer2.png");
 		break;
 
 		case ObstacleType::GROUND:
@@ -278,6 +233,52 @@ void Obstacle::createComponents() {
 		errorLog("Obstacle::createComponents");
 		break;
 	}
+}
+
+/**
+* @brief Method for creating single image Obstacle component.
+*
+* Used for creating a ImageComponent's type component.
+*/
+void Obstacle::initImageObstacle(
+	std::string obstacleName,
+	std::string obstaclePath
+) {
+	DEBUG("Obstacle is a " << obstacleName);
+	mObstacleImage = new engine::ImageComponent(*this, obstaclePath, 1.0);
+	ASSERT(mObstacleImage != NULL, "engine::ImageComponent, mObstacleImage can't be NULL.");
+	this->addComponent(*mObstacleImage);
+	createBlocks();
+	errorCode = FunctionStatusObstacle::SUCCESS;
+}
+
+/**
+* @brief Method for creating single animated Obstacle component.
+*
+* Used for creating a MachinePart component.
+*/
+void Obstacle::initMachinePart() {
+	DEBUG("Obstacle is a MACHINE PART");
+	mMachinePartState = MachinePartState::NON_COLLECTED;
+	generateSpinAnimation();
+	mSpinning = new engine::Animation(
+		*this, "sprites/machine_part.png",
+		1200.0f, mSpinningAnimationSprites,
+		0.0, 23.0, true, 1.0
+	);
+	this->addComponent(*mSpinning);
+
+	mAudioController = new engine::AudioController();
+	ASSERT(mAudioController != NULL, "engine::AudioController, AudioController can't be NULL.");
+	mCollected = new engine::AudioComponent(*this, "audios/coleta.ogg", false, false);
+	ASSERT(mCollected != NULL, "engine::AudioComponent, AudioComponent can't be NULL.");
+	mAudioController->addAudio("coleta", *mCollected);
+	this->addComponent(*mAudioController);
+
+	mMachinePartCode = new MachinePartCode(this);
+	ASSERT(mMachinePartCode != NULL, "MachinePartCode, mMachinePartCode can't return NULL.");
+	this->addComponent(*mMachinePartCode);
+	errorCode = FunctionStatusObstacle::SUCCESS;
 }
 
 /**
