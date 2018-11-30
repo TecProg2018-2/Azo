@@ -1,10 +1,10 @@
 /**
  * @file: level_one_code.hpp
  * @brief Purpose: LevelOneCode class declaration
- * 
+ *
  * GPL v3.0 Licence
  * Copyright (c) 2017 Azo
- * 
+ *
  * Notice: TheAzo, TheAzoTeam
  * https://github.com/TecProg2018-2/Azo
 */
@@ -17,7 +17,6 @@
 #include "audio_controller.hpp"
 
 namespace Azo {
-
 	/**
 	* @brief LevelOneCode class
 	* This class is used to manage creation and behavior of
@@ -33,7 +32,7 @@ namespace Azo {
 			engine::GameObject *mWinningScreen;
 			engine::GameObject *mArrow;
 
-			double mWaitingTime = 0.0f;
+			double mWaitingTime = 0.0; // technique 33
 			int mCurrentOption = 1;
 
 		public:

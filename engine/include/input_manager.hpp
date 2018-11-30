@@ -11,6 +11,7 @@
 #define INPUT_MANAGER_HPP
 
 #include "sdl2include.h"
+#include "log.h"
 #include <string>
 #include <list>
 
@@ -49,8 +50,6 @@ namespace engine {
 			bool keyDownOnce(Button button);
 			bool keyState(Button button);
 			void clear();
-
-		private:
 	};
 }
 

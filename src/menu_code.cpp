@@ -79,6 +79,7 @@ void MenuCode::changeOption(){
 	switch (mCurrentButton) {
 		// Start Option.
 		case ButtonType::START_BUTTON:
+
 			mAnimationController->startAnimation("arrow_start");
 
 			if(engine::Game::instance.inputManager.keyDownOnce(engine::Button::RIGHT_ARROW)){
@@ -187,7 +188,7 @@ void MenuCode::errorLog(std::string file){
     std::string message = "===============\n";
 	message += "Function: " + file + "\n";
     message += "Date: " + dt + "\n";
-	
+
     switch(errorCode) {
         case FunctionStatus::DIVIBYZERO:
             message += "Error: division by zero\n";

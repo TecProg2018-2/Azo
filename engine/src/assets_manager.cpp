@@ -7,6 +7,7 @@
  *
  * https://github.com/TecProg2018-2/Azo/blob/master/LICENSE.md
 */
+#include <fstream>
 #include "assets_manager.hpp"
 #include "game.hpp"
 
@@ -23,7 +24,6 @@ using namespace engine;// Used to avoid write engine::Game engine::Game::instanc
 	// Load image into image map.
 	Image* AssetsManager::LoadImage(std::string imagePath) {
 		ASSERT(imagePath != "", "Animation::CreateAnimation, imagePath is empty.");
-		DEBUG("Trying to load image " << imagePath);
 		//DEBUG("Image Map size before loading " << imageMap.size());
 
 		if (imageMap.find(imagePath) == imageMap.end()) {
@@ -31,18 +31,21 @@ using namespace engine;// Used to avoid write engine::Game engine::Game::instanc
 
 			SDL_Surface *image = NULL;
 
-			if (imagePath != "") {																														
-				//Nothing to do for the imagePath is valid
-			} else {
-				ERROR("Invalid Image Path: " << imagePath);
-			}
 
+			if (imagePath == "") {		
+				errorLog(ErrorType::EMPTY_STRING, "AssetsManager::LoadImage");		
+				ERROR("Invalid Image Path: " << imagePath);
+			} else {
+				//Nothing to do for the imagePath is valid
+			}
+			
 			image = IMG_Load(imagePath.c_str());
 
-			if (image != NULL) {
-				//Nothing to do for the image was loaded
-			} else {
+			if (image == NULL) {
+				errorLog(ErrorType::NULL_POINTER, "AssetsManager::LoadImage");
 				ERROR("Couldn't load sprite.");
+			} else {
+				//Nothing to do for the image was loaded
 			}
 
 			SDL_Texture *imageTexture = SDL_CreateTextureFromSurface(Game::instance.sdlElements.getCanvas(), image);
@@ -50,6 +53,7 @@ using namespace engine;// Used to avoid write engine::Game engine::Game::instanc
 			if (imageTexture != NULL) {
 				//Nothing to do for the imageTexture was created
 			} else {
+				errorLog(ErrorType::NULL_POINTER, "AssetsManager::LoadImage");
 				ERROR("Couldn't create texture from image: " << SDL_GetError());
 			}
 
@@ -58,7 +62,6 @@ using namespace engine;// Used to avoid write engine::Game engine::Game::instanc
 			SDL_FreeSurface(image);
 
 		} else {
-
 			DEBUG("Image: " << imagePath << " already loaded!");
 		}
 
@@ -87,7 +90,6 @@ using namespace engine;// Used to avoid write engine::Game engine::Game::instanc
 
 		// Insert image into image map.
 		imageMap[imagePath] = assetsManagerImage;
-		DEBUG("Image Map size after inserting " << imageMap.size());
 	}
 
 	// Load music into music map.
@@ -100,17 +102,16 @@ using namespace engine;// Used to avoid write engine::Game engine::Game::instanc
 
 			Mix_Music * music = Mix_LoadMUS(audioPath.c_str());
 
-			if(music != NULL) {
-				//Nothing to do for the audioPath is correct
-			} else {
+			if(music == NULL) {
+				errorLog(ErrorType::NULL_POINTER, "AssetsManager::LoadMusic");
 				ERROR("Could not load music from path " << audioPath);
+			} else {
+				//Nothing to do for the audioPath is correct
 			}
 
 			InsertIntoMusicMap(audioPath, music);
 
 		} else {
-
-			DEBUG("Music: " << audioPath << " already loaded!");
 		}
 
 		return musicMap[audioPath];
@@ -145,16 +146,16 @@ using namespace engine;// Used to avoid write engine::Game engine::Game::instanc
 
 			Mix_Chunk * sound = Mix_LoadWAV(audioPath.c_str());
 
-			if (sound != NULL) {
-				//Nothing to do for the audioPath is not null
-			} else {
+			if (sound == NULL) {
 				ERROR("Could not load sound from path " << audioPath);
+				errorLog(ErrorType::NULL_POINTER, "AssetsManager::LoadSound");
+			} else {
+				//Nothing to do for the audioPath is not null
 			}
 
 			InsertIntoSoundMap(audioPath, sound);
 
 		} else {
-			DEBUG("Sound: " << audioPath << " already loaded!");
 		}
 
 		return soundMap[audioPath];
@@ -176,4 +177,37 @@ using namespace engine;// Used to avoid write engine::Game engine::Game::instanc
 		// Insert sound into image map.
 		soundMap[audioPath] = sound;
 		DEBUG("Sound Map size after inserting " << soundMap.size());
+	}
+
+	/*
+	*@brief Method to log error messages.
+	*
+	* Writes a file with error message, function containing error and time.
+	*/
+	void AssetsManager::errorLog(ErrorType code, std::string file){
+		std::ofstream outfile;
+		outfile.open("../errorLog.txt", std::ofstream::out | std::ofstream::app);
+		time_t now = time(0);
+		std::string dt = ctime(&now); //convert to string
+		outfile << "Function: " + file << std::endl;
+		outfile << "Date: " + dt << std::endl;
+		
+		switch(code) {
+			case ErrorType::DIVI_BY_ZERO:
+				outfile << "Error: division by zero" << std::endl;
+				break;
+			case ErrorType::EMPTY_STRING:
+				outfile << "Error: empty String" << std::endl;
+				break;
+			case ErrorType::NULL_POINTER:
+				outfile << "Error: null pointer" << std::endl;
+				break;
+			case ErrorType::WRONG_TYPE:
+				outfile << "Error: wrong type" << std::endl;
+				break;
+			default:
+				outfile << "Error: no matching file" << std::endl;
+		}
+		outfile << "===============" << std::endl;
+		outfile.close();
 	}
