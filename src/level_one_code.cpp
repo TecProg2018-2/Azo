@@ -23,7 +23,8 @@ LevelOneCode::LevelOneCode(engine::GameObject &gameObject){
 
 
 void LevelOneCode::shutdown() {
-	for (auto Obstacle : mObstacleList) Obstacle = nullptr;
+	for (auto Obstacle : mObstacleList) 
+		Obstacle = nullptr;
 		mAudioController = nullptr;
 		mPlayer = nullptr;
 	}
@@ -168,6 +169,7 @@ void LevelOneCode::changeOption() {
 			break;
 		default:
 			// Nothing to do.
+			break;			
 	}
 }
 
@@ -297,12 +299,12 @@ void LevelOneCode::handleCollisionCeiling(Obstacle *obstacle, Player *mPlayer, d
 bool LevelOneCode::collectMachinePart(double playerTop, double playerBottom, double playerRight, double playerLeft,
 									  Obstacle *obstacle, Player *mPlayer, std::list<Obstacle *> mObstacleList){
 
-    std::pair<double, double> blockBottomLeft = eachObstacle->calcBottomLeft();
-	std::pair<double, double> blockTopRight = eachObstacle->calcTopRight();
+    std::pair<double, double> blockBottomLeft = obstacle->calcBottomLeft();
+	std::pair<double, double> blockTopRight = obstacle->calcTopRight();
 
-	const int DISTANCE_RIGHT = 5;
 	const int DISTANCE_LEFT = 5;
-	const int DISTANCE_TOP = 16;
+	const int DISTANCE_TOP = 16; 
+	const int DISTANCE_RIGHT = 5;
 	const int DISTANCE_BOTTOM = 16;
 	// These magic numbers are used because the walls must be a bit at the front of the top
 	double blockRight = blockTopRight.first + DISTANCE_RIGHT;
@@ -314,9 +316,9 @@ bool LevelOneCode::collectMachinePart(double playerTop, double playerBottom, dou
 		playerTop <= blockBottom && playerBottom >= blockTop &&
 		playerRight >= blockLeft) {
 
-		eachObstacle->mMachinePartState = MachinePartState::COLLECTED;
+		obstacle->mMachinePartState = MachinePartState::COLLECTED;
 		mPlayer->mCollectedParts++;
-		mObstacleList.remove(eachObstacle);
+		mObstacleList.remove(obstacle);
 
 		return true;
 	} else {
@@ -403,6 +405,11 @@ bool LevelOneCode::hasWallOnRight(double *wallX) {
 	double playerRight = playerTopRight.first;
 
 	for (auto eachObstacle : mObstacleList) {
+		const int DISTANCE_RIGHT = 5;
+		const int DISTANCE_LEFT = 5;
+		const int DISTANCE_TOP = 16;
+		const int DISTANCE_BOTTOM = 16;
+
 		if (eachObstacle->mObstacleType == ObstacleType::MACHINE_PART) {
 				if(collectMachinePart(playerTop, playerBottom, playerRight, playerLeft,
 									  eachObstacle, mPlayer, mObstacleList)){
@@ -490,7 +497,7 @@ for (auto eachObstacle : mObstacleList) {
 		if (playerLeft >= blockLeft && playerRight <= blockRight &&
 			playerTop <= blockBottom && playerBottom >= blockTop &&
 			playerTop >= blockTop) {
-				handleCollision(eachObstacle, mPlayer, groundY, blockBottom);
+				handleCollisionCeiling(eachObstacle, mPlayer, groundY, blockBottom);
 				return true;
 			} else {
 				//Nothing to do
