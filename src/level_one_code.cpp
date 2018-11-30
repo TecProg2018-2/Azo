@@ -32,7 +32,8 @@ LevelOneCode::LevelOneCode(engine::GameObject &gameObject){
  * Iterates through each created obstacle and the audioController, then deletes them.
  */
 void LevelOneCode::shutdown() {
-	for (auto Obstacle : mObstacleList) Obstacle = nullptr;
+	for (auto Obstacle : mObstacleList) 
+		Obstacle = nullptr;
 		mAudioController = nullptr;
 		mPlayer = nullptr;
 	}
@@ -192,6 +193,7 @@ void LevelOneCode::changeOption() {
 			break;
 		default:
 			// Nothing to do.
+			break;			
 	}
 }
 
@@ -241,11 +243,55 @@ void LevelOneCode::updateObstaclePosition() {
 
 
 /*
- * @brief Updates player's physics.
+ * @brief Sets max position for player.
  * 
- * 
+ * Automatically updates player's position in case it exceeds the limit.
  */
-void LevelOneCode::updatePhysics() {
+void LevelOneCode::maxPosition(Player *mPlayer, engine::GameObject *gameObject){
+	const int PLAYER_MAX_POSITION_CANVAS = 300;
+	const int  GAME_OBJECT_MAX_POSITION_CANVAS = -7390;
+
+	if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION_CANVAS &&
+		gameObject->mCurrentPosition.first > GAME_OBJECT_MAX_POSITION_CANVAS) {
+			mPlayer->mCurrentPosition.first = PLAYER_MAX_POSITION_CANVAS;
+	} else {
+			//Nothing to do.
+	}
+}
+
+
+/*
+ * @brief Checks for player collisions.
+ * 
+ * Checks player's position and calls collision handlers.
+ */
+void LevelOneCode::checkCollisions(Player *mPlayer){
+	double wallX = 0.0;
+	//Check wall on right
+	if (mPlayer->mSpeed.first > 0 && hasWallOnRight(&wallX)) {
+		DEBUG("Collision with the wall"); 
+		mPlayer->mCurrentPosition.first = wallX - (mPlayer->mHalfSize.first * 2);
+		mPlayer->mPushesLeftWall = true;
+		mPlayer->mState = PlayerState::DIE;
+	} else {
+		mPlayer->mPushesLeftWall = false;
+	}
+
+	//Check wall on left
+	if (mPlayer->mSpeed.first < 0.0 && hasWallOnLeft(&wallX)) { 
+		mPlayer->mState = PlayerState::DIE;
+	} else {
+		mPlayer->mPushesRightWall = false;
+	}
+}
+
+
+/*
+ * @brief Checks whether player is on the ground, sliding or jumping.
+ * 
+ * Checks player position according to relative position and speed.
+ */
+void LevelOneCode::checkJumpSlide(Player *mPlayer){
 	mPlayer->mCurrentPosition.second += mPlayer->mSpeed.second * engine::Game::instance.getTimer().getDeltaTime();
 	double groundY = 0.0; 
 	const int PLAYER_RELATIVE_POSITION = 15;
@@ -263,44 +309,42 @@ void LevelOneCode::updatePhysics() {
 		mPlayer->mOnGround = false;
 		mPlayer->mAtCeiling = false;
 	}
-
-	//double deltaWalked =  mPlayer->mSpeed.first * engine::Game::instance.getTimer().getDeltaTime();
-	double deltaWalked =  mPlayer->mSpeed.first;
-	// DEBUG("Speed: " << mPlayer->mSpeed.first);
-	// DEBUG("Delta walked: " << deltaWalked);
-
-	mPlayer->mCurrentPosition.first += deltaWalked;
-
-	double wallX = 0.0;
-
-	//Limiting player position on canvas.
-	const int PLAYER_MAX_POSITION_CANVAS = 300;
-	const int  GAME_OBJECT_MAX_POSITION_CANVAS = -7390;
-
-	if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION_CANVAS &&
-		gameObject->mCurrentPosition.first > GAME_OBJECT_MAX_POSITION_CANVAS) {
-			mPlayer->mCurrentPosition.first = PLAYER_MAX_POSITION_CANVAS;
-	} else {
-			//Nothing to do.
-	}
-
-	if (mPlayer->mSpeed.first > 0 && hasWallOnRight(&wallX)) {
-		DEBUG("Collision with the wall"); 
-		mPlayer->mCurrentPosition.first = wallX - (mPlayer->mHalfSize.first * 2);
-		mPlayer->mPushesLeftWall = true;
-		mPlayer->mState = PlayerState::DIE;
-	} else {
-		mPlayer->mPushesLeftWall = false;
-	}
-
-	if (mPlayer->mSpeed.first < 0.0 && hasWallOnLeft(&wallX)) { 
-		mPlayer->mState = PlayerState::DIE;
-	} else {
-		mPlayer->mPushesRightWall = false;
-	}
 }
 
 
+/*
+ * @brief Updates player's position.
+ * 
+ * Changes player position according to current speed.
+ */
+void LevelOneCode::updatePlayerPosition(Player *mPlayer){
+	double deltaWalked =  mPlayer->mSpeed.first;
+	//Updates position in relation to current speed
+	mPlayer->mCurrentPosition.first += deltaWalked;
+}
+
+
+/*
+ * @brief Updates player's physics.
+ * 
+ * 
+ */
+void LevelOneCode::updatePhysics() {	
+	//Check if player is on air or sliding
+	checkJumpSlide(mPlayer);
+	updatePlayerPosition(mPlayer);
+	//Limiting player position on canvas.
+	maxPosition(mPlayer, gameObject);
+	//Updating player state in relation to obstacles
+	checkCollisions(mPlayer);
+}
+
+
+/*
+ * @brief Updates player on ground collisions.
+ * 
+ * 
+ */
 void LevelOneCode::handleCollisionGround(Obstacle *obstacle, Player *mPlayer){
 	if (obstacle->mObstacleType == ObstacleType::WESTERN_POST) {
 		mPlayer->mState = PlayerState::DIE;
@@ -311,6 +355,11 @@ void LevelOneCode::handleCollisionGround(Obstacle *obstacle, Player *mPlayer){
 }
 
 
+/*
+ * @brief Updates player and wall side collisions.
+ * 
+ * 
+ */
 void LevelOneCode::handleCollisionSide(Obstacle *obstacle, Player *mPlayer, double *wallX, double offset, double blockSide){
 	if (obstacle->mObstacleType == ObstacleType::WESTERN_POST) {
 		mPlayer->mState = PlayerState::DIE;
@@ -322,6 +371,11 @@ void LevelOneCode::handleCollisionSide(Obstacle *obstacle, Player *mPlayer, doub
 }
 
 
+/*
+ * @brief Updates player and ceiling on ceiling collisions.
+ * 
+ * 
+ */
 void LevelOneCode::handleCollisionCeiling(Obstacle *obstacle, Player *mPlayer, double *groundY, double blockBottom){
 	if (obstacle->mObstacleType == ObstacleType::WESTERN_POST) {
 		mPlayer->mState = PlayerState::DIE;
@@ -333,15 +387,20 @@ void LevelOneCode::handleCollisionCeiling(Obstacle *obstacle, Player *mPlayer, d
 }
 
 
+/*
+ * @brief Makes it so collisions with MachineParts collects them.
+ * 
+ * 
+ */
 bool LevelOneCode::collectMachinePart(double playerTop, double playerBottom, double playerRight, double playerLeft,
 									  Obstacle *obstacle, Player *mPlayer, std::list<Obstacle *> mObstacleList){
 
-    std::pair<double, double> blockBottomLeft = eachObstacle->calcBottomLeft();
-	std::pair<double, double> blockTopRight = eachObstacle->calcTopRight();
+    std::pair<double, double> blockBottomLeft = obstacle->calcBottomLeft();
+	std::pair<double, double> blockTopRight = obstacle->calcTopRight();
 
-	const int DISTANCE_RIGHT = 5;
 	const int DISTANCE_LEFT = 5;
-	const int DISTANCE_TOP = 16;
+	const int DISTANCE_TOP = 16; 
+	const int DISTANCE_RIGHT = 5;
 	const int DISTANCE_BOTTOM = 16;
 	// These magic numbers are used because the walls must be a bit at the front of the top
 	double blockRight = blockTopRight.first + DISTANCE_RIGHT;
@@ -353,9 +412,9 @@ bool LevelOneCode::collectMachinePart(double playerTop, double playerBottom, dou
 		playerTop <= blockBottom && playerBottom >= blockTop &&
 		playerRight >= blockLeft) {
 
-		eachObstacle->mMachinePartState = MachinePartState::COLLECTED;
+		obstacle->mMachinePartState = MachinePartState::COLLECTED;
 		mPlayer->mCollectedParts++;
-		mObstacleList.remove(eachObstacle);
+		mObstacleList.remove(obstacle);
 
 		return true;
 	} else {
@@ -365,6 +424,11 @@ bool LevelOneCode::collectMachinePart(double playerTop, double playerBottom, dou
 }
 
 
+/*
+ * @brief Checks if player is touching the ground.
+ * 
+ * 
+ */
 bool LevelOneCode::hasGround(double *groundY) {
 	ASSERT(*groundY == 0.0,"groundY must be initialized at 0.0");
 	std::pair<double, double> playerBottomLeft = mPlayer->calcBottomLeft();
@@ -411,14 +475,7 @@ bool LevelOneCode::hasGround(double *groundY) {
 				if (playerLeft <= blockRight && playerRight >= blockLeft &&
 					playerBottom > blockTop && playerTop < blockTop) {
 						*groundY = blockTop;
-
-					if (eachObstacle->mObstacleType == ObstacleType::WESTERN_ROCK ||
-						eachObstacle->mObstacleType == ObstacleType::WESTERN_SPIKE ||
-						eachObstacle->mObstacleType == ObstacleType::WESTERN_POST) {
-						mPlayer->mState = PlayerState::DIE;
-					} else {
-						//Nothing to do.
-					}
+					handleCollisionGround(eachObstacle, mPlayer);
 					return true;
 				} else {
 					//Nothing to do.
@@ -431,6 +488,11 @@ bool LevelOneCode::hasGround(double *groundY) {
 }
 
 
+/*
+ * @brief Checks if there is an obstacle on the right of player.
+ * 
+ * 
+ */
 bool LevelOneCode::hasWallOnRight(double *wallX) {
 	ASSERT(*wallX == 0.0,"wallX must be initialized at 0.0");
 	std::pair<double, double> playerBottomLeft = mPlayer->calcBottomLeft();
@@ -442,6 +504,11 @@ bool LevelOneCode::hasWallOnRight(double *wallX) {
 	double playerRight = playerTopRight.first;
 
 	for (auto eachObstacle : mObstacleList) {
+		const int DISTANCE_RIGHT = 5;
+		const int DISTANCE_LEFT = 5;
+		const int DISTANCE_TOP = 16;
+		const int DISTANCE_BOTTOM = 16;
+
 		if (eachObstacle->mObstacleType == ObstacleType::MACHINE_PART) {
 				if(collectMachinePart(playerTop, playerBottom, playerRight, playerLeft,
 									  eachObstacle, mPlayer, mObstacleList)){
@@ -476,6 +543,11 @@ bool LevelOneCode::hasWallOnRight(double *wallX) {
 }
 
 
+/*
+ * @brief Checks if there is an obstacle on left of player.
+ * 
+ * 
+ */
 bool LevelOneCode::hasWallOnLeft(double *wallX) {
 	ASSERT(*wallX == 0.0,"wallX must be initialized at 0.0");
 	std::pair<double, double> playerBottomLeft = mPlayer->calcBottomLeft();
@@ -485,7 +557,6 @@ bool LevelOneCode::hasWallOnLeft(double *wallX) {
 	double playerBottom = playerBottomLeft.second;
 	double playerLeft = playerBottomLeft.first;
 	double playerRight = playerTopRight.first;
-
 	for (auto eachObstacle : mObstacleList) {
 		for (auto eachBlock : eachObstacle->mBlockList) {
 			std::pair<double, double> blockBottomLeft = eachBlock->calcBottomLeft();
@@ -506,6 +577,11 @@ bool LevelOneCode::hasWallOnLeft(double *wallX) {
 }
 
 
+/*
+ * @brief Checks if there is a ceiling on top of player.
+ * 
+ * 
+ */
 bool LevelOneCode::hasCeiling(double *groundY) {
 ASSERT(*groundY == 0.0,"groundY must be initialized at 0.0");
 std::pair<double, double> playerBottomLeft = mPlayer->calcBottomLeft();
@@ -529,7 +605,7 @@ for (auto eachObstacle : mObstacleList) {
 		if (playerLeft >= blockLeft && playerRight <= blockRight &&
 			playerTop <= blockBottom && playerBottom >= blockTop &&
 			playerTop >= blockTop) {
-				handleCollision(eachObstacle, mPlayer, groundY, blockBottom);
+				handleCollisionCeiling(eachObstacle, mPlayer, groundY, blockBottom);
 				return true;
 			} else {
 				//Nothing to do
