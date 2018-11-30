@@ -18,59 +18,39 @@ using namespace Azo;
 
 LevelOne::LevelOne() {}
 
-//constructor that inits level one and its game objects
+/**
+ * @brief Constructor method for LevelOne.
+ *
+ * constructor that inits level one and its game objects.
+ */
 LevelOne::LevelOne(std::string name){
 	ASSERT(name != "", "Name can`t be blank.");
 	this->sceneName = name;
 	startLevel();
 }
 
-//function that restarts level one
+/**
+ * @brief restart method for InvisibleBlock.
+ *
+ * function that restarts level one (clear map and start level again).
+ */
 void LevelOne::restart(){
 	gameObjectMap.clear();
 	//To Do: add objects to be recreated one by one here, instead of recalling createGameObjects.
 	startLevel();
 }
 
-//function that create all new game objects of level one in order.
+/**
+ * @brief method to start objects to level.
+ *
+ * function that create all new game objects of level one in order.
+ */
 void LevelOne::startLevel() {
 
 	DEBUG("Creating LevelOne GameObjects.");
-	createSceneGeneral();
-
-	// Execute errors tests
-	if(mLevelBackground1 == NULL) {
-		errorCode = FunctionStatusLevelOne::NULLPOINTER;
-		errorLog("LevelOne::findLevelBackground1");
-	} else {
-		errorCode = FunctionStatusLevelOne::SUCCESS;
-	}
-	if(mLevelBackground2 == NULL) {
-		errorCode = FunctionStatusLevelOne::NULLPOINTER;
-		errorLog("LevelOne::findLevelBackground2");
-	} else {
-		errorCode = FunctionStatusLevelOne::SUCCESS;
-	}
-	if(mLevelBackground3 == NULL) {
-		errorCode = FunctionStatusLevelOne::NULLPOINTER;
-		errorLog("LevelOne::findLevelBackground3");
-	} else {
-		errorCode = FunctionStatusLevelOne::SUCCESS;
-	}
-	if(mAudioController == NULL) {
-		errorCode = FunctionStatusLevelOne::NULLPOINTER;
-		errorLog("LevelOne::findAudioController");
-	} else {
-		errorCode = FunctionStatusLevelOne::SUCCESS;
-	}
-	if(mLevelTheme == NULL) {
-		errorCode = FunctionStatusLevelOne::NULLPOINTER;
-		errorLog("LevelOne::findLevelTheme");
-	} else {
-		errorCode = FunctionStatusLevelOne::SUCCESS;
-  	}
 
 	// Create the game objects
+	createSceneGeneral();
 	createObstacleCar();
 	createObstacleSpike();
 	createObstacleBox();
@@ -82,8 +62,10 @@ void LevelOne::startLevel() {
 	// Create the ending screen
 	createEndingScreen();
 
+	// Add the game objects to the level
 	addLevelParentsGeneral();
 
+	// Create the level one object
 	mLevelCode = new LevelOneCode(*mLevelOne);
 	mLevelOne->addComponent(*mLevelCode);
 }
