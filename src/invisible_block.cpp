@@ -26,6 +26,23 @@ InvisibleBlock::InvisibleBlock(
 	std::pair<double, double> positionRelativeToParent,
 	std::pair<double, double> size
 ) {
+	initInvisibleBlock(name, positionRelativeToParent, size);
+	initImageComponent();
+}
+
+/**
+* @brief Method for initializing new invisible block.
+*
+* Used for initializing new invisible block with default invisible block image.
+* @param name InvisibleBlock name.
+* @param positionRelativeToParent Pair of doubles relative to position(range > 0).
+* @param size Pair of doubles relative to size(range > 0).
+*/
+void InvisibleBlock::initInvisibleBlock(
+	std::string name,
+	std::pair<double, double> positionRelativeToParent,
+	std::pair<double, double> size
+){
 	DEBUG("Creating Blocks");
 
 	mName = name;
@@ -36,10 +53,15 @@ InvisibleBlock::InvisibleBlock(
 	// 2.0f is used on the snippets below to halve the size while maintaining float type result.
 	mHalfSize.first = mSize.first / 2.0f;
 	mHalfSize.second = mSize.second / 2.0f;
-
 	mCenter = mHalfSize; // Center is equal to the mHalfSize pair.
+}
 
-	// Initializing new ImageComponent with default invisible block image.
+/**
+* @brief Method for initializing new ImageComponent.
+*
+* Used for initializing new ImageComponent with default invisible block image.
+*/
+void InvisibleBlock::initImageComponent(){
 	mImage = new engine::ImageComponent(
 		*this,
 		"backgrounds/test_invisible_1.png",

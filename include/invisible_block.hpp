@@ -40,7 +40,13 @@ namespace Azo {
 
 	private:
 		engine::ImageComponent *mImage;
-		
+
+		void initInvisibleBlock(
+			std::string name,
+			std::pair<double, double> positionRelativeToParent,
+			std::pair<double, double> size
+		);
+		void initImageComponent();
 	};
 }
 
