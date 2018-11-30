@@ -38,7 +38,13 @@ void LevelOneCode::shutdown() {
 		mPlayer = nullptr;
 	}
 
-	void LevelOneCode::findAudioController() {
+
+/*
+ * @brief Locates audio controller.
+ * 
+ * Finds the current audio controller and sets it to level.
+ */
+void LevelOneCode::findAudioController() {
 	mAudioController = (gameObject->getAudioController(typeid(engine::AudioController)));
 }
 
@@ -49,6 +55,8 @@ void LevelOneCode::shutdown() {
  * Used to identify gameObject's parents to use in later code.
  */
 void LevelOneCode::getParents() {
+	/* Iterates through each gameObject to check for name. 
+	  We can't use switch case here because we're dealing with strings. */
 	for (auto parent : gameObject->mParentList) {
 		if (parent->getClassName() == "Player") {
 			mPlayer = dynamic_cast<Player *>(parent);
@@ -81,12 +89,14 @@ void LevelOneCode::updateCode() {
 	const double PLAYER_MAX_POSITION = 300.0; 
 	const int GAME_OBJECT_MAX_POSITION = -17600; 
 
+	// Checking player and game object's position on update.
 	if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION && gameObject->mCurrentPosition.first > GAME_OBJECT_MAX_POSITION) {
 		const double CONTROLLER_POSITION_GAME_OBJECT = 4.0; 
 		gameObject->mCurrentPosition.first -= CONTROLLER_POSITION_GAME_OBJECT;
 		const int CONTROLLER_POSITION_PLAYER = 299; 
 		mPlayer->mCurrentPosition.first = CONTROLLER_POSITION_PLAYER;
-	} else if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION) {
+	} else if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION) { 
+		// Triggers once max distance on level is reached, causing the game to end.
 		mWaitingTime += engine::Game::instance.getTimer().getDeltaTime();
 		mPlayer->mSpeed.first = 0.0; 
 		mAudioController->stopAudio("tema_level_one");
@@ -105,6 +115,7 @@ void LevelOneCode::updateCode() {
 
 			const double MAX_WAITING_TIME = 2300.0; 
 
+			// Retry menu on death.
 			if (mWaitingTime >= MAX_WAITING_TIME) {
 				mLosingDeath->mObjectState = engine::ObjectState::ENABLED;
 				changeOption();
@@ -119,6 +130,7 @@ void LevelOneCode::updateCode() {
 				//Nothing to do.
 			}
 
+			// Stopping theme if still playing.
 			if (mAudioController->getAudioState("tema_level_one") == engine::AudioState::PLAYING) {
 				mAudioController->stopAudio("tema_level_one");
 			}
@@ -136,6 +148,7 @@ void LevelOneCode::updateCode() {
 	}
 	updateObstaclePosition();
 
+	// If player isn't dead, update player physics.
 	if (mPlayer->mState != PlayerState::DIE) {
 		updatePhysics();
 	} else {
@@ -583,34 +596,34 @@ bool LevelOneCode::hasWallOnLeft(double *wallX) {
  * 
  */
 bool LevelOneCode::hasCeiling(double *groundY) {
-ASSERT(*groundY == 0.0,"groundY must be initialized at 0.0");
-std::pair<double, double> playerBottomLeft = mPlayer->calcBottomLeft();
-std::pair<double, double> playerTopRight = mPlayer->calcTopRight();
+	ASSERT(*groundY == 0.0,"groundY must be initialized at 0.0");
+	std::pair<double, double> playerBottomLeft = mPlayer->calcBottomLeft();
+	std::pair<double, double> playerTopRight = mPlayer->calcTopRight();
 
-double playerTop = playerTopRight.second;
-double playerBottom = playerBottomLeft.second;
-double playerLeft = playerBottomLeft.first;
-double playerRight = playerTopRight.first;
+	double playerTop = playerTopRight.second;
+	double playerBottom = playerBottomLeft.second;
+	double playerLeft = playerBottomLeft.first;
+	double playerRight = playerTopRight.first;
 
-for (auto eachObstacle : mObstacleList) {
-	for (auto eachBlock : eachObstacle->mBlockList) {
-		std::pair<double, double> blockBottomLeft = eachBlock->calcBottomLeft();
-		std::pair<double, double> blockTopRight = eachBlock->calcTopRight();
+	for (auto eachObstacle : mObstacleList) {
+		for (auto eachBlock : eachObstacle->mBlockList) {
+			std::pair<double, double> blockBottomLeft = eachBlock->calcBottomLeft();
+			std::pair<double, double> blockTopRight = eachBlock->calcTopRight();
 
-		double blockLeft = blockBottomLeft.first;
-		double blockRight = blockTopRight.first;
-		double blockTop = blockTopRight.second;
-		double blockBottom = blockBottomLeft.second;
+			double blockLeft = blockBottomLeft.first;
+			double blockRight = blockTopRight.first;
+			double blockTop = blockTopRight.second;
+			double blockBottom = blockBottomLeft.second;
 
-		if (playerLeft >= blockLeft && playerRight <= blockRight &&
-			playerTop <= blockBottom && playerBottom >= blockTop &&
-			playerTop >= blockTop) {
-				handleCollisionCeiling(eachObstacle, mPlayer, groundY, blockBottom);
-				return true;
-			} else {
-				//Nothing to do
+			if (playerLeft >= blockLeft && playerRight <= blockRight &&
+				playerTop <= blockBottom && playerBottom >= blockTop &&
+				playerTop >= blockTop) {
+					handleCollisionCeiling(eachObstacle, mPlayer, groundY, blockBottom);
+					return true;
+				} else {
+					//Nothing to do
+				}
 			}
 		}
-	}
-	return false;
+		return false;
 }
