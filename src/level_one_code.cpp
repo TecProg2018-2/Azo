@@ -208,7 +208,42 @@ void LevelOneCode::updateObstaclePosition() {
 }
 
 
-void LevelOneCode::updatePhysics() {
+
+void LevelOneCode::maxPosition(Player *mPlayer, GameObject *gameObject){
+	const int PLAYER_MAX_POSITION_CANVAS = 300;
+	const int  GAME_OBJECT_MAX_POSITION_CANVAS = -7390;
+
+	if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION_CANVAS &&
+		gameObject->mCurrentPosition.first > GAME_OBJECT_MAX_POSITION_CANVAS) {
+			mPlayer->mCurrentPosition.first = PLAYER_MAX_POSITION_CANVAS;
+	} else {
+			//Nothing to do.
+	}
+}
+
+
+void LevelOneCode::checkCollisions(Player *mPlayer){
+	double wallX = 0.0;
+	//Check wall on right
+	if (mPlayer->mSpeed.first > 0 && hasWallOnRight(&wallX)) {
+		DEBUG("Collision with the wall"); 
+		mPlayer->mCurrentPosition.first = wallX - (mPlayer->mHalfSize.first * 2);
+		mPlayer->mPushesLeftWall = true;
+		mPlayer->mState = PlayerState::DIE;
+	} else {
+		mPlayer->mPushesLeftWall = false;
+	}
+
+	//Check wall on left
+	if (mPlayer->mSpeed.first < 0.0 && hasWallOnLeft(&wallX)) { 
+		mPlayer->mState = PlayerState::DIE;
+	} else {
+		mPlayer->mPushesRightWall = false;
+	}
+}
+
+
+void LevelOneCode::checkJumpSlide(Player *mPlayer){
 	mPlayer->mCurrentPosition.second += mPlayer->mSpeed.second * engine::Game::instance.getTimer().getDeltaTime();
 	double groundY = 0.0; 
 	const int PLAYER_RELATIVE_POSITION = 15;
@@ -226,41 +261,24 @@ void LevelOneCode::updatePhysics() {
 		mPlayer->mOnGround = false;
 		mPlayer->mAtCeiling = false;
 	}
+}
 
-	//double deltaWalked =  mPlayer->mSpeed.first * engine::Game::instance.getTimer().getDeltaTime();
+
+void LevelOneCode::updatePlayerPosition(Player *mPlayer){
 	double deltaWalked =  mPlayer->mSpeed.first;
-	// DEBUG("Speed: " << mPlayer->mSpeed.first);
-	// DEBUG("Delta walked: " << deltaWalked);
-
+	//Updates position in relation to current speed
 	mPlayer->mCurrentPosition.first += deltaWalked;
+}
 
-	double wallX = 0.0;
 
+void LevelOneCode::updatePhysics() {	
+	//Check if player is on air or sliding
+	checkJumpSlide(mPlayer);
+	updatePlayerPosition(mPlayer);
 	//Limiting player position on canvas.
-	const int PLAYER_MAX_POSITION_CANVAS = 300;
-	const int  GAME_OBJECT_MAX_POSITION_CANVAS = -7390;
-
-	if (mPlayer->mCurrentPosition.first >= PLAYER_MAX_POSITION_CANVAS &&
-		gameObject->mCurrentPosition.first > GAME_OBJECT_MAX_POSITION_CANVAS) {
-			mPlayer->mCurrentPosition.first = PLAYER_MAX_POSITION_CANVAS;
-	} else {
-			//Nothing to do.
-	}
-
-	if (mPlayer->mSpeed.first > 0 && hasWallOnRight(&wallX)) {
-		DEBUG("Collision with the wall"); 
-		mPlayer->mCurrentPosition.first = wallX - (mPlayer->mHalfSize.first * 2);
-		mPlayer->mPushesLeftWall = true;
-		mPlayer->mState = PlayerState::DIE;
-	} else {
-		mPlayer->mPushesLeftWall = false;
-	}
-
-	if (mPlayer->mSpeed.first < 0.0 && hasWallOnLeft(&wallX)) { 
-		mPlayer->mState = PlayerState::DIE;
-	} else {
-		mPlayer->mPushesRightWall = false;
-	}
+	maxPosition(mPlayer, gameObject);
+	//Updating player state in relation to obstacles
+	checkCollisions(mPlayer);
 }
 
 
@@ -374,14 +392,7 @@ bool LevelOneCode::hasGround(double *groundY) {
 				if (playerLeft <= blockRight && playerRight >= blockLeft &&
 					playerBottom > blockTop && playerTop < blockTop) {
 						*groundY = blockTop;
-
-					if (eachObstacle->mObstacleType == ObstacleType::WESTERN_ROCK ||
-						eachObstacle->mObstacleType == ObstacleType::WESTERN_SPIKE ||
-						eachObstacle->mObstacleType == ObstacleType::WESTERN_POST) {
-						mPlayer->mState = PlayerState::DIE;
-					} else {
-						//Nothing to do.
-					}
+					handleCollisionGround(mPlayer);
 					return true;
 				} else {
 					//Nothing to do.
@@ -446,14 +457,13 @@ bool LevelOneCode::hasWallOnRight(double *wallX) {
 
 bool LevelOneCode::hasWallOnLeft(double *wallX) {
 	ASSERT(*wallX == 0.0,"wallX must be initialized at 0.0");
-	std::pair<double, double> playerBottomLeft = mPlayer->calcBottomLeft();
-	std::pair<double, double> playerTopRight = mPlayer->calcTopRight();
+	std::pair<double, double> *playerBottomLeft = mPlayer->calcBottomLeft();
+	std::pair<double, double> *playerTopRight = mPlayer->calcTopRight();
 
-	double playerTop = playerTopRight.second;
-	double playerBottom = playerBottomLeft.second;
-	double playerLeft = playerBottomLeft.first;
-	double playerRight = playerTopRight.first;
-
+	double *playerTop = playerTopRight.second;
+	double *playerBottom = playerBottomLeft.second;
+	double *playerLeft = playerBottomLeft.first;
+	double *playerRight = playerTopRight.first;
 	for (auto eachObstacle : mObstacleList) {
 		for (auto eachBlock : eachObstacle->mBlockList) {
 			std::pair<double, double> blockBottomLeft = eachBlock->calcBottomLeft();
