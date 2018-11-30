@@ -15,7 +15,6 @@
 #include "machine_part_code.hpp"
 
 namespace Azo {
-
 	/**
 	 * @brief Class for possible Obstacle Types.
 	 *
@@ -32,7 +31,6 @@ namespace Azo {
 		MACHINE_PART,
 		WESTERN_POST
 	};
-
 
 	/**
 	 * @brief Class for MachinePart state.
@@ -56,7 +54,6 @@ namespace Azo {
 			WRONGTYPE,
 			SUCCESS,
 	};
-
 
 	/**
 	 * @brief Obstacle class for in-game objects with collision.
@@ -83,6 +80,7 @@ namespace Azo {
 			inline std::string getClassName(){
 				return "obstacle";
 			}
+
 		private:
 			// Initializing pointes for components
 			engine::ImageComponent *mObstacleImage = NULL;
@@ -92,10 +90,18 @@ namespace Azo {
 			std::vector<engine::Sprite *> mTurningAnimationSprites;
 			MachinePartCode *mMachinePartCode = NULL;
 			FunctionStatusObstacle errorCode = FunctionStatusObstacle::SUCCESS;
+
 			void createComponents();
 			void createBlocks();
 			void generateTurningAnimation();
 
+			void setLoadedAnimatedSprite(
+				unsigned int spriteNumber,
+				unsigned int spriteX,
+				unsigned int spriteY,
+				unsigned int spriteWidth,
+				unsigned int spriteHeight
+			);
 	};
 }
 
