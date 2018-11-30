@@ -495,7 +495,11 @@ void LevelOne::createPlayer() {
 	this->addGameObject(*mPlayer);
 }
 
-//function that instantiate game over screen/menu
+/**
+ * @brief method to add player to level.
+ *
+ * function that instantiate game over screen/menu.
+ */
 void LevelOne::createEndingScreen() {
 	// Create the winning screen
 	mWinningScreenObject = new engine::GameObject("winning_screen", std::make_pair(0, 0));
@@ -526,7 +530,11 @@ void LevelOne::createEndingScreen() {
 	this->addGameObject(*mArrow);
 }
 
-//function that adds level one parents
+/**
+ * @brief method to add objects to parent.
+ *
+ * function that adds level one parents to general objects.
+ */
 void LevelOne::addLevelParentsGeneral() {
 	// Adding parents to general on level
 	DEBUG("adding level parents.");
@@ -539,6 +547,11 @@ void LevelOne::addLevelParentsGeneral() {
 	mLevelOne->mParentList.push_back(mGround);
 }
 
+/**
+ * @brief method to add objects to parent.
+ *
+ * function that adds level one parents to car objects.
+ */
 void LevelOne::addLevelParentsCar() {
 	// Adding parents to car obstacle on level
 	DEBUG("adding level parents car.");
@@ -549,6 +562,11 @@ void LevelOne::addLevelParentsCar() {
 	mLevelOne->mParentList.push_back(mObstacleCar5);
 }
 
+/**
+ * @brief method to add objects to parent.
+ *
+ * function that adds level one parents to spike objects.
+ */
 void LevelOne::addLevelParentsSpike() {
 	// Adding parents to spike obstacle on level
 	DEBUG("adding level parents spike.");
@@ -559,6 +577,11 @@ void LevelOne::addLevelParentsSpike() {
 	mLevelOne->mParentList.push_back(mSpike5);
 }
 
+/**
+ * @brief method to add objects to parent.
+ *
+ * function that adds level one parents to box objects.
+ */
 void LevelOne::addLevelParentsBox() {
 	// Adding parents to box obstacle on level
 	mLevelOne->mParentList.push_back(mObstacleBox01);
@@ -576,6 +599,11 @@ void LevelOne::addLevelParentsBox() {
 	mLevelOne->mParentList.push_back(mObstacleBox11);
 }
 
+/**
+ * @brief method to add objects to parent.
+ *
+ * function that adds level one parents to aerial objects.
+ */
 void LevelOne::addLevelParentsAerial() {
 	// Adding parents to aerial obstacle on level
 	mLevelOne->mParentList.push_back(mObstacleAerial1);
@@ -602,6 +630,11 @@ void LevelOne::addLevelParentsAerial() {
 	mLevelOne->mParentList.push_back(mObstacleAerial22);
 }
 
+/**
+ * @brief method to add objects to parent.
+ *
+ * function that adds level one parents to part objects.
+ */
 void LevelOne::addLevelParentsPart() {
 	// Adding parents to part obstacle on level
 	mLevelOne->mParentList.push_back(mPart1);
@@ -631,6 +664,11 @@ void LevelOne::addLevelParentsPart() {
 	mLevelOne->mParentList.push_back(mPart22);
 }
 
+/**
+ * @brief method to add objects to parent.
+ *
+ * function that adds level one parents to rock objects.
+ */
 void LevelOne::addLevelParentsRock() {
 	// Adding parents to rock obstacle on level
 	mLevelOne->mParentList.push_back(mObstacleRock1);
