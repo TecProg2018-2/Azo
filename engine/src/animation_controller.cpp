@@ -16,11 +16,15 @@ using namespace engine;
 
 AnimationController::AnimationController() {
 	//DEBUG("Calling AnimationController::AnimationController");
+	//This function is just changing the state of componentState to enabled.
 	this->componentState = State::ENABLED;
 }
 
 AnimationController::AnimationController(GameObject &gameObject) {
 	//DEBUG("Calling AnimationController::AnimationController");
+	//This function paragraph receives the gameObject and enables the
+	//componentState. Its important because the gameObject is the specific
+	// object to whom the animation is going to refer.
 	ASSERT(&gameObject != NULL, "The gameObject can't be null.");
 	this->gameObject = &gameObject;
 	this->componentState = State::ENABLED;
@@ -28,6 +32,7 @@ AnimationController::AnimationController(GameObject &gameObject) {
 
 void AnimationController::init() {
 	//DEBUG("Calling AnimationController::init");
+	//This function paragraph initialize the animations on the map.
 	for (auto animationRow : mAnimationMap) {
 		auto animation = animationRow.second;
 		animation->init();
@@ -37,6 +42,7 @@ void AnimationController::init() {
 
 void AnimationController::shutdown() {
 	//DEBUG("Shutting down AnimationController");
+	//This function paragraph shutdown the refered animations.
 	for (auto animationRow : mAnimationMap) {
 		auto animation = animationRow.second;
 		ASSERT(
@@ -49,6 +55,7 @@ void AnimationController::shutdown() {
 
 void AnimationController::draw() {
 	//DEBUG("Drawing AnimationController");
+	//This function paragraph draws on the screen the refered animations.
 	for (auto animationRow : mAnimationMap) {
 		auto animation = animationRow.second;
 		ASSERT(
@@ -65,6 +72,7 @@ void AnimationController::draw() {
 
 void AnimationController::addAnimation(std::string animationName, Animation &animation) {
 	//DEBUG("Calling AnimationController::addAnimation");
+	//This function paragraph adds new animations on the list.
 	ASSERT(
 		animationName != "",
 		"AnimationController::addAnimation, animationName is empty."
@@ -79,12 +87,13 @@ void AnimationController::addAnimation(std::string animationName, Animation &ani
 		newAnimation.first != "",
 		"AnimationController::addAnimation, newAnimation must have a name"
 	);
-
 	mAnimationMap.insert(newAnimation);
 }
 
 void AnimationController::startUniqueAnimation(std::string animationName) {
 	//DEBUG("Calling AnimationController::startUniqueAnimation");
+	//This function paragraph rows through the animations list and selects them
+	//to be played.
 	ASSERT(
 		animationName != "",
 		"AnimationController::startUniqueAnimation, animationName is empty."
@@ -95,6 +104,9 @@ void AnimationController::startUniqueAnimation(std::string animationName) {
 		"AnimationController::startUniqueAnimation, animationToBePlayed is empty."
 	);
 
+
+	//This function paragraph verifies if the selected animation adress is not
+	//the last on the list
 	//Default is to fail
 	if (animationToBePlayed == mAnimationMap.end()) {
 		ERROR("Animation " << animationName << "doesn't exist!");
@@ -102,6 +114,10 @@ void AnimationController::startUniqueAnimation(std::string animationName) {
 		//Nothing to do
 	}
 
+
+
+	//This fucntion paragraph verifies and sets the state of animations on
+	//the list. It verifies if its to end the animations or to let them follow.
 	if (animationToBePlayed->second->mState == AnimationState::STOPPED) {
 		for (auto eachAnimation : mAnimationMap) {
 			eachAnimation.second->disableComponent();
@@ -120,6 +136,8 @@ void AnimationController::startUniqueAnimation(std::string animationName) {
 
 void AnimationController::startAnimation(std::string animationName) {
 	//DEBUG("Calling AnimationController::startAnimation");
+	//This function paragraph rows through the animations list and selects them
+	//to start playing.
 	ASSERT(
 		animationName != "",
 		"AnimationController::startAnimation, animationName is empty."
@@ -130,6 +148,10 @@ void AnimationController::startAnimation(std::string animationName) {
 		"AnimationController::startAnimation, animationToBePlayed is empty."
 	);
 
+
+
+	//This function paragraph verifies if the selected animation adress is not
+	//the last on the list
 	//Default is to fail
 	if (animationToBePlayed == mAnimationMap.end()) {
 		ERROR("Animation " << animationName << "doesn't exist!");
@@ -137,6 +159,9 @@ void AnimationController::startAnimation(std::string animationName) {
 		//Nothing to do
 	}
 
+
+	//This function paragraph verifies if the animation is set to be played.
+	//If not, the functions sets it to start playing
 	if (!animationToBePlayed->second->isEnabled()) {
 		animationToBePlayed->second->enableComponent();
 		animationToBePlayed->second->mState = AnimationState::PLAYING;
@@ -148,6 +173,8 @@ void AnimationController::startAnimation(std::string animationName) {
 
 void AnimationController::stopAnimation(std::string animationName) {
 	//DEBUG("Calling AnimationController::stopAnimation");
+	//This function paragraph rows through the animations list and selects them
+	//to be stopped.
 	ASSERT(
 		animationName != "",
 		"AnimationController::stopAnimation, animationName is empty."
@@ -158,6 +185,9 @@ void AnimationController::stopAnimation(std::string animationName) {
 		"AnimationController::stopAnimation, animationToBePlayed is empty."
 	);
 
+
+	//This function paragraph disables the animations components and sets them
+	//not to be played.
 	if (animationToBePlayed != mAnimationMap.end()) {
 		animationToBePlayed->second->disableComponent();
 	} else {
@@ -167,6 +197,8 @@ void AnimationController::stopAnimation(std::string animationName) {
 
 AnimationState AnimationController::getAnimationStatus(std::string animationName) {
 	//DEBUG("Calling AnimationController::getAnimationStatus");
+	//This function paragraph rows through the animations list and then
+	//receive their status and return them.
 	ASSERT(
 		animationName != "",
 		"AnimationController::stopAnimation, animationName is empty."

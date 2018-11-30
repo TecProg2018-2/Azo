@@ -24,6 +24,8 @@ ImageComponent::ImageComponent(
 	std::string imagePath,
 	double zoomFactor
 ) {
+	//This function paragraph creates the image component according
+	//to the received gameObject
 	DEBUG("Calling ImageComponent::ImageComponent");
 	ASSERT(&gameObject != NULL, "The gameObject can't be null.");
 	ASSERT(imagePath != "", "ImageComponent::ImageComponent, imagePath is empty.");
@@ -39,6 +41,9 @@ ImageComponent::ImageComponent(
 	double zoomFactor,
 	std::pair<double, double> positionRelativeToObject
 ) {
+	//This function paragraph creates the image component according
+	//to the received gameObject, but relating it to the relative
+	//position of the object
 	DEBUG("Calling ImageComponent::ImageComponent");
 	ASSERT(&gameObject != NULL, "The gameObject can't be null.");
 	ASSERT(imagePath != "", "ImageComponent::ImageComponent, imagePath is empty.");
@@ -69,6 +74,10 @@ void ImageComponent::init() {
 	gameObject->mSize.first = componentWidth;
 	gameObject->mSize.second = componentHeight;
 
+
+	//initiating canvas quad.
+	//This function paragraph initiates the canvasQuad values
+	//according to the current and relative position of the object
 	canvasQuad = {
 		(int)(gameObject->mCurrentPosition.first + mPositionRelativeToObject.first),
 		(int)(gameObject->mCurrentPosition.second + mPositionRelativeToObject.second),
@@ -76,13 +85,16 @@ void ImageComponent::init() {
 		componentHeight
 	};
 
+
+	//This function paragraph generates the renderQuad with
+	//the current component and its informations
 	renderQuad = {0, 0, componentWidth, componentHeight};
 }
 
 
 void ImageComponent::draw() {
+	//This function paragraph is responsible for drawing the image component
 	//DEBUG("Calling ImageComponent::draw");
-
 	updateQuad();
 	SDL_RenderCopy(
 		Game::instance.sdlElements.getCanvas(),
@@ -93,8 +105,10 @@ void ImageComponent::draw() {
 }
 
 void ImageComponent::updateQuad() {
+	//Updating canvas quad.
+	//This function paragraph updates the canvasQuad values
+	//according to the current and relative position of the object
 	//DEBUG("Calling ImageComponent::updateQuad");
-
 	canvasQuad = {
 		(int)(gameObject->mCurrentPosition.first + mPositionRelativeToObject.first),
 		(int)(gameObject->mCurrentPosition.second + mPositionRelativeToObject.second),

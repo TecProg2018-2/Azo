@@ -40,7 +40,7 @@ Animation::Animation(
 		"Animation time can't be zero or less."
 	);
 	ASSERT(&gameObject != NULL, "The gameObject can't be null.");
-
+	//This function paragraph builds the initial stats of the animations
 	this->gameObject = &gameObject;
 	this->imagePath = imagePath;
 	this->mAnimationTime = animationTime;
@@ -48,13 +48,13 @@ Animation::Animation(
 	this->mStartFrame = startFrame;
 	this->mEndFrame = endFrame;
 	ASSERT((endFrame - startFrame + FRAME_VALUE), "division by zero.");
-
 	this->mEachFrameTime = animationTime / (endFrame - startFrame + FRAME_VALUE);
 	this->mCurrentAnimationTime = CURRENT_ANIMATION_TIME;
 	this->mLoop = loop;
 	this->zoomFactor = zoomFactor;
 	this->mCurrentSprite = startFrame;
 }
+
 
 Animation::Animation(
 	GameObject & gameObject,
@@ -75,15 +75,15 @@ Animation::Animation(
 	);
 	ASSERT(&gameObject != NULL, "The gameObject can't be null.");
 
+	//This function paragraph rebuilds the initial stats of the animations
+	//but also adds a new variable that is the positionRelativeToObject
 	this->gameObject = &gameObject;
 	this->imagePath = imagePath;
 	this->mAnimationTime = animationTime;
 	this->mSpriteList = spriteList;
 	this->mStartFrame = startFrame;
 	this->mEndFrame = endFrame;
-
 	ASSERT((endFrame - startFrame + FRAME_VALUE), "division by zero.");
-
 	this->mEachFrameTime = animationTime / (endFrame - startFrame + FRAME_VALUE);
 	this->mCurrentAnimationTime = CURRENT_ANIMATION_TIME;
 	this->mLoop = loop;
@@ -95,6 +95,7 @@ Animation::Animation(
 Animation::~Animation() {}
 
 void Animation::shutdown() {
+	//this function paragraph deletes the sprites in a list
 	DEBUG("Shutting down Animation");
 	if (mSpriteList.size() > 0) {
 		for (auto eachSprite : mSpriteList) {
@@ -107,8 +108,9 @@ void Animation::shutdown() {
 }
 
 void Animation::draw() {
+	//This function paragraph is responsible for bringing together
+	//other functions to be able to draw the animations.
 	//DEBUG("Drawing Animation");
-
 	checkLimits();
 	updateQuad();
 	updateGameObjectMeasures();
@@ -123,7 +125,7 @@ void Animation::draw() {
 
 void Animation::disableComponent() {
 	//DEBUG("Disabling Animation Component");
-
+	//This function paragraph disables the component state of the animation
 	this->componentState = State::DISABLED;
 	mCurrentAnimationTime = CURRENT_ANIMATION_TIME;
 	mCurrentSprite = mStartFrame;
@@ -131,7 +133,7 @@ void Animation::disableComponent() {
 
 void Animation::checkLimits() {
 	//DEBUG("Checking Animation Limits");
-
+	//This function verifies the limits of the animation related to the frames
 	if(mCurrentSprite > mEndFrame) {
 		if (mLoop) {
 			mCurrentSprite = CURRENT_SPRITE;
@@ -146,7 +148,8 @@ void Animation::checkLimits() {
 
 void Animation::updateQuad() {
 	//DEBUG("Updating Animation Quad");
-
+	//This function paragraph generates the renderQuad with
+	//the current sprite and its informations
 	renderQuad = {
 		mSpriteList[mCurrentSprite]->getSpriteX(),
 		mSpriteList[mCurrentSprite]->getSpriteY(),
@@ -154,7 +157,11 @@ void Animation::updateQuad() {
 		mSpriteList[mCurrentSprite]->getSpriteHeight()
 	};
 
+
+
 	//Updating canvas quad.
+	//This function paragraph updates the canvasQuad values
+	//according to the relative object and zoom
 	canvasQuad = {
 		(int)(gameObject->mCurrentPosition.first + mPositionRelativeToObject.first),
 		(int)(gameObject->mCurrentPosition.second + mPositionRelativeToObject.second),
@@ -165,7 +172,7 @@ void Animation::updateQuad() {
 
 void Animation::updateFrameBasedOntime() {
 	//DEBUG("Calling Animation::updateFrameBasedOntime");
-
+	//This function paragraph updates the frame with the time
 	mCurrentAnimationTime += Game::instance.getTimer().getDeltaTime();
 	ASSERT((mEachFrameTime + mStartFrame) != 0, "Division by zero");
 
@@ -174,7 +181,8 @@ void Animation::updateFrameBasedOntime() {
 
 void Animation::updateGameObjectMeasures() {
 	//DEBUG("Calling Animation::updateGameObjectMeasures");
-
+	//This function paragraph updates the game Object measues according
+	//to the zoom 
 	ASSERT(
 		DIVISOR_NUMBER != 0,
 		"Animation::updateGameObjectMeasures, DIVISOR_NUMBER can't be zero."
