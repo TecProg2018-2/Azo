@@ -236,7 +236,6 @@ void Obstacle::createComponents() {
 * Note that the name of the InvisibleBlock is only for internal use.
 */
 void Obstacle::createBlocks() {
-
 	/*
 	We initialize the block' position as the position relative to parent of the obstacle.
 	This way we can position things inside the obstacle just by adding values to the position.
@@ -248,92 +247,43 @@ void Obstacle::createBlocks() {
 		DEBUG("Setting obstacle position");
 
 		case ObstacleType::GROUND:
-		mBlockList.push_back(
-			new InvisibleBlock(
-				"block_1",
-				blockPosition,
-				std::make_pair(21000.0, 100.0)
-			)
-		);
-		errorCode = FunctionStatusObstacle::SUCCESS;
+		setObstaclePosition("block_1", blockPosition, 21000.0, 100.0);
 		break;
 
 		case ObstacleType::WESTERN_CAR:
 		blockPosition.first += 69.0;
 		blockPosition.second += 20.0;
-		mBlockList.push_back(
-			new InvisibleBlock(
-				"block_2",
-				blockPosition,
-				std::make_pair(109.0, 143.0)
-			)
-		);
-		errorCode = FunctionStatusObstacle::SUCCESS;
+		setObstaclePosition("block_2", blockPosition, 109.0, 143.0);
 		break;
 
 		case ObstacleType::WESTERN_BOX:
 		blockPosition.first += 58.0;
 		blockPosition.second += 6.0;
-		mBlockList.push_back(
-			new InvisibleBlock(
-				"block_3",
-				blockPosition,
-				std::make_pair(63.0, 73.0)
-			)
-		);
-		errorCode = FunctionStatusObstacle::SUCCESS;
+		setObstaclePosition("block_3", blockPosition, 63.0, 73.0);
 		break;
 
 		case ObstacleType::WESTERN_RAISED_BOX:
 		blockPosition.first += 35.0;
 		blockPosition.second += 6.0;
-		mBlockList.push_back(
-			new InvisibleBlock(
-				"block_4",
-				blockPosition,
-				std::make_pair(50.0, 68.0)
-			)
-		);
-		errorCode = FunctionStatusObstacle::SUCCESS;
+		setObstaclePosition("block_4", blockPosition, 50.0, 68.0);
 		break;
 
 		case ObstacleType::WESTERN_ROCK:
 		blockPosition.first += 80.0;
 		blockPosition.second += 12.0;
-		mBlockList.push_back(
-			new InvisibleBlock(
-				"block_5",
-				blockPosition,
-				std::make_pair(4.0, 100.0)
-			)
-		);
-		errorCode = FunctionStatusObstacle::SUCCESS;
+		setObstaclePosition("block_5", blockPosition, 4.0, 100.0);
 		break;
 
 		case ObstacleType::WESTERN_SPIKE:
 		blockPosition.first += 19.0;
 		blockPosition.second += 23.0;
-		mBlockList.push_back(
-			new InvisibleBlock(
-				"block_6",
-				blockPosition,
-				std::make_pair(210.0, 92.0)
-			)
-		);
-		errorCode = FunctionStatusObstacle::SUCCESS;
+		setObstaclePosition("block_6", blockPosition, 210.0, 92.0);
 		break;
 
 		case ObstacleType::WESTERN_POST:
 		blockPosition.first += 48.0;
 		blockPosition.second += 32.0;
-		mBlockList.push_back(
-			new InvisibleBlock(
-				"block_7",
-				blockPosition,
-				std::make_pair(23.0, 106.0)
-			)
-		);
-		errorCode = FunctionStatusObstacle::SUCCESS;
+		setObstaclePosition("block_7", blockPosition, 23.0, 106.0);
 		break;
 
 		default:
@@ -375,9 +325,9 @@ void Obstacle::generateTurningAnimation() {
 	setLoadedAnimatedSprite(9, 351, 11, (382 - 351), (47 - 11));
 	setLoadedAnimatedSprite(10, 388, 11, (419 - 388), (47 - 11));
 	setLoadedAnimatedSprite(11, 425, 11, (456 - 425), (47 - 11));
-	setLoadedAnimatedSprite(12, 461, 11, (497 - 461), (47 - 11));
 
-	//TODO(Check if Obstacles 13 til 17 is necessary)
+	//TODO(Obstacles 12 to 17 looks the same, is it right?)
+	setLoadedAnimatedSprite(12, 461, 11, (497 - 461), (47 - 11));
 	setLoadedAnimatedSprite(13, 461, 11, (497 - 461), (47 - 11));
 	setLoadedAnimatedSprite(14, 461, 11, (497 - 461), (47 - 11));
 	setLoadedAnimatedSprite(15, 461, 11, (497 - 461), (47 - 11));
@@ -392,6 +342,32 @@ void Obstacle::generateTurningAnimation() {
 	setLoadedAnimatedSprite(23, 874, 11, (905 - 874), (47 - 11));
 }
 
+/**
+* @brief Method for setting obstacle position.
+*
+* Used for setting obstacle position.
+*/
+void Obstacle::setObstaclePosition(
+	std::string blockName,
+	std::pair<double, double> blockPosition,
+	double pairFirst,
+	double pairSecond
+) {
+	mBlockList.push_back(
+		new InvisibleBlock(
+			blockName,
+			blockPosition,
+			std::make_pair(pairFirst, pairSecond)
+		)
+	);
+	errorCode = FunctionStatusObstacle::SUCCESS;
+}
+
+/**
+* @brief Method for setting up loaded obstacles' sprites.
+*
+* Used for turning animations sprites.
+*/
 void Obstacle::setLoadedAnimatedSprite(
 	unsigned int spriteNumber,
 	unsigned int spriteX,

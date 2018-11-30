@@ -102,6 +102,12 @@ namespace Azo {
 				unsigned int spriteWidth,
 				unsigned int spriteHeight
 			);
+			void setObstaclePosition(
+				std::string blockName,
+				std::pair<double, double> blockPosition,
+				double pairFirst,
+				double pairSecond
+			);
 	};
 }
 

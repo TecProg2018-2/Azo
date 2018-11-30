@@ -49,7 +49,6 @@ InvisibleBlock::InvisibleBlock(
 	ASSERT(mImage != NULL, "mImage, ImageComponent can't be empty");
 }
 
-
 /**
 * @brief Destructor class for InvisibleBlock.
 *
