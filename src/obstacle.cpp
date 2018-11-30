@@ -29,94 +29,12 @@ Obstacle::Obstacle() {}
 Obstacle::~Obstacle(){}
 
 /**
-* @brief Destructor class for Obstacle.
-*
-* Used for shutting down each one of the Obstacle's attributes so as to free
-* memory when closing the game.
-*/
-void Obstacle::shutdown() {
-	// Each block in mBlockList must be shutdown before Obstacle can also be shut down.
-	DEBUG("Calling Obstacle shutdown");
-	for (auto eachBlock : mBlockList) {
-		DEBUG("Deleting eachBlock from mBlockList");
-		if (eachBlock != NULL) {
-			eachBlock->shutdown();
-			delete(eachBlock);
-			eachBlock = NULL;
-		} else {
-			//Nothing to do, the pointer is already null
-		}
-	}
-
-	// Clear any animations remaining before shutdding down Obstacle.
-	if (mTurningAnimationSprites.size() > 0) {
-		DEBUG("Clearing mTurningAnimationSprites that remained");
-		for (auto eachAnimation : mTurningAnimationSprites) {
-			if (eachAnimation != NULL) {
-				delete(eachAnimation);
-				eachAnimation = NULL;
-			} else {
-				//Nothing to do, the pointer is already null
-			}
-		}
-	} else {
-		//Nothing to do, there is no mTurningAnimationSprites
-	}
-
-	// Clear all remaining images.
-	if (mObstacleImage != NULL) {
-		DEBUG("Clearing mObstacleImage");
-		delete(mObstacleImage);
-		mObstacleImage = NULL;
-	} else {
-		//Nothing to do, the pointer is already null
-	}
-
-	// Clear all remaining audio.
-	if (mAudioController != NULL) {
-		DEBUG("Clearing mAudioController");
-		mAudioController->shutdown();
-		delete(mAudioController);
-		mAudioController = NULL;
-	} else {
-		//Nothing to do, the pointer is already null
-	}
-
-	// Reset mCollected value.
-	if (mCollected != NULL) {
-		DEBUG("Reseting mCollected");
-		mCollected = NULL;
-	} else {
-		//Nothing to do, the pointer is already null
-	}
-
-	// Reset mTurning value.
-	if (mTurning != NULL) {
-		DEBUG("Reseting mTurning");
-		delete(mTurning);
-		mTurning = NULL;
-	} else {
-		//Nothing to do, the pointer is already null
-	}
-
-	// Shutdown mMachinePart code.
-	if (mMachinePartCode != NULL) {
-		DEBUG("Shutting down mMachinePartCode");
-		mMachinePartCode->shutdown();
-		delete(mMachinePartCode);
-		mMachinePartCode = NULL;
-	} else {
-		//Nothing to do, the pointer is already null
-	}
-}
-
-/**
 * @brief Constructor class for Obstacle.
 *
 * Used to initialize Obstacle class variables.
 * @param name Obstacle name.
 * @param positionRelativeToParent Pair of doubles relative to position(range > 0).
-* @param obstacleType Type of obstacle according to enum class ObstacleType from obstacle.hpp .
+* @param obstacleType Type of obstacle according to enum class ObstacleType from obstacle.hpp.
 */
 Obstacle::Obstacle(std::string name, std::pair<double, double> positionRelativeToParent, ObstacleType obstacleType) {
 	DEBUG("Initializing Obstacle variables");
@@ -129,6 +47,140 @@ Obstacle::Obstacle(std::string name, std::pair<double, double> positionRelativeT
 
 	DEBUG("Calling createComponents");
 	createComponents();
+}
+
+/**
+* @brief Destructor class for Obstacle.
+*
+* Used for shutting down each one of the Obstacle's attributes so as to free
+* memory when closing the game.
+*/
+void Obstacle::shutdown() {
+	DEBUG("Calling Obstacle shutdown");
+
+	clearEachBlock();
+	clearAnimations();
+	clearImages();
+	clearAudio();
+	resetCollectedValue();
+	resetSpinningValue();
+	shutdownMachinePartCode();
+}
+
+/**
+* @brief Method to clear eachBlock from mBlockList.
+*
+* Used to clear eachBlock from mBlockList.
+* All of them must be shutted down before Obstacle can also be shutted down.
+*/
+void Obstacle::clearEachBlock(){
+	for (auto eachBlock : mBlockList) {
+		DEBUG("Deleting eachBlock from mBlockList");
+		if (eachBlock != NULL) {
+			eachBlock->shutdown();
+			delete(eachBlock);
+			eachBlock = NULL;
+		} else {
+			//Nothing to do, the pointer is already null
+		}
+	}
+}
+
+/**
+* @brief Method to clear animations.
+*
+* Used to clear any animations remaining before shutting down Obstacle.
+*/
+void Obstacle::clearAnimations(){
+	if (mSpinningAnimationSprites.size() > 0) {
+		DEBUG("Clearing mSpinningAnimationSprites that remained");
+		for (auto eachAnimation : mSpinningAnimationSprites) {
+			if (eachAnimation != NULL) {
+				delete(eachAnimation);
+				eachAnimation = NULL;
+			} else {
+				//Nothing to do, the pointer is already null
+			}
+		}
+	} else {
+		//Nothing to do, there is no mSpinningAnimationSprites
+	}
+}
+
+/**
+* @brief Method to clear images.
+*
+* Used to clear all remaining images before shutting down Obstacle.
+*/
+void Obstacle::clearImages(){
+	if (mObstacleImage != NULL) {
+		DEBUG("Clearing mObstacleImage");
+		delete(mObstacleImage);
+		mObstacleImage = NULL;
+	} else {
+		//Nothing to do, the pointer is already null
+	}
+}
+
+/**
+* @brief Method to clear audio.
+*
+* Used to clear all remaining audio before shutting down Obstacle.
+*/
+void Obstacle::clearAudio(){
+	if (mAudioController != NULL) {
+		DEBUG("Clearing mAudioController");
+		mAudioController->shutdown();
+		delete(mAudioController);
+		mAudioController = NULL;
+	} else {
+		//Nothing to do, the pointer is already null
+	}
+}
+
+/**
+* @brief Method to reset collected value.
+*
+* Used to reset mCollected value before shutting down Obstacle.
+*/
+void Obstacle::resetCollectedValue(){
+	if (mCollected != NULL) {
+		DEBUG("Reseting mCollected");
+		mCollected = NULL;
+	} else {
+		//Nothing to do, the pointer is already null
+	}
+}
+
+/**
+* @brief Method to reset spinning value.
+*
+* Used to reset mSpinning value before shutting down Obstacle.
+*/
+void Obstacle::resetSpinningValue(){
+	if (mSpinning != NULL) {
+		DEBUG("Reseting mSpinning");
+		delete(mSpinning);
+		mSpinning = NULL;
+	} else {
+		//Nothing to do, the pointer is already null
+	}
+}
+
+/**
+* @brief Method to shutdown MachinePart code.
+*
+* Used to shutdown MachinePartCode class.
+*/
+void Obstacle::shutdownMachinePartCode(){
+	if (mMachinePartCode != NULL) {
+		DEBUG("Shutting down mMachinePartCode");
+		mMachinePartCode->shutdown();
+		delete(mMachinePartCode);
+		mMachinePartCode = NULL;
+	} else {
+		//Nothing to do, the pointer is already null
+	}
 }
 
 /**
@@ -180,8 +232,8 @@ void Obstacle::createComponents() {
 		DEBUG("obstacle is a MACHINE PART");
 		mMachinePartState = MachinePartState::NON_COLLECTED;
 		generateSpinAnimation();
-		mTurning = new engine::Animation(*this, "sprites/machine_part.png", 1200.0f, mTurningAnimationSprites, 0.0, 23.0, true, 1.0);
-		this->addComponent(*mTurning);
+		mSpinning = new engine::Animation(*this, "sprites/machine_part.png", 1200.0f, mSpinningAnimationSprites, 0.0, 23.0, true, 1.0);
+		this->addComponent(*mSpinning);
 
 		mAudioController = new engine::AudioController();
 		ASSERT(mAudioController != NULL, "engine::AudioController, AudioController can't be NULL.");
@@ -298,6 +350,10 @@ void Obstacle::createBlocks() {
 * @brief Method for setting obstacle position.
 *
 * Used for setting obstacle position.
+* @param blockName Name of block that will be set.
+* @param blockPosition Pair of doubles relative to block position.
+* @param pairFirst Number that indicates first number of pair set.
+* @param pairSecond Number that indicates second number of pair set.
 */
 void Obstacle::setObstaclePosition(
 	std::string blockName,
@@ -326,7 +382,7 @@ void Obstacle::generateSpinAnimation() {
 	const int NUMBER_SPRITES_SPIN_ANIMATION = 24; // Default animation speed is 24 frames per second.
 	// Fill sprites animation up to the NUMBER_SPRITES_SPIN_ANIMATION const.
 	for (int i = 0; i < NUMBER_SPRITES_SPIN_ANIMATION; i++) {
-		mTurningAnimationSprites.push_back(new engine::Sprite());
+		mSpinningAnimationSprites.push_back(new engine::Sprite());
 	}
 
 	// Set the animation sprite coordinates (x, y), its width and height
@@ -360,6 +416,8 @@ void Obstacle::generateSpinAnimation() {
 * @brief Method for setting up loaded obstacles' sprites.
 *
 * Used for setting spin animation sprite coordinates, width and height
+* @param spriteNumber Number that indicates index of sprite.
+* @param spriteX Number that indicates 'x' coordinate of sprite.
 */
 void Obstacle::setLoadedAnimatedSprite(
 	unsigned int spriteNumber,
@@ -370,10 +428,10 @@ void Obstacle::setLoadedAnimatedSprite(
 	const unsigned int SPRITE_HEIGHT = 36;
 
 	DEBUG("Setting loaded animated Sprite " << spriteNumber);
-	mTurningAnimationSprites[spriteNumber]->setSpriteX(spriteX);
-	mTurningAnimationSprites[spriteNumber]->setSpriteY(SPRITE_Y);
-	mTurningAnimationSprites[spriteNumber]->setSpriteWidth(SPRITE_WIDTH);
-	mTurningAnimationSprites[spriteNumber]->setSpriteHeight(SPRITE_HEIGHT);
+	mSpinningAnimationSprites[spriteNumber]->setSpriteX(spriteX);
+	mSpinningAnimationSprites[spriteNumber]->setSpriteY(SPRITE_Y);
+	mSpinningAnimationSprites[spriteNumber]->setSpriteWidth(SPRITE_WIDTH);
+	mSpinningAnimationSprites[spriteNumber]->setSpriteHeight(SPRITE_HEIGHT);
 }
 
 void Obstacle::errorLog(std::string file) {
