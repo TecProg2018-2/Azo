@@ -15,7 +15,7 @@
 #include "audio_controller.hpp"
 
 namespace Azo {
-	/**  
+	/**
 		 * @brief A Hitbox class.
 		 * Menu class
 		 *
@@ -48,7 +48,7 @@ namespace Azo {
 			MenuCode *mCode;
 			engine::AudioController *mAudioController;
 			engine::AudioComponent *mMenuTheme; // Variable referring to the menu
-		
+
 		public:
 			Menu();
 			Menu(std::string name);

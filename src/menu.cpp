@@ -63,7 +63,7 @@ void Menu::createGameObjects() {
 	DEBUG("Creating Menu GameObjects.");
 
 	mMenu = new engine::GameObject("menu", std::make_pair(0.0, 0.0));
-	ASSERT(mMenu != NULL, "The mMenu can't be null."); 
+	ASSERT(mMenu != NULL, "The mMenu can't be null.");
 
 	createMenuComponents();
 	this->addGameObject(*mMenu);
@@ -108,7 +108,7 @@ void Menu::createMenuComponents() {
 					       				 1.0, // zoomFactor
 					       				 std::make_pair(205.0, 162.0)); // positionRelativeToObject
 
-	ASSERT(mStartButton != NULL, "The mStartButton can't be null."); 
+	ASSERT(mStartButton != NULL, "The mStartButton can't be null.");
 
 	mAnimationController->addAnimation("start_button", *mStartButton);
 
@@ -122,7 +122,7 @@ void Menu::createMenuComponents() {
 					      				false,
 					      				1.0,
 					      				std::make_pair(168.0, 162.0));
-	ASSERT(mArrowStart != NULL, "The mArrowStart can't be null."); 
+	ASSERT(mArrowStart != NULL, "The mArrowStart can't be null.");
 
 	mAnimationController->addAnimation("arrow_start", *mArrowStart);
 
@@ -166,7 +166,7 @@ void Menu::createMenuComponents() {
 						      				   false,
 						      				   1.0,
 						      				   std::make_pair(708.0, 40.0));
-	
+
 	ASSERT(mSoundEnabledButton != NULL, "The mSoundEnabledButton can't be null.");
 
 	mAnimationController->addAnimation("sound_enabled_button", *mSoundEnabledButton);
@@ -181,7 +181,7 @@ void Menu::createMenuComponents() {
 												 false,
 												 1.0,
 												 std::make_pair(708.0, 40.0));
-	
+
 	ASSERT(mSoundDisabledButton != NULL, "The mSoundDisabledButton can't be null.");
 
 	DEBUG("Disabling Menu sound disabled button.");
@@ -199,7 +199,7 @@ void Menu::createMenuComponents() {
 					      				false,
 					      				1.0,
 					      				std::make_pair(676.0, 40.0));
-	
+
 	ASSERT(mArrowSound!= NULL, "The mArrowSound can't be null.");
 
 	mArrowSound->disableComponent();
@@ -216,27 +216,13 @@ void Menu::createMenuComponents() {
 
 	DEBUG("Creating the Menu code component.");
 	mCode = new MenuCode(mMenu);
-	ASSERT(mCode != NULL, "The mCode can't be null."); 
+	ASSERT(mCode != NULL, "The mCode can't be null.");
 
 	mMenu->addComponent(*mCode);
 }
+void Menu::generateStartButon() {
 
-/**
-     * @brief function responsible for generating button animations
-     *
-     * Why: For aesthetic purposes
-	 *
-	 * @return "void"
-     */
-void Menu::generateButtonsAnimation() {
-	DEBUG("Generating Menu start button sprites.");
 	mStartButtonSprites.push_back(new engine::Sprite());
-
-	/*
-		Set the animation sprites coordinates (x, y)
-		and its Width and Height based on its coordinates
-		spriteWidth = (width - spriteX) and spriteHeight = (Height - spriteY)
-	*/
 
 	DEBUG("Setting Menu start button sprites position.");
 	mStartButtonSprites[0]->setSpriteX((unsigned int)43);
@@ -244,7 +230,11 @@ void Menu::generateButtonsAnimation() {
 	mStartButtonSprites[0]->setSpriteWidth((unsigned int)(161 - 43));
 	mStartButtonSprites[0]->setSpriteHeight((unsigned int)(478 - 452));
 
-	DEBUG("Generating Menu exit button sprites.");
+}
+
+
+void generateExitButon() {
+
 	mExitButtonSprites.push_back(new engine::Sprite());
 
 	DEBUG("Setting Menu exit button sprites position.");
@@ -253,7 +243,10 @@ void Menu::generateButtonsAnimation() {
 	mExitButtonSprites[0]->setSpriteWidth((unsigned int)(280 - 207));
 	mExitButtonSprites[0]->setSpriteHeight((unsigned int)(441 - 413));
 
-	DEBUG("Generating Menu sound enabled button sprites.");
+}
+
+void generateSoundEnableButon(){
+
 	mSoundEnabledButtonSprites.push_back(new engine::Sprite());
 
 	DEBUG("Setting Menu sound enabled button sprites position.");
@@ -262,7 +255,10 @@ void Menu::generateButtonsAnimation() {
 	mSoundEnabledButtonSprites[0]->setSpriteWidth((unsigned int)(702 - 660));
 	mSoundEnabledButtonSprites[0]->setSpriteHeight((unsigned int)(77 - 46));
 
-	DEBUG("Generating Menu sound disabled button sprites.");
+}
+
+void generateDisableSoundButon(){
+
 	mSoundDisabledButtonSprites.push_back(new engine::Sprite());
 
 	DEBUG("Generating Menu sound disabled button sprites position.");
@@ -271,7 +267,10 @@ void Menu::generateButtonsAnimation() {
 	mSoundDisabledButtonSprites[0]->setSpriteWidth((unsigned int)(646 - 608));
 	mSoundDisabledButtonSprites[0]->setSpriteHeight((unsigned int)(77 - 46));
 
-	DEBUG("Generating Menu arrow sprites.");
+}
+
+void generateMenuArrowSprites(){
+
 	mArrowSprites.push_back(new engine::Sprite());
 
 	DEBUG("Generating Menu arrow sprites position.");
@@ -279,4 +278,37 @@ void Menu::generateButtonsAnimation() {
 	mArrowSprites[0]->setSpriteY((unsigned int)433);
 	mArrowSprites[0]->setSpriteWidth((unsigned int)(598 - 582));
 	mArrowSprites[0]->setSpriteHeight((unsigned int)(459 - 433));
+
+}
+/**
+     * @brief function responsible for generating button animations
+     *
+     * Why: For aesthetic purposes
+	 *
+	 * @return "void"
+     */
+void Menu::generateButtonsAnimation() {
+	DEBUG("Generating button sprites.");
+
+	/*
+		Set the animation sprites coordinates (x, y)
+		and its Width and Height based on its coordinates
+		spriteWidth = (width - spriteX) and spriteHeight = (Height - spriteY)
+	*/
+
+	DEBUG("Calling generateStartButon.");
+	generateStartButon();
+
+	DEBUG("Calling generateExitButon.");
+	generateExitButon();
+
+	DEBUG("Generating Menu sound enabled button sprites.");
+	generateSoundEnableButon();
+
+	DEBUG("Generating Menu sound disabled button sprites.");
+	generateDisableSoundButon();
+
+	DEBUG("Generating Menu arrow sprites.");
+	generateMenuArrowSprites();
+	
 }
