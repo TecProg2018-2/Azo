@@ -41,7 +41,7 @@ void LevelOne::restart(){
 }
 
 /**
- * @brief method to start objects to level.
+ * @brief method to add objects to level.
  *
  * function that create all new game objects of level one in order.
  */
@@ -70,6 +70,11 @@ void LevelOne::startLevel() {
 	mLevelOne->addComponent(*mLevelCode);
 }
 
+/**
+ * @brief method to add general objects to level.
+ *
+ * function that create background, audio and ground and add to level.
+ */
 void LevelOne::createSceneGeneral() {
 	mLevelOne = new engine::GameObject("level_one", std::make_pair(0, 0));
 
@@ -96,8 +101,13 @@ void LevelOne::createSceneGeneral() {
 	
 }
 
+/**
+ * @brief method to add car obstacle objects to level.
+ *
+ * function that create all car obstacles and add to level.
+ */
 void LevelOne::createObstacleCar() {
-	// Create car osbstacle
+	// Instantiate all car osbstacles
 
 	DEBUG("Creating obstacle car 1.");
 	mObstacleCar1 = new Obstacle("obstacle_car_1", std::make_pair(1135, 300), ObstacleType::WESTERN_CAR);
@@ -122,8 +132,13 @@ void LevelOne::createObstacleCar() {
 	addLevelParentsCar();
 }
 
+/**
+ * @brief method to add spike obstacle objects to level.
+ *
+ * function that create all spike obstacles and add to level.
+ */
 void LevelOne::createObstacleSpike() {
-	// Create spike osbstacle
+	// Instantiate all spike osbstacles
 
 	DEBUG("Creating spike 1.");
 	mSpike1 = new Obstacle("obstacle_spike_1", std::make_pair(1349, 340), ObstacleType::WESTERN_SPIKE);
@@ -148,8 +163,13 @@ void LevelOne::createObstacleSpike() {
 	addLevelParentsSpike();
 }
 
+/**
+ * @brief method to add box obstacle objects to level.
+ *
+ * function that create all box obstacles and add to level.
+ */
 void LevelOne::createObstacleBox() {
-	// Create box osbstacle
+	// Instantiate all box osbstacles
 
 	DEBUG("Creating obstacle box 0_1.");
 	mObstacleBox01 = new Obstacle("obstacle_box_0_1", std::make_pair(1309, 310), ObstacleType::WESTERN_BOX);
@@ -206,8 +226,13 @@ void LevelOne::createObstacleBox() {
 	addLevelParentsBox();
 }
 
+/**
+ * @brief method to add aerial obstacle objects to level.
+ *
+ * function that create all aerial obstacles and add to level.
+ */
 void LevelOne::createObstacleAerial() {
-	// Create aerial osbstacle
+	// Instantiate all aerial osbstacles
 	
 	DEBUG("Creating obstacle aerial 1 - box.");
 	mObstacleAerial1 = new Obstacle("obstacle_aerial_1", std::make_pair(1350, 250), ObstacleType::WESTERN_RAISED_BOX);
@@ -300,8 +325,13 @@ void LevelOne::createObstacleAerial() {
 	addLevelParentsAerial();
 }
 
+/**
+ * @brief method to add part objects to level.
+ *
+ * function that create all part and add to level.
+ */
 void LevelOne::createPart() {
-	// Create part collectible osbstacle
+	// Instantiate all part collectibles
 
 	DEBUG("Creating part 1.");
 	mPart1 = new Obstacle("part_1", std::make_pair(1500, 80), ObstacleType::MACHINE_PART);
@@ -406,8 +436,13 @@ void LevelOne::createPart() {
 	addLevelParentsPart();
 }
 
+/**
+ * @brief method to add rock obstacle objects to level.
+ *
+ * function that create all rock obstacles and add to level.
+ */
 void LevelOne::createObstacleRock() {
-	// Create rock osbstacle
+	// Instantiate all rock osbstacles
 
 	DEBUG("Creating obstacle rock 1");
 	mObstacleRock1 = new Obstacle("obstacle_rock_1", std::make_pair(4300, 340), ObstacleType::WESTERN_ROCK);
@@ -448,8 +483,13 @@ void LevelOne::createObstacleRock() {
 	addLevelParentsRock();
 }
 
+/**
+ * @brief method to add player to level.
+ *
+ * function that create player and add to level.
+ */
 void LevelOne::createPlayer() {
-	// Create player
+	// Instantiate player
 	DEBUG("Creating Player.");
 	mPlayer = new Player("player", std::make_pair(165, 280));
 	this->addGameObject(*mPlayer);
