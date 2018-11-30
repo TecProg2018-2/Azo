@@ -209,7 +209,7 @@ void LevelOneCode::updateObstaclePosition() {
 
 
 
-void LevelOneCode::maxPosition(Player *mPlayer, GameObject *gameObject){
+void LevelOneCode::maxPosition(Player *mPlayer, engine::GameObject *gameObject){
 	const int PLAYER_MAX_POSITION_CANVAS = 300;
 	const int  GAME_OBJECT_MAX_POSITION_CANVAS = -7390;
 
@@ -392,7 +392,7 @@ bool LevelOneCode::hasGround(double *groundY) {
 				if (playerLeft <= blockRight && playerRight >= blockLeft &&
 					playerBottom > blockTop && playerTop < blockTop) {
 						*groundY = blockTop;
-					handleCollisionGround(mPlayer);
+					handleCollisionGround(eachObstacle, mPlayer);
 					return true;
 				} else {
 					//Nothing to do.
@@ -457,13 +457,13 @@ bool LevelOneCode::hasWallOnRight(double *wallX) {
 
 bool LevelOneCode::hasWallOnLeft(double *wallX) {
 	ASSERT(*wallX == 0.0,"wallX must be initialized at 0.0");
-	std::pair<double, double> *playerBottomLeft = mPlayer->calcBottomLeft();
-	std::pair<double, double> *playerTopRight = mPlayer->calcTopRight();
+	std::pair<double, double> playerBottomLeft = mPlayer->calcBottomLeft();
+	std::pair<double, double> playerTopRight = mPlayer->calcTopRight();
 
-	double *playerTop = playerTopRight.second;
-	double *playerBottom = playerBottomLeft.second;
-	double *playerLeft = playerBottomLeft.first;
-	double *playerRight = playerTopRight.first;
+	double playerTop = playerTopRight.second;
+	double playerBottom = playerBottomLeft.second;
+	double playerLeft = playerBottomLeft.first;
+	double playerRight = playerTopRight.first;
 	for (auto eachObstacle : mObstacleList) {
 		for (auto eachBlock : eachObstacle->mBlockList) {
 			std::pair<double, double> blockBottomLeft = eachBlock->calcBottomLeft();

@@ -51,11 +51,10 @@ namespace Azo {
 			bool hasWallOnRight(double *wallX);
 			bool hasWallOnLeft(double *wallX);
 			void updatePhysics();
-			void maxPosition(Player *mPlayer, GameObject *gameObject);
+			void maxPosition(Player *mPlayer, engine::GameObject *gameObject);
 			void checkCollisions(Player *mPlayer);
 			void checkJumpSlide(Player *mPlayer);
 			void updatePlayerPosition(Player *mPlayer);
-			void updatePhysics();
 			void handleCollisionGround(Obstacle *obstacle, Player *mPlayer);
 			void handleCollisionSide(Obstacle *obstacle, Player *mPlayer, double *wallX, double offset, double blockSide);
 			void handleCollisionCeiling(Obstacle *obstacle, Player *mPlayer, double *groundY, double blockBottom);
