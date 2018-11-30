@@ -93,14 +93,11 @@ namespace Azo {
 
 			void createComponents();
 			void createBlocks();
-			void generateTurningAnimation();
+			void generateSpinAnimation();
 
 			void setLoadedAnimatedSprite(
 				unsigned int spriteNumber,
-				unsigned int spriteX,
-				unsigned int spriteY,
-				unsigned int spriteWidth,
-				unsigned int spriteHeight
+				unsigned int spriteX
 			);
 			void setObstaclePosition(
 				std::string blockName,

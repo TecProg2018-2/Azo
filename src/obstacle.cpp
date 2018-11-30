@@ -179,7 +179,7 @@ void Obstacle::createComponents() {
 		case ObstacleType::MACHINE_PART:
 		DEBUG("obstacle is a MACHINE PART");
 		mMachinePartState = MachinePartState::NON_COLLECTED;
-		generateTurningAnimation();
+		generateSpinAnimation();
 		mTurning = new engine::Animation(*this, "sprites/machine_part.png", 1200.0f, mTurningAnimationSprites, 0.0, 23.0, true, 1.0);
 		this->addComponent(*mTurning);
 
@@ -295,54 +295,6 @@ void Obstacle::createBlocks() {
 }
 
 /**
-* @brief Method for setting up animated obstacles.
-*
-* Used for generating animations for obstacles that have animated sprites.
-*/
-void Obstacle::generateTurningAnimation() {
-	DEBUG("Generating animations of animated obstacles");
-
-	const int NUMBER_SPRITES_TURNING_ANIMATION = 24; // Default animation speed is 24 frames per second.
-	// Fill sprites animation up to the NUMBER_SPRITES_TURNING_ANIMATION const.
-	for (int i = 0; i < NUMBER_SPRITES_TURNING_ANIMATION; i++) {
-		mTurningAnimationSprites.push_back(new engine::Sprite());
-	}
-
-	/*
-	Set the animation sprite coordinates (x, y)
-	and its Width and Height based on its coordinates (width - spriteX)
-	and (Height - spriteY).
-	*/
-	setLoadedAnimatedSprite(0, 13, 11, (49 - 13), (47 - 11));
-	setLoadedAnimatedSprite(1, 50, 11, (86 - 50), (47 - 11));
-	setLoadedAnimatedSprite(2, 87, 11, (123 - 87), (47 - 11));
-	setLoadedAnimatedSprite(3, 124, 11, (160 - 124), (47 - 11));
-	setLoadedAnimatedSprite(4, 161, 11, (197 - 161), (47 - 11));
-	setLoadedAnimatedSprite(5, 198, 11, (234 - 198), (47 - 11));
-	setLoadedAnimatedSprite(6, 240, 11, (271 - 240), (47 - 11));
-	setLoadedAnimatedSprite(7, 277, 11, (308 - 277), (47 - 11));
-	setLoadedAnimatedSprite(8, 314, 11, (345 - 314), (47 - 11));
-	setLoadedAnimatedSprite(9, 351, 11, (382 - 351), (47 - 11));
-	setLoadedAnimatedSprite(10, 388, 11, (419 - 388), (47 - 11));
-	setLoadedAnimatedSprite(11, 425, 11, (456 - 425), (47 - 11));
-
-	//TODO(Obstacles 12 to 17 looks the same, is it right?)
-	setLoadedAnimatedSprite(12, 461, 11, (497 - 461), (47 - 11));
-	setLoadedAnimatedSprite(13, 461, 11, (497 - 461), (47 - 11));
-	setLoadedAnimatedSprite(14, 461, 11, (497 - 461), (47 - 11));
-	setLoadedAnimatedSprite(15, 461, 11, (497 - 461), (47 - 11));
-	setLoadedAnimatedSprite(16, 461, 11, (497 - 461), (47 - 11));
-	setLoadedAnimatedSprite(17, 461, 11, (497 - 461), (47 - 11));
-
-	setLoadedAnimatedSprite(18, 689, 11, (720 - 689), (47 - 11));
-	setLoadedAnimatedSprite(19, 726, 11, (757 - 726), (47 - 11));
-	setLoadedAnimatedSprite(20, 763, 11, (794 - 763), (47 - 11));
-	setLoadedAnimatedSprite(21, 800, 11, (831 - 800), (47 - 11));
-	setLoadedAnimatedSprite(22, 837, 11, (868 - 837), (47 - 11));
-	setLoadedAnimatedSprite(23, 874, 11, (905 - 874), (47 - 11));
-}
-
-/**
 * @brief Method for setting obstacle position.
 *
 * Used for setting obstacle position.
@@ -364,22 +316,64 @@ void Obstacle::setObstaclePosition(
 }
 
 /**
+* @brief Method for loading up sprites to animations.
+*
+* Used for generating MachinePart spin animation.
+*/
+void Obstacle::generateSpinAnimation() {
+	DEBUG("Generating animations of animated obstacles");
+
+	const int NUMBER_SPRITES_SPIN_ANIMATION = 24; // Default animation speed is 24 frames per second.
+	// Fill sprites animation up to the NUMBER_SPRITES_SPIN_ANIMATION const.
+	for (int i = 0; i < NUMBER_SPRITES_SPIN_ANIMATION; i++) {
+		mTurningAnimationSprites.push_back(new engine::Sprite());
+	}
+
+	// Set the animation sprite coordinates (x, y), its width and height
+	setLoadedAnimatedSprite(0, 13);
+	setLoadedAnimatedSprite(1, 50);
+	setLoadedAnimatedSprite(2, 87);
+	setLoadedAnimatedSprite(3, 124);
+	setLoadedAnimatedSprite(4, 161);
+	setLoadedAnimatedSprite(5, 198);
+	setLoadedAnimatedSprite(6, 240);
+	setLoadedAnimatedSprite(7, 277);
+	setLoadedAnimatedSprite(8, 314);
+	setLoadedAnimatedSprite(9, 351);
+	setLoadedAnimatedSprite(10, 388);
+	setLoadedAnimatedSprite(11, 425);
+	setLoadedAnimatedSprite(12, 461);
+	setLoadedAnimatedSprite(13, 461);
+	setLoadedAnimatedSprite(14, 461);
+	setLoadedAnimatedSprite(15, 461);
+	setLoadedAnimatedSprite(16, 461);
+	setLoadedAnimatedSprite(17, 461);
+	setLoadedAnimatedSprite(18, 689);
+	setLoadedAnimatedSprite(19, 726);
+	setLoadedAnimatedSprite(20, 763);
+	setLoadedAnimatedSprite(21, 800);
+	setLoadedAnimatedSprite(22, 837);
+	setLoadedAnimatedSprite(23, 874);
+}
+
+/**
 * @brief Method for setting up loaded obstacles' sprites.
 *
-* Used for turning animations sprites.
+* Used for setting spin animation sprite coordinates, width and height
 */
 void Obstacle::setLoadedAnimatedSprite(
 	unsigned int spriteNumber,
-	unsigned int spriteX,
-	unsigned int spriteY,
-	unsigned int spriteWidth,
-	unsigned int spriteHeight
+	unsigned int spriteX
 ) {
+	const unsigned int SPRITE_Y = 11;
+	const unsigned int SPRITE_WIDTH = 36;
+	const unsigned int SPRITE_HEIGHT = 36;
+
 	DEBUG("Setting loaded animated Sprite " << spriteNumber);
 	mTurningAnimationSprites[spriteNumber]->setSpriteX(spriteX);
-	mTurningAnimationSprites[spriteNumber]->setSpriteY(spriteY);
-	mTurningAnimationSprites[spriteNumber]->setSpriteWidth(spriteWidth);
-	mTurningAnimationSprites[spriteNumber]->setSpriteHeight(spriteHeight);
+	mTurningAnimationSprites[spriteNumber]->setSpriteY(SPRITE_Y);
+	mTurningAnimationSprites[spriteNumber]->setSpriteWidth(SPRITE_WIDTH);
+	mTurningAnimationSprites[spriteNumber]->setSpriteHeight(SPRITE_HEIGHT);
 }
 
 void Obstacle::errorLog(std::string file) {
