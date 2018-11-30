@@ -32,6 +32,75 @@ Game::Game(){
 }
 
 /**
+ * @brief Method for searching events.
+ *
+ * Searches for a event that will close the Game.
+ *
+ * @return "void".
+*/
+void Game::searchEvent(SDL_Event _event){
+	while(SDL_PollEvent(&_event)){
+		switch(_event.type){
+			case SDL_QUIT:
+				gameState = engine::GameState::EXIT;
+				break;
+			default:
+				inputManager.update(_event); // Check for user inputs.
+				break;
+		}
+	}
+}
+
+/**
+ * @brief Initialize Variables.
+ *
+ * Initialize all SDL attributes, create the window and set state to play..
+ *
+ * @return "void".
+*/
+void Game::initializeVariables(){
+	sdlElements.initSDL();
+	sdlElements.createWindow();
+	gameState = engine::GameState::PLAY;
+	frameTime = 1000.0f / frameRate; // Calculate the time of a game frame (miliseconds).
+}
+
+/**
+ * @brief Method to refresh objects.
+ *
+ * Clean and Draw the Scene to refresh animations and objects.
+ *
+ * @return "void".
+*/
+void Game::refreshObjects(){
+	SDL_RenderClear(sdlElements.getCanvas());
+	currentScene->draw();
+	SDL_RenderPresent(sdlElements.getCanvas());
+	currentScene->updateCode();
+	inputManager.clear();
+
+}
+
+/**
+ * @brief Method to calculate a frame's time.
+ *
+ * Calculate the time passed until the specific point and the frame's time.
+ *
+ * @return "void".
+*/
+void Game::calculateTime(){
+	timer.DeltaTime(); // Calculating elapsed time from the start of this frame until now.
+
+	//If the time that has passed until now was faster than the frame's time,
+	//it will wait the time necessary to complete a frame's time.
+	if(frameTime > timer.getDeltaTime()){
+		SDL_Delay(frameTime - timer.getDeltaTime());
+	}
+
+	timer.DeltaTime();
+}
+
+/**
  * @brief Main Game Loop and SDL Initiators.
  *
  * Run all the game.
@@ -40,60 +109,25 @@ Game::Game(){
 */
 void Game::run(){
 
-	// Initialize all SDL attributes, create the window and set state to play.
-	sdlElements.initSDL();
-	sdlElements.createWindow();
-	gameState = engine::GameState::PLAY;
-
-	frameTime = 1000.0f / frameRate; // Calculate the time of a game frame (miliseconds).
+	initializeVariables();
 
 	INFO("Starting Main Loop Game.");
 	while(gameState == engine::GameState::PLAY){
 		timer.step(); // Get the current time.
 
+		//Checks if there is any scene to run.
 		if(startAndStopScenes() == false){
 			break;
 		}
 
 		SDL_Event _event; // Reading input (events).
 
-		// "Search" for a event that will close the Game.
-		while(SDL_PollEvent(&_event)){
-			switch(_event.type){
-				case SDL_QUIT:
-					gameState = engine::GameState::EXIT;
-					break;
-				default:
-					inputManager.update(_event); // Check for user inputs.
-					break;
-			}
-		}
-
-		// Clean and Draw the Scene to refreh animations and objects.
-		SDL_RenderClear(sdlElements.getCanvas());
-		currentScene->draw();
-		SDL_RenderPresent(sdlElements.getCanvas());
-
-		currentScene->updateCode();
-
-		inputManager.clear();
-
-		timer.DeltaTime(); // Calculating elapsed time from the start of this frame until now.
-
-		/**
-		 * If the time that has passed until now was faster than the frame's time,
-		 * is needed wait the time necessary to complete a frame's time.
-		*/
-		if(frameTime > timer.getDeltaTime()){
-			SDL_Delay(frameTime - timer.getDeltaTime());
-		}
-
-		timer.DeltaTime();
-
+		searchEvent(_event);
+		refreshObjects();
+		calculateTime();
 	}
 
 	INFO("Finishing Main Loop.");
-
 	INFO("Shutting down SDL.");
 	sdlElements.terminateSDL();
 }
@@ -110,8 +144,9 @@ void Game::run(){
 bool Game::addScene(Scene &scene){
 	ASSERT(&scene != NULL, "The scene can't be null.");
 	auto sceneName = scene.getSceneName();
-	ASSERT(sceneName != "", "Scene name can't be null.");
+	ASSERT(sceneName != "", "Scene name can't be blank.");
 
+	//Checks if Scene already exists.
 	if(sceneMap.find(sceneName) != sceneMap.end()){
 		ERROR("Scene already exists!");
 		return false;
@@ -173,6 +208,8 @@ void Game::setAttributes(std::string gameName, int windowWidth, int windowHeight
 void Game::changeScene(std::string sceneName){
 	ASSERT(sceneName != "", "The scene name can't be blank.");
 	INFO("Changing Scenes.");
+
+	//Tries to find Scene.
 	if(sceneMap.find(sceneName) == sceneMap.end()){
 		ERROR("Scene not found!");
 	}
@@ -197,12 +234,21 @@ bool Game::startAndStopScenes(){
 			ERROR("No scenes to run!");
 			return false;
 		}else{
+			sceneHandler();
+		}
+	}
+
+	return true;
+}
+
+void Game::sceneHandler(){
 			// If the last scene is equal the current scene, we still need
 			// to delete all keys from the game object map on scene.
 			if(lastScene != NULL && lastScene->getSceneName() == currentScene->getSceneName()){
 				currentScene->deleteKeyList();
 			}
 
+			//Restart Scene
 			if (currentScene->mState == SceneState::RUNNED) {
 				currentScene->restart();
 				currentScene->mState = SceneState::FIRST_TIME;
@@ -210,6 +256,7 @@ bool Game::startAndStopScenes(){
 				//Nothing to do, scene state is different
 			}
 
+			//Run Scene
 			if (currentScene->mState == SceneState::FIRST_TIME) {
 				currentScene->mState = SceneState::RUNNED;
 			} else {
@@ -217,7 +264,8 @@ bool Game::startAndStopScenes(){
 			}
 
 			currentScene->init();
-
+			
+			//Shutdown Scene
 			if(lastScene != NULL){
 				INFO("Shuting down scene!");
 				if(lastScene->getSceneName() != currentScene->getSceneName()){
@@ -226,8 +274,4 @@ bool Game::startAndStopScenes(){
 			}
 
 			needToChangeScene = false;
-		}
-	}
-
-	return true;
 }

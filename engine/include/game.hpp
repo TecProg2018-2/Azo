@@ -54,6 +54,11 @@ namespace engine {
 			Game();
 
 			void run();
+			void searchEvent(SDL_Event _event);
+			void initializeVariables();
+			void refreshObjects();
+			void sceneHandler();
+			void calculateTime();
 			bool addScene(engine::Scene &scene);
 			void restartScene(std::string sceneName);
 			void setAttributes(std::string gameName,
