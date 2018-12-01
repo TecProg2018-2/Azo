@@ -37,22 +37,6 @@ void Menu::restart(){
 }
 
 /**
-     * @brief function responsible for shutting down menu.
-     *
-     * Why: Because it is responsible for shutting down the menu
-	 *
-	 * @return "void".
-     */
-void Menu::shutdown() {
-	DEBUG("Calling Menu::shutdown.");
-	if(mMenu != NULL){
-		mMenu = NULL;
-	} else {
-		// Nothing to do, Menu shut down.
-	}
-}
-
-/**
      * @brief function responsible for creating game objects
      *
      * Why: Because it is necessary for the menu to have some elements in its interface
@@ -220,6 +204,14 @@ void Menu::createMenuComponents() {
 
 	mMenu->addComponent(*mCode);
 }
+
+/**
+     * @brief function responsible for generate start buton.
+     *
+     * Why: Because it is responsible for generate start buton.
+	 *
+	 * @return "void".
+     */
 void Menu::generateStartButon() {
 
 	mStartButtonSprites.push_back(new engine::Sprite());
@@ -232,8 +224,14 @@ void Menu::generateStartButon() {
 
 }
 
-
-void generateExitButon() {
+/**
+     * @brief function responsible for generate exit buton.
+     *
+     * Why: Because it is responsible for generate exit buton.
+	 *
+	 * @return "void".
+     */
+void Menu::generateExitButon() {
 
 	mExitButtonSprites.push_back(new engine::Sprite());
 
@@ -245,7 +243,14 @@ void generateExitButon() {
 
 }
 
-void generateSoundEnableButon(){
+/**
+     * @brief function responsible for generate sound enable buton.
+     *
+     * Why: Because it is responsible for generate sound enable buton.
+	 *
+	 * @return "void".
+     */
+void Menu::generateSoundEnableButon(){
 
 	mSoundEnabledButtonSprites.push_back(new engine::Sprite());
 
@@ -257,7 +262,14 @@ void generateSoundEnableButon(){
 
 }
 
-void generateDisableSoundButon(){
+/**
+     * @brief function responsible for generate disable sound buton.
+     *
+     * Why: Because it is responsible for generate disable sound buton.
+	 *
+	 * @return "void".
+     */
+void Menu::generateDisableSoundButon(){
 
 	mSoundDisabledButtonSprites.push_back(new engine::Sprite());
 
@@ -269,8 +281,20 @@ void generateDisableSoundButon(){
 
 }
 
-void generateMenuArrowSprites(){
+/**
+     * @brief function responsible for generate menu arrow sprites buton.
+     *
+     * Why: Because it is responsible for generate menu arrow sprites buton.
+	 *
+	 * @return "void".
+     */
+void Menu::generateMenuArrowSprites(){
 
+	/*
+		Set the animation sprites coordinates (x, y)
+		and its Width and Height based on its coordinates
+		spriteWidth = (width - spriteX) and spriteHeight = (Height - spriteY)
+	*/
 	mArrowSprites.push_back(new engine::Sprite());
 
 	DEBUG("Generating Menu arrow sprites position.");
@@ -288,13 +312,9 @@ void generateMenuArrowSprites(){
 	 * @return "void"
      */
 void Menu::generateButtonsAnimation() {
-	DEBUG("Generating button sprites.");
 
-	/*
-		Set the animation sprites coordinates (x, y)
-		and its Width and Height based on its coordinates
-		spriteWidth = (width - spriteX) and spriteHeight = (Height - spriteY)
-	*/
+	//Calls functions to generate menu butons animations
+	DEBUG("Generating button sprites.");
 
 	DEBUG("Calling generateStartButon.");
 	generateStartButon();
@@ -310,5 +330,21 @@ void Menu::generateButtonsAnimation() {
 
 	DEBUG("Generating Menu arrow sprites.");
 	generateMenuArrowSprites();
-	
+
+}
+
+/**
+     * @brief function responsible for shutting down menu.
+     *
+     * Why: Because it is responsible for shutting down the menu
+	 *
+	 * @return "void".
+     */
+void Menu::shutdown() {
+	DEBUG("Calling Menu::shutdown.");
+	if(mMenu != NULL){
+		mMenu = NULL;
+	} else {
+		// Nothing to do, Menu shut down.
+	}
 }

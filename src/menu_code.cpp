@@ -76,6 +76,7 @@ void MenuCode::findAudioController(){
      */
 void MenuCode::changeOption(){
 
+	//
 	switch (mCurrentButton) {
 		// Start Option.
 		case ButtonType::START_BUTTON:
@@ -147,6 +148,7 @@ void MenuCode::changeOption(){
 void MenuCode::updateCode(){
 	if(engine::Game::instance.inputManager.keyDownOnce(engine::Button::ENTER)){
 
+		//Switch responsable for verify buton selected in menu screen
 		switch (mCurrentButton) {
 			case ButtonType::START_BUTTON:
 				DEBUG("Start button selected.");
@@ -189,6 +191,7 @@ void MenuCode::errorLog(std::string file){
 	message += "Function: " + file + "\n";
     message += "Date: " + dt + "\n";
 
+	//Bolck responsable for manage types of error.
     switch(errorCode) {
         case FunctionStatus::DIVIBYZERO:
             message += "Error: division by zero\n";

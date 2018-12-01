@@ -59,6 +59,12 @@ namespace Azo {
 			void createGameObjects();
 			void createMenuComponents();
 			void generateButtonsAnimation();
+			// Functions for the purpose of generate animations of butons from menu
+			void generateStartButon();
+			void generateExitButon();
+			void generateSoundEnableButon();
+			void generateDisableSoundButon();
+			void generateMenuArrowSprites();
 
 	};
 }
