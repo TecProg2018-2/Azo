@@ -29,9 +29,9 @@ ra	 *Enum Class used to differentiate Audio States
 
 	/*
 	 * @brief Class for possible errors types.
-	 * 
+	 *
 	 * Enum class used to differentiate errors inside the menu.
-	 */ 
+	 */
 	enum class ErrorTypeAudioComponent {
 		DIVI_BY_ZERO,
 		NULL_POINTER,
@@ -39,7 +39,7 @@ ra	 *Enum Class used to differentiate Audio States
 		WRONG_TYPE,
 		NO_MATCHING_FILE
 	};
-	
+
 	/*
 	 *
 	 *@brief AudioComponent class for in-game audio
@@ -56,6 +56,8 @@ ra	 *Enum Class used to differentiate Audio States
 		bool isMusic;
 		bool playOnStart;
 
+		void musicTest(int loops);
+		void channelTest(int channel);
 		Mix_Music * music;
 		Mix_Chunk * sound;
 
