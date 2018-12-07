@@ -56,6 +56,7 @@ void AudioComponent::init() {
 		DEBUG("Playing Music" << audioPath);
 		music = Game::instance.getAssetsManager().LoadMusic(audioPath);
 
+        // Checking if the music is null.
 		if (music == NULL) {
 			ERROR("Invalid Music Path (Music = NULL): " << audioPath);
 			errorLog(ErrorTypeAudioComponent::NULL_POINTER, "AudioComponent::init");
@@ -67,6 +68,7 @@ void AudioComponent::init() {
 		DEBUG("Playing Sound" << audioPath);
 		sound = Game::instance.getAssetsManager().LoadSound(audioPath);
 
+		// Checking if the sound is null.
 		if (sound == NULL) {
 			ERROR("Invalid Sound Path (Sound = NULL): " << audioPath);
 			errorLog(ErrorTypeAudioComponent::NULL_POINTER, "AudioComponent::init");
@@ -115,6 +117,31 @@ void AudioComponent::shutdown() {
 		//Nothing to do
 	}
 }
+void AudioComponent::musicTest(int loops) {
+
+	if (audioState == AudioState::STOPPED) {
+		Mix_PlayMusic (music, loops);
+		INFO("Play music: " << audioPath);
+	} else if (audioState == AudioState::PAUSED) {
+		Mix_ResumeMusic();
+		INFO("Resume music: " << audioPath);
+	} else {
+		//Nothing to do
+	}
+}
+void AudioComponent::channelTest(int channel) {
+
+	if (audioState == AudioState::STOPPED){
+		Mix_PlayChannel(channel, sound, 0);
+		INFO("Play sound: " << audioPath);
+	} else if (audioState == AudioState::PAUSED){
+		Mix_Resume(channel);
+		INFO("Resume sound: " << audioPath);
+	} else {
+		//Nothing to do
+	}
+}
+
 
 /*
  *@brief Method to change the audio state to PLAYING
@@ -128,27 +155,11 @@ void AudioComponent::play(int loops, int channel) {
 	//checks if the audio in question is music or sound effect
 	if (isMusic) {
 		DEBUG("Audio is music");
-		if (audioState == AudioState::STOPPED) {
-			Mix_PlayMusic (music, loops);
-			INFO("Play music: " << audioPath);
-		} else if (audioState == AudioState::PAUSED) {
-			Mix_ResumeMusic();
-			INFO("Resume music: " << audioPath);
-		} else {
-			//Nothing to do
-		}
+		musicTest(loops);
 
 	} else {
 		DEBUG("Audio is sound");
-		if (audioState == AudioState::STOPPED){
-			Mix_PlayChannel(channel, sound, 0);
-			INFO("Play sound: " << audioPath);
-		} else if (audioState == AudioState::PAUSED){
-			Mix_Resume(channel);
-			INFO("Resume sound: " << audioPath);
-		} else {
-			//Nothing to do
-		}
+		channelTest(channel);
 	}
 	DEBUG("Changing AudioState to PLAYING");
 	audioState = AudioState::PLAYING;
