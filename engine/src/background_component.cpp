@@ -57,7 +57,7 @@ void BackgroundComponent::shutdown(){
 }
 
 void BackgroundComponent::draw(){
-	DEBUG("Calling BackgroundComponent::draw");
+	//DEBUG("Calling BackgroundComponent::draw");
 	SDL_RenderCopy(
 		Game::instance.sdlElements.getCanvas(),
 		imageTexture,

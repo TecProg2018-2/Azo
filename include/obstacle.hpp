@@ -15,7 +15,6 @@
 #include "machine_part_code.hpp"
 
 namespace Azo {
-
 	/**
 	 * @brief Class for possible Obstacle Types.
 	 *
@@ -32,7 +31,6 @@ namespace Azo {
 		MACHINE_PART,
 		WESTERN_POST
 	};
-
 
 	/**
 	 * @brief Class for MachinePart state.
@@ -57,7 +55,6 @@ namespace Azo {
 			SUCCESS,
 	};
 
-
 	/**
 	 * @brief Obstacle class for in-game objects with collision.
 	 *
@@ -70,9 +67,11 @@ namespace Azo {
 			std::list<InvisibleBlock *> mBlockList;
 			ObstacleType mObstacleType;
 			MachinePartState mMachinePartState = MachinePartState::NON_MACHINE;
+
 			Obstacle();
-			virtual ~Obstacle();
 			Obstacle(std::string name, std::pair<double, double> positionRelativeToParent, ObstacleType obstacleType);
+			virtual ~Obstacle();
+
 			void shutdown();
 			void errorLog(std::string file);
 			/**
@@ -83,19 +82,45 @@ namespace Azo {
 			inline std::string getClassName(){
 				return "obstacle";
 			}
+
 		private:
 			// Initializing pointes for components
 			engine::ImageComponent *mObstacleImage = NULL;
 			engine::AudioController *mAudioController = NULL;
-			engine::Animation *mTurning = NULL;
+			engine::Animation *mSpinning = NULL;
 			engine::AudioComponent *mCollected = NULL;
-			std::vector<engine::Sprite *> mTurningAnimationSprites;
+			std::vector<engine::Sprite *> mSpinningAnimationSprites;
 			MachinePartCode *mMachinePartCode = NULL;
 			FunctionStatusObstacle errorCode = FunctionStatusObstacle::SUCCESS;
+
 			void createComponents();
 			void createBlocks();
-			void generateTurningAnimation();
+			void generateSpinAnimation();
 
+			void clearEachBlock();
+			void clearAnimations();
+			void clearImages();
+			void clearAudio();
+			void resetCollectedValue();
+			void resetSpinningValue();
+			void shutdownMachinePartCode();
+
+			void initImageObstacle(
+				std::string obstacleName,
+				std::string obstaclePath
+			);
+			void initMachinePart();
+
+			void setLoadedAnimatedSprite(
+				unsigned int spriteNumber,
+				unsigned int spriteX
+			);
+			void setObstaclePosition(
+				std::string blockName,
+				std::pair<double, double> blockPosition,
+				double pairFirst,
+				double pairSecond
+			);
 	};
 }
 
