@@ -24,8 +24,11 @@ Player::Player(std::string name, std::pair<double, double> currentPosition) {
 	createComponents();
 }
 
-//This method create the components corresponding to player. Components as the
-//possible animations and the possibles audios.
+/**
+ * @brief This method create the components corresponding to player. Components as the
+* possible animations and the possibles audios.
+ * @return 'void'.
+*/
 void Player::createComponents() {
 	DEBUG("Creating Player Components.");
 
@@ -141,7 +144,10 @@ void Player::createComponents() {
 	this->addComponent(*mPlayerCode);
 }
 
-//This method sets the configuration for winning scenario
+/**
+ * @brief This method sets the configuration for winning scenario
+ * @return 'void'.
+*/
 void Player::generateVictoryAnimation() {
 	mVictoryAnimationSprites.push_back(new engine::Sprite());
 
@@ -157,7 +163,10 @@ void Player::generateVictoryAnimation() {
 	mVictoryAnimationSprites[0]->setSpriteHeight((unsigned int)140);
 }
 
-//This method sets the configuration for winning scenario
+/**
+ * @brief This method sets the configuration for winning scenario
+ * @return 'void'.
+*/
 void Player::generateLosingAnimation() {
 	const int LOSING_SPRITES = 7;
 	for (int i = 0; i < LOSING_SPRITES; i++) {
@@ -206,7 +215,10 @@ void Player::generateLosingAnimation() {
 	mLosingAnimationSprites[6]->setSpriteHeight((unsigned int)111 - 4);
 }
 
-//This method sets the walking sprites on its desgined variables
+/**
+ * @brief This method sets the walking sprites on its desgined variables
+ * @return 'void'.
+*/
 void Player::generateWalkingAnimation() {
 	DEBUG("Generating Player walking animation.");
 	const int WALKING_SPRITES = 23;
@@ -337,7 +349,10 @@ void Player::generateWalkingAnimation() {
 	mWalkingAnimationSprites[22]->setSpriteHeight((unsigned int)139 - 29);
 }
 
-//This method sets the jumping sprites on its desgined variables
+/**
+ * @brief This method sets the jumping sprites on its desgined variables
+ * @return 'void'.
+*/
 void Player::generateJumpingAnimation() {
 	DEBUG("Generating Player Jumping Animation.");
 	const int JUMPING_SPRITES = 8;
@@ -393,7 +408,10 @@ void Player::generateJumpingAnimation() {
 	mJumpingAnimationSprites[7]->setSpriteHeight((unsigned int)1107 - 997);
 }
 
-//This method sets the sliding sprites on its desgined variables
+/**
+ * @brief This method sets the sliding sprites on its desgined variables
+* @return 'void'.
+*/
 void Player::generateSlidingAnimation() {
 	const int SLIDING_SPRITES = 21;
 	//create a vector with designed number of sprites
@@ -513,7 +531,10 @@ void Player::generateSlidingAnimation() {
 	mSlidingAnimationSprites[20]->setSpriteHeight((unsigned int)139 - 40);
 }
 
-//This method sets the jumping sprites on its desgined variables
+/**
+ * @brief This method sets the jumping sprites on its desgined variables
+* @return 'void'.
+*/
 void Player::generateDyingAnimation() {
 	const int DYING_SPRITES = 36;
 	//create a vector with designed number of sprites
@@ -708,8 +729,11 @@ void Player::generateDyingAnimation() {
 	mDyingAnimationSprites[35]->setSpriteHeight((unsigned int)139 - 47);
 }
 
-//This method free all the pointers of player. It passes through its pointers
-//attributes, free them and point to null
+/**
+ * @brief This method free all the pointers of player. It passes through its pointers
+* attributes, free them and point to null
+* @return 'void'.
+*/
 void Player::shutdown() {
 
 	//checks if mAnimationController is null

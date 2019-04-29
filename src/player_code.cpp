@@ -61,6 +61,80 @@ void PlayerCode::findAudioController() {
 }
 
 /**
+ * @brief checks if the player has hit some obstacle
+ * Defines what happens when the player touches a game obstaclo
+ * @return ' void '.
+*/
+void PlayerCode::obstacleHit(){
+		//Check if player hit some obstacle
+		if (mPlayer->mPushesRightWall || mPlayer->mPushesLeftWall) {
+			//DEBUG("Update code method. Player Speed in X: " << mPlayer->mSpeed.first);
+			mPlayer->mSpeed.first = mPlayer->M_ZERO_VECTOR.first; //clear mPlayer walking speed
+		} else {
+			mPlayer->mSpeed.first = mPlayer->M_WALKING_SPEED;
+			//DEBUG("PLAYER SHOULD HAVE SPEED! PLAYER SPEED " << mPlayer->mSpeed.first);
+		}
+}
+
+/**
+ * @brief Checks if the button has been pressed
+ * Sets what will occur after a certain button is pressed
+ * @return ' void '.
+*/
+void PlayerCode::buttonTest(){
+		//check if button 'w' is pressed
+		if (engine::Game::instance.inputManager.keyState(engine::Button::W)) {
+			//DEBUG("W pressed!");
+			mPlayer->mState = PlayerState::JUMP; //Updates mPlayer's state to JUMP
+			mPlayer->mSpeed.second = mPlayer->M_JUMPING_SPEED; // Jumping speed.
+
+		} else if (!mPlayer->mOnGround) { //checks if character is not on ground
+			//DEBUG("Player isn't on ground. (WALK)");
+			mPlayer->mState = PlayerState::JUMP;
+		}
+
+		//checks if button 'S' is pressed
+		if (engine::Game::instance.inputManager.keyState(engine::Button::S)) {
+			mPlayer->mState = PlayerState::SLIDE;
+		}else{
+				// button is not pressed
+		}
+}
+
+/**
+ * @brief checks if the player can skid
+ * Sets the time the player can drift
+ * @return ' void '.
+*/
+void PlayerCode::slidingTest(){
+		//check if character was sliding
+		if (mAnimationController->getAnimationStatus("sliding") == engine::AnimationState::FINISHED) {
+			mPlayer->mState = PlayerState::WALK;
+		}else{
+				// character is not sliding
+		}
+}
+
+/**
+ * @brief checks whether the parts have been collected
+ * Defines what will happen after the pieces are collected
+ * @return ' void '.
+*/
+void PlayerCode::collectedTeste(){
+		if (mPlayer->mCollectedParts < mPlayer->M_TOTAL_PARTS) {
+			mAnimationController->startUniqueAnimation("losing");
+			//checks if animationStatus is losing
+			if (mAnimationController->getAnimationStatus("losing") == engine::AnimationState::FINISHED) {
+				mAudioController->playAudio("lost");
+			}else{
+					// animationStatus is not losing
+			}
+		} else {
+			mAnimationController->startUniqueAnimation("victory");
+			mAudioController->playAudio("victory");
+		}
+}
+/**
  * @brief handle player behaviour
  * defines what happens in each case of player's state
  * according to enum class PlayerStae
@@ -75,32 +149,8 @@ void PlayerCode::updateCode() {
 		case PlayerState::WALK:
 			mAnimationController->startUniqueAnimation("walking");
 
-			//Check if player hit some obstacle
-			if (mPlayer->mPushesRightWall || mPlayer->mPushesLeftWall) {
-				//DEBUG("Update code method. Player Speed in X: " << mPlayer->mSpeed.first);
-				mPlayer->mSpeed.first = mPlayer->M_ZERO_VECTOR.first; //clear mPlayer walking speed
-			} else {
-				mPlayer->mSpeed.first = mPlayer->M_WALKING_SPEED;
-				//DEBUG("PLAYER SHOULD HAVE SPEED! PLAYER SPEED " << mPlayer->mSpeed.first);
-			}
-
-			//check if button 'w' is pressed
-			if (engine::Game::instance.inputManager.keyState(engine::Button::W)) {
-				//DEBUG("W pressed!");
-				mPlayer->mState = PlayerState::JUMP; //Updates mPlayer's state to JUMP
-				mPlayer->mSpeed.second = mPlayer->M_JUMPING_SPEED; // Jumping speed.
-
-			} else if (!mPlayer->mOnGround) { //checks if character is not on ground
-				//DEBUG("Player isn't on ground. (WALK)");
-				mPlayer->mState = PlayerState::JUMP;
-			}
-
-			//checks if button 'S' is pressed
-			if (engine::Game::instance.inputManager.keyState(engine::Button::S)) {
-				mPlayer->mState = PlayerState::SLIDE;
-			}else{
-					// button is not pressed
-			}
+			obstacleHit();
+			buttonTest();
 
 			break;
 
@@ -120,24 +170,13 @@ void PlayerCode::updateCode() {
 			//DEBUG("UpdateCode method. Player Speed in Y: " << mPlayer->m_speed.second);
 
 			//Check if player hit some obstacle
-			if (mPlayer->mPushesRightWall) {
-				mPlayer->mSpeed.first = mPlayer->M_ZERO_VECTOR.first; //clear mPlayer walking speed
-			} else {
-				mPlayer->mSpeed.first = mPlayer->M_WALKING_SPEED;         // Walking speed.
-			}
+			obstacleHit();
 
 			break;
 
 		case PlayerState::SLIDE:
 			mAnimationController->startUniqueAnimation("sliding");
-
-			//check if character was sliding
-			if (mAnimationController->getAnimationStatus("sliding") == engine::AnimationState::FINISHED) {
-				mPlayer->mState = PlayerState::WALK;
-				break;
-			}else{
-					// character is not sliding
-			}
+			slidingTest();
 
 
 			// sets the normal speed of walking
@@ -153,12 +192,7 @@ void PlayerCode::updateCode() {
 			}
 
 			//check if button 'W' is pressed
-			if (engine::Game::instance.inputManager.keyState(engine::Button::W)) {
-				mPlayer->mState = PlayerState::JUMP;
-				mPlayer->mSpeed.second = mPlayer->M_JUMPING_SPEED; //normal jump speed of character
-			}else{
-					// 'w' button is not pressed
-			}
+			buttonTest();
 
 			break;
 		case PlayerState::DIE:
@@ -168,18 +202,7 @@ void PlayerCode::updateCode() {
 
 		case PlayerState::END:
 			//checks if player collected parts is less that the total avaliable in game
-			if (mPlayer->mCollectedParts < mPlayer->M_TOTAL_PARTS) {
-				mAnimationController->startUniqueAnimation("losing");
-				//checks if animationStatus is losing
-				if (mAnimationController->getAnimationStatus("losing") == engine::AnimationState::FINISHED) {
-					mAudioController->playAudio("lost");
-				}else{
-						// animationStatus is not losing
-				}
-			} else {
-				mAnimationController->startUniqueAnimation("victory");
-				mAudioController->playAudio("victory");
-			}
+			collectedTeste();
 
 			break;
 	}
